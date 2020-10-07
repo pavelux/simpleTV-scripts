@@ -1,4 +1,5 @@
--- видеоскрипт для сайта https://www.twitch.tv (18/5/20)
+-- видеоскрипт для сайта https://www.twitch.tv (8/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- открывает подобные ссылки:
 -- https://www.twitch.tv/jonnykuik
 -- https://www.twitch.tv/SpeedrunHypeTV
@@ -148,7 +149,7 @@
 				name = w:match('NAME="(%d+[^"]+)') or w:match('RESOLUTION=%d+x(%d+)')
 					if not adr or not name then break end
 				qlty = tonumber(name:match('%d+'))
-				if qlty > 200 then
+				if qlty > 200 and not w:match('VIDEO="chunked"') then
 					fps = tonumber(name:match('p(%d+)') or '0')
 					if fps > 30 then
 						qlty = qlty + 6
