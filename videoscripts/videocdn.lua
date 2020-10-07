@@ -1,5 +1,5 @@
--- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (25/8/20)
--- Copyright © 2017-2020 Nexterr
+-- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (7/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- открывает подобные ссылки:
 -- https://videocdn.so/fnXOUDB9nNSO?kp_id=5928
 -- https://videocdn.so/fnXOUDB9nNSO/tv-series/92
@@ -251,11 +251,12 @@ local proxy = ''
 	local transl
 	local tr = answer:match('<div class="translations".-</div>')
 	if tr and not fromScr then
+		tr = tr:gsub('<template class="__cf_email__" data%-cfemail="%x+">%[email&#160;protected%]</template>', 'MUZOBOZ@')
 		local t, i = {}, 1
 			for Adr, name in tr:gmatch('<option.-value="(.-)".->(.-)</option>') do
 				t[i] = {}
 				t[i].Id = i
-				t[i].Name = name:gsub('.+template>', ''):gsub('^%s+$', 'неизвестно'):gsub('&amp;', '&')
+				t[i].Name = name:gsub('<template.-template>', 'неизвестно'):gsub('&amp;', '&')
 				t[i].Address = Adr
 				i = i + 1
 			end
