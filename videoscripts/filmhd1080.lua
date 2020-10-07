@@ -1,16 +1,13 @@
--- видеоскрипт для сайта http://filmhd1080.club (26/6/20)
--- необходимы скрипты: hdvb, collaps, videocdn, youtube
+-- видеоскрипт для сайта http://filmhd1080.club (7/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- необходимы скрипты: hdvb.lua, collaps.lua, videocdn.lua, youtube.lua
 -- открывает подобные ссылки:
--- http://filmhd1080.club/3156-hvayugi-1-sezon-smotret-onlayn.html
--- http://filmhd1080.club/10607-arifureta-silneyshiy-remeslennik-v-mire-smotret-onlayn.html
--- http://filmhd1080.pro/11898-lezviya-slavy-zvezduny-na-ldu-2007-smotret-onlayn.html
--- http://filmhd1080.pro/1222-serial-strela-smotret-onlayn-hd.html
--- http://filmhd1080.club/11980-opasnye-sekrety-2019-smotret.html
+-- http://u.filmhd1080.xyz/13719-nochnoj-porte-2020-smotret.html
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://[%w%.]*filmhd1080%..-/.+') then return end
+	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	local host = inAdr:match('https?://[^/]+')
-	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, TypeBackColor = 0, PictFileName = host .. '/templates/temp/images/logo.png', UseLogo = 1, Once = 1})
 	end
@@ -19,7 +16,7 @@
 	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = ''
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.2785.143 Safari/537.36')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0')
 		if not session then
 			showError('1')
 		 return
@@ -48,7 +45,7 @@
 	local i, t = 1, {}
 		for adr in answer:gmatch('<div class="polna%-play tabs%-b video%-box">.-<iframe.-src="([^"]+)') do
 				if not adr then break end
-			if not adr:match('alloha') then
+			if not (adr:match('alloha') or adr:match('bazon')) then
 				t[i] = {}
 				t[i].Id = i
 				if adr:match('trailer%-cdn') then
