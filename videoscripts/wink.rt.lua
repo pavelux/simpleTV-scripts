@@ -19,37 +19,42 @@
 		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
 		if not inAdr:match('/media_items/(%d+)') then
-			showError('эта ссылка не открывается')
+			showError('1\nэта ссылка не открывается ')
 		 return
 		end
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0')
 		if not session then
-			showError('0')
+			showError('2')
 		 return
 		end
 	m_simpleTV.Http.SetTimeout(session, 8000)
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
-			showError('1')
+			showError('3')
 		 return
 		end
-	local id = answer:match('"episode_id":(%d+)') or answer:match('"content_id":(%d+)')
+	local id, title
+	local season = answer:match('"season_id"')
+	if season then
+		id = answer:match('"episode_id":(%d+)')
+		title = answer:match('"episode","([^"]+)') or answer:match('"TVSeries","name":"([^"]+)')
+	else
+		id = answer:match('"content_id":(%d+)')
+		title = answer:match('"Movie","name":"([^"]+)')
+	end
 		if not id then
-			showError('2')
+			showError('4')
 		 return
 		end
-	local title = answer:match('"Movie","name":"([^"]+)')
-				or answer:match('"episode","([^"]+)')
-				or answer:match('"TVSeries","name":"([^"]+)')
-				or 'wink.rt'
+	title = title or 'wink.rt'
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	local url = decode64('aHR0cHM6Ly9mZS5zdmMuaXB0di5ydC5ydS9DYWNoZUNsaWVudEpzb24vanNvbi9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9NzAwMDAxJmRldmljZVR5cGU9T1RUU1RCJklEPQ') .. id
 	rc, answer = m_simpleTV.Http.Request(session, {url = url})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
-			showError('3')
+			showError('5')
 		return
 		end
 	answer = answer:gsub('%s+', ''):gsub('\n+', '')
@@ -69,7 +74,7 @@
 			i = i + 1
 		end
 		if i == 1 then
-			showError('4')
+			showError('6')
 		 return
 		end
 	if m_simpleTV.Control.MainMode == 0 then
