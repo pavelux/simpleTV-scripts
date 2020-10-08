@@ -18,6 +18,29 @@
 	local function showError(str)
 		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
+	local function getAdr(answer, title, poster, patt)
+		local t, i = {}, 1
+		local preview = patt:match('"PREVIEW"')
+		if preview then
+			preview = ' (предосмотр)'
+		end
+			for adr in answer:gmatch(patt) do
+				local qlty = adr:match('hls/([^_]+)')
+				if qlty then
+					qlty = ' (' .. qlty:upper() .. ')'
+				end
+				t[i] = {}
+				t[i].Id = i
+				t[i].Name = title .. (qlty or '') .. (preview or '')
+				t[i].Address = 'https://zabava-htvod.cdn.ngenix.net/' .. adr
+				t[i].InfoPanelLogo = poster
+				t[i].InfoPanelName = title
+				t[i].InfoPanelShowTime = 8000
+				i = i + 1
+			end
+			if #t == 0 then return end
+	 return t
+	end
 		if not inAdr:match('/media_items/(%d+)') then
 			showError('1\nэта ссылка не открывается ')
 		 return
@@ -58,22 +81,9 @@
 		return
 		end
 	answer = answer:gsub('%s+', ''):gsub('\n+', '')
-	local t, i = {}, 1
-		for adr in answer:gmatch('"CONTENT","ifn":"([^"]+)') do
-			local qlty = adr:match('hls/([^_]+)')
-			if qlty then
-				qlty = ' (' .. qlty:upper() .. ')'
-			end
-			t[i] = {}
-			t[i].Id = i
-			t[i].Name = title .. (qlty or '')
-			t[i].Address = 'https://zabava-htvod.cdn.ngenix.net/' .. adr
-			t[i].InfoPanelLogo = poster
-			t[i].InfoPanelName = title
-			t[i].InfoPanelShowTime = 8000
-			i = i + 1
-		end
-		if i == 1 then
+	local t = getAdr(answer, title, poster, '"CONTENT","ifn":"([^"]+)')
+			or getAdr(answer, title, poster, '"PREVIEW","ifn":"([^"]+)')
+		if not t then
 			showError('6')
 		 return
 		end
