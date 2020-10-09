@@ -1,9 +1,11 @@
--- видеоскрипт для поиска видео по видеобазе "Kodik", "Hdvb", "Videocdn", "Bazon", "zona" (28/6/20)
--- необходимы скрипты: kinopoisk
--- искать через команду меню "Открыть URL (Ctrl+N)"
+-- видеоскрипт для поиска видео по видеобазе "Kodik", "Hdvb", "Videocdn", "zona" (9/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- видоскрипт: kinopoisk.lua
+-- ## искать через команду меню "Открыть URL (Ctrl+N)" ##
 -- поиск по целому слову или словосочетанию
 -- использовать префикс "*" для названия, "**" id кинопоиска
--- открывает подобные запросы:
+-- ## открывает подобные ссылки ##
 -- * адский
 --  *судЬя   ДреДд
 -- *13-й район
@@ -52,77 +54,6 @@
 	retAdr = xren(retAdr)
 	require 'json'
 	local t, i = {}, 1
--- Bazon
-	local rc, answer = m_simpleTV.Http.Request(session, {url = decode64('aHR0cHM6Ly9iYXpvbi5jYy9hcGkvc2VhcmNoP3Rva2VuPWMxMThlYjVmOGQzNjU2NWIyYjA4YjUzNDJkYTk3Zjc5JnRpdGxlPQ') .. m_simpleTV.Common.toPercentEncoding(retAdr)})
-	if rc == 200 then
-		answer = answer:gsub('(%[%])', '"nil"'):gsub(string.char(239, 187, 191), '')
-		local tab = json.decode(answer)
-			if tab and tab.results and tab.results[1] and tab.results[1].info then
-				local j = 1
-				local t1, k
-					while true do
-							if not tab.results[j] then break end
-						local name, desc, genres, year, kp, im, title, countries, poster, kpid
-						title = tab.results[j].info.rus or tab.results[j].info.orig
-						kpid = tab.results[j].kinopoisk_id
-						if kpid and kpid ~= '' and xren(title):match(retAdr) then
-							t[i] = {}
-							year = tab.results[j].info.year
-							t[i].year = tonumber(year or '0')
-							if year and year ~= '' then
-								name = title .. ' (' .. year .. ')'
-								year = ' | ' .. year
-							else
-								name = title
-								year = ''
-							end
-							t[i].Name = name
-							t[i].Address = kpid
-							countries = tab.results[j].info.country
-							if countries and countries ~= '' then
-								countries = ' | ' .. countries
-							else
-								countries = ''
-							end
-							genres = tab.results[j].info.genre
-							if genres and genres ~= '' then
-								genres = ' | ' .. genres
-							else
-								genres = ''
-							end
-							poster = tab.results[j].info.poster
-							if poster and poster ~= '' then
-								t[i].InfoPanelLogo = poster
-							else
-								t[i].InfoPanelLogo = 'https://st.kp.yandex.net/images/movies/poster_none.png'
-							end
-							desc = tab.results[j].info.description
-							if desc and desc ~= '' then
-								t[i].InfoPanelDesc = desc:gsub('\\n', '\r'):gsub('%s+', ' ')
-							end
-							if tab.results[j].info.rating then
-								kp = tab.results[j].info.rating.rating_kp
-								im = tab.results[j].info.rating.rating_imdb
-							end
-							if kp and kp ~= '' and kp ~= 0 then
-								kp = ' | КП: ' .. tonumber(string.format('%.' .. (1 or 0) .. 'f', kp))
-							else
-								kp = ''
-							end
-							if im and im ~= '' and im ~= 0 then
-								im = ' | IMDb: ' .. tonumber(string.format('%.' .. (1 or 0) .. 'f', im))
-							else
-								im = ''
-							end
-							t[i].InfoPanelName = 'Bazon'
-							t[i].InfoPanelShowTime = 30000
-							t[i].InfoPanelTitle = title .. year .. countries .. genres .. kp .. im
-							i = i + 1
-						end
-						j = j + 1
-					end
-			end
-	end
 -- Kodik
 	local rc, answer = m_simpleTV.Http.Request(session, {url = decode64('aHR0cHM6Ly9rb2Rpa2FwaS5jb20vc2VhcmNoP3Rva2VuPWI3Y2M0MjkzZWQ0NzVjNGFkMWZkNTk5ZDExNGY0NDM1JndpdGhfbWF0ZXJpYWxfZGF0YT10cnVlJnRpdGxlPQ') .. m_simpleTV.Common.toPercentEncoding(retAdr)})
 	if rc == 200 then
