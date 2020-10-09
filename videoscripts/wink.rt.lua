@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (8/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (9/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-vod.lua
@@ -50,7 +50,7 @@
 			showError('2')
 		 return
 		end
-	m_simpleTV.Http.SetTimeout(session, 8000)
+	m_simpleTV.Http.SetTimeout(session, 16000)
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
@@ -81,8 +81,12 @@
 		return
 		end
 	answer = answer:gsub('%s+', ''):gsub('\n+', '')
-	local t = getAdr(answer, title, poster, '"CONTENT","ifn":"([^"]+)')
-			or getAdr(answer, title, poster, '"PREVIEW","ifn":"([^"]+)')
+	local patt = {'"CONTENT","ifn":"([^"]+)', '"PREVIEW","ifn":"([^"]+)'}
+	local t
+		for i = 1, #patt do
+			t = getAdr(answer, title, poster, patt[i])
+				if t then break end
+		end
 		if not t then
 			showError('6')
 		 return
