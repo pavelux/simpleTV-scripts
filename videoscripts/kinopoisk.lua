@@ -1,8 +1,8 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (9/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (10/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
--- yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
--- zonamobi.lua, iviru.lua, wink-vod.lua, videocdn.lua, hdvb.lua, collaps.lua
+-- wink.rt.lua, wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
+-- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua
 -- ## открывает подобные ссылки ##
 -- https://www.kinopoisk.ru/film/336434
 -- https://www.kinopoisk.ru/level/1/film/46225/sr/1/
@@ -117,25 +117,27 @@ local tname = {
 				if rc ~= 200 then return end
 			answer = answer:match('"iframe_src":"([^"]+)')
 				if not answer then return end
-		elseif url:match('itv%.rt%.ru') then
+		elseif url:match('iptv%.rt%.ru') then
 				if zonaSerial then return end
-			rc, answer = m_simpleTV.Http.Request(session, {url = url .. url_encode(title) .. '&per_page=15'})
-				if rc ~= 200 or (rc == 200 and not answer:match('^{"content"')) then return end
+			rc, answer = m_simpleTV.Http.Request(session, {url = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens', method = 'post', body = '{"fingerprint":"PeCKCkaoiqjMaT4pesySz"}', headers = 'Content-Type: application/json;charset=utf-8'})
+				if rc ~= 200 then return end
+			local s = answer:match('"session_id":"([^"]+)')
+				if not s then return end
+			rc, answer = m_simpleTV.Http.Request(session, {url = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/search?query=' .. url_encode(title) .. '&limit=15&offset=0&content_types=media_item', headers = 'session_id: ' .. s})
+				if rc ~= 200 then return end
 			local tab = json.decode(answer:gsub('%[%]', '""'))
-				if not tab then return end
+				if not tab or not tab.items or not tab.items[1] or not tab.items[1].media_item then return end
 			local uRt, i = 1, 1
 			local yearRt, nameRt, urlRt, typeRt
-				while true do
-						if not tab.content[i] then break end
-					yearRt = tab.content[i].year
-					nameRt = tab.content[i].name
-					typeRt = tab.content[i].type
-						if not nameRt or not yearRt or not typeRt then break end
-					if tonumber(yearRt) == year and typeRt:match('Film') then
+				while tab.items[i] do
+					yearRt = tab.items[i].media_item.year
+					nameRt = tab.items[i].media_item.name
+						if not nameRt or not yearRt then break end
+					if tonumber(yearRt) == year then
 						Rt[uRt] = {}
 						Rt[uRt].Id = uRt
 						Rt[uRt].Name = nameRt
-						Rt[uRt].Address = tab.content[i].content_assets[1].asset_url
+						Rt[uRt].Address = 'https://wink.rt.ru/media_items/' .. tab.items[i].media_item.id
 						uRt = uRt + 1
 					end
 					i = i + 1
@@ -315,7 +317,7 @@ local tname = {
 			retAdr = answer
 		elseif url:match('videocdn%.tv') then
 			retAdr = answer
-		elseif url:match('itv%.rt%.ru') then
+		elseif url:match('iptv%.rt%.ru') then
 			local hash, rtab = {}, {}
 			local u
 				for i = 1, #Rt do
@@ -328,7 +330,14 @@ local tname = {
 				for i = 1, #rtab do
 					rtab[i].Id = i
 				end
-			rtab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+			if m_simpleTV.User.paramScriptForSkin_buttonPrev then
+				rtab.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPrev}
+			else
+				tab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonOk then
+				rtab.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			end
 			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на портале Wink', 0, rtab, 10000, 1)
 				if ret == 3 then return -1 end
 			id = id or 1
@@ -348,13 +357,27 @@ local tname = {
 				f[i].Address = ww:match('href="([^"]+)')
 				i = i + 1
 			end
-			f.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
- 			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Filmix', 0, f, 10000, 1)
+			if m_simpleTV.User.paramScriptForSkin_buttonPrev then
+				f.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPrev}
+			else
+				tab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonOk then
+				f.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			end
+			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Filmix', 0, f, 10000, 1)
 				if ret == 3 then return -1 end
 			id = id or 1
 			retAdr = f[id].Address
 		elseif url:match('seasonvar%.ru') then
-			svar.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+			if m_simpleTV.User.paramScriptForSkin_buttonOk then
+				svar.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonPrev then
+				svar.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPrev}
+			else
+				tab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+			end
 			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Seasonvar', 0, svar, 10000, 1)
 				if ret == 3 then return -1 end
 			id = id or 1
@@ -404,7 +427,7 @@ local tname = {
 			elseif tname[i] == 'ivi' then
 				turl[i] = {adr = decode64('aHR0cHM6Ly9hcGkuaXZpLnJ1L21vYmlsZWFwaS9zZWFyY2gvdjUvP2ZpZWxkcz1rcF9pZCxpZCxkcm1fb25seSZmYWtlPTAmcXVlcnk9'), tTitle = 'Фильмы и сериалы с ivi.ru', tLogo = 'http://saledeal.ru/wp-content/uploads/2019/09/ivi.png'}
 			elseif tname[i] == 'Wink' then
-				turl[i] = {adr = decode64('aHR0cHM6Ly9pdHYucnQucnUvYXBpL3YxL3NlYXJjaC9hdXRvc3VnZ2VzdD9xPQ=='), 		tTitle = 'Фильмы с портала Wink', tLogo = 'https://wink.rt.ru/assets/fa4f2bd16b18b08e947d77d6b65e397e.svg'}
+				turl[i] = {adr = decode64('aHR0cHM6Ly9pcHR2LnJ0LnJ1'), tTitle = 'Фильмы с портала Wink', tLogo = 'https://wink.rt.ru/assets/fa4f2bd16b18b08e947d77d6b65e397e.svg'}
 			elseif tname[i] == 'Videocdn' then
 				turl[i] = {adr = decode64('aHR0cHM6Ly92aWRlb2Nkbi50di9hcGkvc2hvcnQ/YXBpX3Rva2VuPW9TN1d6dk5meGU0SzhPY3NQanBBSVU2WHUwMVNpMGZtJmtpbm9wb2lza19pZD0') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'Collaps' then
@@ -490,7 +513,14 @@ local tname = {
 	end
 	local function selectmenu()
 		rett.ExtParams = {FilterType = 2}
-		rett.ExtButton1 = {ButtonEnable = true, ButtonName = '✕󠁙󠁙'}
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			rett.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕'}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			rett.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
 		m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 		local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('🎞 ' .. title .. getReting(), 0, rett, 8000, 1 + 2)
 		if ret == 3 then
