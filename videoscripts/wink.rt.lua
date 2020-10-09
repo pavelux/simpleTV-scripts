@@ -8,11 +8,15 @@
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru') then return end
 	local logo = 'https://wink.rt.ru/assets/fa4f2bd16b18b08e947d77d6b65e397e.svg'
-	if m_simpleTV.Control.MainMode == 0 then
-		m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
-		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = logo, TypeBackColor = 0, UseLogo = 1, Once = 1})
-	end
 	local inAdr = m_simpleTV.Control.CurrentAddress
+	if not inAdr:match('&kinopoisk') then
+		if m_simpleTV.Control.MainMode == 0 then
+			m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
+			m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = logo, TypeBackColor = 0, UseLogo = 1, Once = 1})
+		end
+	else
+		inAdr = inAdr:gsub('&kinopoisk', '')
+	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local function showError(str)
@@ -73,7 +77,6 @@
 	title = title or 'wink.rt'
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	local url = decode64('aHR0cDovL2ZlLnN2Yy5pcHR2LnJ0LnJ1L0NhY2hlQ2xpZW50L25jZHhtbC9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9QW5kcm9pZCZJRD0') .. id
-	debug_in_file(url .. '\n')
 	rc, answer = m_simpleTV.Http.Request(session, {url = url})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then
