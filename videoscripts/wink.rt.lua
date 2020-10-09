@@ -50,7 +50,7 @@
 			showError('2')
 		 return
 		end
-	m_simpleTV.Http.SetTimeout(session, 16000)
+	m_simpleTV.Http.SetTimeout(session, 12000)
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
@@ -72,7 +72,7 @@
 		end
 	title = title or 'wink.rt'
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
-	local url = decode64('aHR0cHM6Ly9mZS5zdmMuaXB0di5ydC5ydS9DYWNoZUNsaWVudEpzb24vanNvbi9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9NzAwMDAxJmRldmljZVR5cGU9T1RUU1RCJklEPQ') .. id
+	local url = decode64('aHR0cHM6Ly9mZS5zdmMuaXB0di5ydC5ydS9DYWNoZUNsaWVudEpzb24vanNvbi9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9T1RUU1RCJklEPQ') .. id
 	rc, answer = m_simpleTV.Http.Request(session, {url = url})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then
