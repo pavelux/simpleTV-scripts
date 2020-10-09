@@ -119,7 +119,20 @@ local tname = {
 				if not answer then return end
 		elseif url:match('iptv%.rt%.ru') then
 				if zonaSerial then return end
-			rc, answer = m_simpleTV.Http.Request(session, {url = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens', method = 'post', body = '{"fingerprint":"PeCKCkaoiqjMaT4pesySz"}', headers = 'Content-Type: application/json;charset=utf-8'})
+						local function fingerprint()
+							local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
+							local t = {}
+							local math_random = math.random
+							local a = #alphabet
+								for i = 1, 21 do
+									local rand = math_random(1, a)
+									t[i] = {}
+									t[i] = alphabet:sub(rand, rand)
+								end
+						 return '{"fingerprint":"'.. table.concat(t) .. '"}'
+						end
+			local body = fingerprint()
+			rc, answer = m_simpleTV.Http.Request(session, {url = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens', method = 'post', body = body, headers = 'Content-Type: application/json;charset=utf-8'})
 				if rc ~= 200 then return end
 			local s = answer:match('"session_id":"([^"]+)')
 				if not s then return end
