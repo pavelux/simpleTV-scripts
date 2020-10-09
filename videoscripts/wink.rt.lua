@@ -29,20 +29,25 @@
 			preview = ' (предосмотр)'
 		end
 			for adr in answer:gmatch(patt) do
-				local qlty = adr:match('hls/([^_]+)')
-				if qlty then
-					qlty = ' (' .. qlty:upper() .. ')'
+				local qlty = adr:match('hls/([^_]+)') or ''
+				if qlty ~= '4K'then
+					t[i] = {}
+					t[i].Name = title .. ' (' .. qlty:upper() .. ')' .. (preview or '')
+					t[i].Address = 'https://zabava-htvod.cdn.ngenix.net/' .. adr
+					t[i].InfoPanelLogo = poster
+					t[i].InfoPanelName = title
+					t[i].InfoPanelShowTime = 8000
+					t[i].qlty = qlty
 				end
-				t[i] = {}
-				t[i].Id = i
-				t[i].Name = title .. (qlty or '') .. (preview or '')
-				t[i].Address = 'https://zabava-htvod.cdn.ngenix.net/' .. adr
-				t[i].InfoPanelLogo = poster
-				t[i].InfoPanelName = title
-				t[i].InfoPanelShowTime = 8000
 				i = i + 1
 			end
 			if #t == 0 then return end
+		if #t > 1 then
+			table.sort(t, function(a, b) return a.qlty < b.qlty end)
+				for i = 1, #t do
+					t[i].Id = i
+				end
+		end
 	 return t
 	end
 		if not inAdr:match('/media_items/(%d+)') then
