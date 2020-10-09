@@ -1,6 +1,8 @@
--- видеоскрипт для плейлиста "wink" https://wink.rt.ru (19/9/20)
--- Copyright © 2017-2020 Nexterr
--- открывает подобные ссылки:
+-- видеоскрипт для плейлиста "wink" https://wink.rt.ru (10/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- расширение дополнения httptimeshift - wink
+-- ## открывает подобные ссылки ##
 -- https://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHTVHD/variant.m3u8
 -- http://hlsstr03.svc.iptv.rt.ru/hls/CH_TNTHD/variant.m3u8
 -- http://rt-vlg-samara-htlive-lb.cdn.ngenix.net/hls/CH_R03_OTT_VLG_SAMARA_M1/variant.m3u8
@@ -40,6 +42,8 @@ local proxy = ''
 	local session = m_simpleTV.Http.New(userAgent, proxy, false)
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 8000)
+	local offset = inAdr:match('%?offset=%-%d+')
+	extOpt = (offset or '') .. extOpt
 	inAdr = inAdr:gsub('$OPT:.+', '')
 	inAdr = inAdr:gsub('bw%d+/', '')
 	inAdr = inAdr:gsub('%?.-$', '')
