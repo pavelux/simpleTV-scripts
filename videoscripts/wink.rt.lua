@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (9/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (10/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-vod.lua
@@ -20,7 +20,7 @@
 	end
 	local function getAdr(answer, title, poster, patt)
 		local t, i = {}, 1
-		local preview = patt:match('"PREVIEW"')
+		local preview = patt:match('PREVIEW')
 		if preview then
 			preview = ' (предосмотр)'
 		end
@@ -45,12 +45,12 @@
 			showError('1\nэта ссылка не открывается ')
 		 return
 		end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Linux; Android 10; Z832 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Mobile Safari/537.36')
 		if not session then
 			showError('2')
 		 return
 		end
-	m_simpleTV.Http.SetTimeout(session, 12000)
+	m_simpleTV.Http.SetTimeout(session, 25000)
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
@@ -72,23 +72,24 @@
 		end
 	title = title or 'wink.rt'
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
-	local url = decode64('aHR0cHM6Ly9mZS5zdmMuaXB0di5ydC5ydS9DYWNoZUNsaWVudEpzb24vanNvbi9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9T1RUU1RCJklEPQ') .. id
+	local url = decode64('aHR0cDovL2ZlLnN2Yy5pcHR2LnJ0LnJ1L0NhY2hlQ2xpZW50L25jZHhtbC9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9QW5kcm9pZCZJRD0') .. id
+	debug_in_file(url .. '\n')
 	rc, answer = m_simpleTV.Http.Request(session, {url = url})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
-			showError('5')
+			showError('5\nсервер не доступен')
 		return
 		end
-	answer = answer:gsub('%s+', ''):gsub('\n+', '')
-	local patt = {'"CONTENT","ifn":"([^"]+)', '"PREVIEW","ifn":"([^"]+)'}
+	answer = answer:gsub('\n+', ''):gsub('%s+', '')
+	local patt = {'CONTENT</type><ifn>([^<]+)', 'PREVIEW</type><ifn>([^<]+)'}
 	local t
 		for i = 1, #patt do
 			t = getAdr(answer, title, poster, patt[i])
 				if t then break end
 		end
 		if not t then
-			showError('6')
+			showError('6\nадрес не найден')
 		 return
 		end
 	if m_simpleTV.Control.MainMode == 0 then
