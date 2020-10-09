@@ -1,9 +1,9 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (5/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходимы скрипты:
--- yandex-vod, kodik, filmix, videoframe, seasonvar, bazon, ustore
--- zonamobi, iviru, wink-vod, videocdn, hdvb, collaps
--- открывает подобные ссылки:
+-- видеоскрипт для сайта http://www.kinopoisk.ru (9/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходимы скрипты ##
+-- yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
+-- zonamobi.lua, iviru.lua, wink-vod.lua, videocdn.lua, hdvb.lua, collaps.lua
+-- ## открывает подобные ссылки ##
 -- https://www.kinopoisk.ru/film/336434
 -- https://www.kinopoisk.ru/level/1/film/46225/sr/1/
 -- https://www.kinopoisk.ru/level/1/film/942397/sr/1/
@@ -37,8 +37,6 @@ local tname = {
 	'Filmix',
 	'Collaps',
 	'Hdvb',
-	-- 'Bazon',
-	'Ustore',
 	'Seasonvar',
 	'ZonaMobi',
 	}
@@ -114,20 +112,11 @@ local tname = {
 				if rc ~= 200 then return end
 				if not answer:match('"stream_type":"HLS","url":"%a') then return end
 			answer = url
-		elseif url:match('bazon%.cc') then
-			rc, answer = m_simpleTV.Http.Request(session, {url = url})
-				if rc ~= 200 then return end
-				if not answer:match('"link":"[^"]+') then return end
 		elseif url:match('videocdn%.tv') then
 			rc, answer = m_simpleTV.Http.Request(session, {url = url})
 				if rc ~= 200 then return end
 			answer = answer:match('"iframe_src":"([^"]+)')
 				if not answer then return end
-		elseif url:match('ustore%.bz') then
-			rc, answer = m_simpleTV.Http.Request(session, {url = url})
-				if rc ~= 200 then return end
-			answer = answer:match('src:"([^"]+)')
-				if not answer or not answer:match('/(%x+)/(%x+)')then return end
 		elseif url:match('itv%.rt%.ru') then
 				if zonaSerial then return end
 			rc, answer = m_simpleTV.Http.Request(session, {url = url .. url_encode(title) .. '&per_page=15'})
@@ -346,32 +335,6 @@ local tname = {
 			retAdr = rtab[id].Address
 		elseif url:match('kodikapi%.com') then
 			retAdr = answer
-		elseif url:match('bazon%.cc') then
-			local tab = json.decode(answer:gsub('%[%]', '""'))
-				if not tab or not tab.results then
-				 return - 1
-				end
-			local baz, i = {}, 1
-				while true do
-						if not tab.results[i] then break end
-					baz[i] = {}
-					baz[i].Id = i
-					baz[i].Name = tab.results[i].translation
-					baz[i].Address = tab.results[i].link
-					i = i + 1
-				end
-				if i == 1 then
-				 return - 1
-				end
-			if #baz > 1 then
-				local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Перевод', 0, baz, 8000, 1)
-				id = id or 1
-				retAdr = baz[id].Address
-			else
-				retAdr = baz[1].Address
-			end
-		elseif url:match('ustore%.bz') then
-			retAdr = answer
 		elseif url:match('zonasearch%.com/solr/movie') then
 			retAdr = answer
 		elseif url:match('widget%.kinopoisk%.ru') then
@@ -430,10 +393,6 @@ local tname = {
 				turl[i] = {adr = decode64('aHR0cHM6Ly9pZnJhbWUudmlkZW8vYXBpL3YyL3NlYXJjaD9rcD0') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'Kodik' then
 				turl[i] = {adr = decode64('aHR0cDovL2tvZGlrYXBpLmNvbS9nZXQtcGxheWVyP3Rva2VuPTQ0N2QxNzllODc1ZWZlNDQyMTdmMjBkMWVlMjE0NmJlJmtpbm9wb2lza0lEPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
-			elseif tname[i] == 'Bazon' then
-				turl[i] = {adr = decode64('aHR0cHM6Ly9iYXpvbi5jYy9hcGkvc2VhcmNoP3Rva2VuPWMxMThlYjVmOGQzNjU2NWIyYjA4YjUzNDJkYTk3Zjc5JmtwPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
-			elseif tname[i] == 'Ustore' then
-				turl[i] = {adr = decode64('aHR0cDovL3VzdG9yZS5iei92aWRlby5qcz9oYXNoPTRjMzg0MTkyYzM1MjQ1YzdkNTI3YmM5ODQ1NjczMjM3JmtwX2lkPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'КиноПоиск онлайн' then
 				turl[i] = {adr = decode64('aHR0cHM6Ly9vdHQtd2lkZ2V0Lmtpbm9wb2lzay5ydS9raW5vcG9pc2suanNvbj9lcGlzb2RlPSZzZWFzb249JmZyb209a3AmaXNNb2JpbGU9MCZrcElkPQ==') .. kpid, tTitle = 'Фильмы и сериалы с Яндекс.Эфир', tLogo = 'https://www.torpedo.ru/upload/resize_cache/iblock/cad/325_325_1/caddb19b51cd12166d1261700046a8f7.png'}
 			elseif tname[i] == 'ZonaMobi' then
