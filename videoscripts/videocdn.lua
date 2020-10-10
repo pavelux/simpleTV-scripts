@@ -235,7 +235,9 @@ local proxy = ''
 		end
 	inAdr = inAdr:gsub('&kinopoisk', ''):gsub('%?block=%w+', '')
 	m_simpleTV.User.Videocdn.Tabletitle = nil
-	inAdr = inAdr:gsub('^https?://[^/]+', 'https://videocdn.so')
+	if proxy ~= '' then
+		inAdr = inAdr:gsub('^https?://[^/]+', 'https://videocdn.so')
+	end
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then return end
