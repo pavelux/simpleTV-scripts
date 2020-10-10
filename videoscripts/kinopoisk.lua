@@ -119,34 +119,54 @@ local tname = {
 				if not answer then return end
 		elseif url:match('iptv%.rt%.ru') then
 				if zonaSerial then return end
-						local function fingerprint()
-							local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
-							local t = {}
-							local math_random = math.random
-							local a = #alphabet
-								for i = 1, 21 do
-									local rand = math_random(1, a)
-									t[i] = {}
-									t[i] = alphabet:sub(rand, rand)
-								end
-						 return '{"fingerprint":"'.. table.concat(t) .. '"}'
+				local function fingerprint()
+					local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
+					local t = {}
+					local math_random = math.random
+					local a = #alphabet
+						for i = 1, 21 do
+							local rand = math_random(1, a)
+							t[i] = {}
+							t[i] = alphabet:sub(rand, rand)
 						end
+				 return '{"fingerprint":"'.. table.concat(t) .. '"}'
+				end
+			local headers = 'Content-Type: application/json;charset=utf-8'
 			local body = fingerprint()
-			rc, answer = m_simpleTV.Http.Request(session, {url = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens', method = 'post', body = body, headers = 'Content-Type: application/json;charset=utf-8'})
+			local adr = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens'
+			rc, answer = m_simpleTV.Http.Request(session, {url = adr, method = 'post', body = body, headers = headers})
 				if rc ~= 200 then return end
 			local s = answer:match('"session_id":"([^"]+)')
 				if not s then return end
-			rc, answer = m_simpleTV.Http.Request(session, {url = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/search?query=' .. url_encode(title) .. '&limit=15&offset=0&content_types=media_item', headers = 'session_id: ' .. s})
+			adr = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/search?&limit=15&offset=0&content_types=media_item&query=' .. m_simpleTV.Common.toPercentEncoding(title)
+			headers = headers .. '\nsession_id: ' .. s
+			rc, answer = m_simpleTV.Http.Request(session, {url = adr, headers = headers})
 				if rc ~= 200 then return end
 			local tab = json.decode(answer:gsub('%[%]', '""'))
-				if not tab or not tab.items or not tab.items[1] or not tab.items[1].media_item then return end
+				if not tab
+					or not tab.items
+					or not tab.items[1]
+				then
+				 return
+				end
 			local uRt, i = 1, 1
-			local yearRt, nameRt, urlRt, typeRt
+			local yearRt, nameRt, kpRt
 				while tab.items[i] do
 					yearRt = tab.items[i].media_item.year
 					nameRt = tab.items[i].media_item.name
-						if not nameRt or not yearRt then break end
-					if tonumber(yearRt) == year then
+					kpRt = tab.items[i].media_item.ratings.kinopoisk
+						if not nameRt
+							or not yearRt
+							or not kpRt
+						then
+						 break
+						end
+					yearRt = tonumber(yearRt)
+					kpRt = tonumber(kpRt)
+					if year == yearRt
+						and kp_r <= kpRt + 0.1
+						and kp_r >= kpRt - 0.1
+					then
 						Rt[uRt] = {}
 						Rt[uRt].Id = uRt
 						Rt[uRt].Name = nameRt
@@ -157,7 +177,7 @@ local tname = {
 				end
 				if uRt == 1 then return end
 		elseif url:match('ivi%.ru') then
-			rc, answer = m_simpleTV.Http.Request(session, {url = url .. url_encode(orig_title) ..'&from=0&to=5&app_version=870&paid_type=AVOD'})
+			rc, answer = m_simpleTV.Http.Request(session, {url = url .. m_simpleTV.Common.toPercentEncoding(title) ..'&from=0&to=5&app_version=870&paid_type=AVOD'})
 				if rc ~= 200 or (rc == 200 and not answer:match('^{')) then return end
 			local tab = json.decode(answer:gsub('%[%]', '""'))
 				if not tab or not tab.result then return end
@@ -218,7 +238,7 @@ local tname = {
 			end
 			if login and password then
 				local url = filmixsite .. '/engine/ajax/user_auth.php'
-				local rc, answer = m_simpleTV.Http.Request(sessionFilmix, {body = 'login_name=' .. url_encode(login) .. '&login_password=' .. url_encode(password) .. '&login=submit', url = url, method = 'post', headers = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-Requested-With: XMLHttpRequest\nReferer: ' .. filmixsite})
+				local rc, answer = m_simpleTV.Http.Request(sessionFilmix, {body = 'login_name=' .. m_simpleTV.Common.toPercentEncoding(login) .. '&login_password=' .. m_simpleTV.Common.toPercentEncoding(password) .. '&login=submit', url = url, method = 'post', headers = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-Requested-With: XMLHttpRequest\nReferer: ' .. filmixsite})
 			end
 			local filmixurl = filmixsite .. '/search'
 			local rc, filmixansw = m_simpleTV.Http.Request(sessionFilmix, {url = filmixurl .. '/search/' .. namei})
@@ -231,7 +251,7 @@ local tname = {
 				if not (bodypar1 or bodypar2) then return end
 			bodypar = bodypar .. bodypar1:gsub('"', '')
 			local headers = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-Requested-With: XMLHttpRequest\nReferer: ' .. filmixurl
-			local body = bodypar .. '&story=' .. url_encode(namei) .. '&search_start=0&do=search&subaction=search&years_ot=' .. yearot .. '&years_do=' .. yeardo .. '&kpi_ot=' .. ratkinot .. '&kpi_do=' .. ratkindo .. '&imdb_ot=' .. ratimdbot .. '&imdb_do=' .. ratimdbdo .. '&sort_name=asc&undefined=asc&sort_date=&sort_favorite=' .. cat
+			local body = bodypar .. '&story=' .. m_simpleTV.Common.toPercentEncoding(namei) .. '&search_start=0&do=search&subaction=search&years_ot=' .. yearot .. '&years_do=' .. yeardo .. '&kpi_ot=' .. ratkinot .. '&kpi_do=' .. ratkindo .. '&imdb_ot=' .. ratimdbot .. '&imdb_do=' .. ratimdbdo .. '&sort_name=asc&undefined=asc&sort_date=&sort_favorite=' .. cat
 			rc, answer = m_simpleTV.Http.Request(sessionFilmix, {body = body, url = filmixsite .. '/engine/ajax/sphinx_search.php', method = 'post', headers = headers})
 			m_simpleTV.Http.Close(sessionFilmix)
 				if rc ~= 200 or (rc == 200 and (answer:match('^<h3>')
@@ -247,7 +267,7 @@ local tname = {
 				sessionsvar = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/78.0.2785.143 Safari/537.36', proxy, false)
 					if not sessionsvar then return end
 			end
-			rc, answer = m_simpleTV.Http.Request((sessionsvar or session), {url = url .. url_encode(svarnamei)})
+			rc, answer = m_simpleTV.Http.Request((sessionsvar or session), {url = url .. m_simpleTV.Common.toPercentEncoding(svarnamei)})
 				if rc ~= 200 or (rc == 200 and (answer:match('"query":""') or answer:match('"data":null'))) then
 					if sessionsvar then
 						m_simpleTV.Http.Close(sessionsvar)
@@ -256,7 +276,7 @@ local tname = {
 				end
 				if answer:match('"data":%[""%]') or answer:match('"data":%["",""%]') then
 					svarnamei = title:gsub('[!?]', ' '):gsub('ё', 'е')
-					rc, answer = m_simpleTV.Http.Request((sessionsvar or session), {url = url .. url_encode(svarnamei)})
+					rc, answer = m_simpleTV.Http.Request((sessionsvar or session), {url = url .. m_simpleTV.Common.toPercentEncoding(svarnamei)})
 						if rc ~= 200 or (rc == 200 and (answer:match('"query":""') or answer:match('"data":%[""%]') or answer:match('"data":%["",""%]'))) then
 							if sessionsvar then
 								m_simpleTV.Http.Close(sessionsvar)
