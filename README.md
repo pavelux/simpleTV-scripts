@@ -1,5 +1,5 @@
 ---------------------------------------------
-### scripts for simpleTV IPTV Player (http://iptv.gen12.net)
+### скрипты к плееру simpleTV (http://iptv.gen12.net)
 - для версии 0.5.0 b12.7.5 (x32/x64 vlc3011)
 - кодировка UTF-8 without BOM
 ---------------------------------------------
