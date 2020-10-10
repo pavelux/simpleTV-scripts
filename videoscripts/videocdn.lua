@@ -1,4 +1,4 @@
--- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (7/10/20)
+-- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (10/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- открывает подобные ссылки:
 -- https://videocdn.so/fnXOUDB9nNSO?kp_id=5928
@@ -35,7 +35,7 @@ local proxy = ''
 	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = ''
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3809.87 Safari/537.36', proxy, false)
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0', proxy, false)
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
 	if not m_simpleTV.User then
@@ -253,17 +253,26 @@ local proxy = ''
 	if tr and not fromScr then
 		tr = tr:gsub('<template class="__cf_email__" data%-cfemail="%x+">%[email&#160;protected%]</template>', 'MUZOBOZ@')
 		local t, i = {}, 1
-			for Adr, name in tr:gmatch('<option.-value="(.-)".->(.-)</option>') do
-				t[i] = {}
-				t[i].Id = i
-				t[i].Name = name:gsub('<template.-template>', 'неизвестно'):gsub('&amp;', '&')
-				t[i].Address = Adr
-				i = i + 1
+		local selected, adr, name
+			for w in tr:gmatch('<option.-</option>') do
+				adr = w:match('value="([^"]+)')
+				name = w:match('>([^<]+)')
+				if adr and name then
+					t[i] = {}
+					t[i].Id = i
+					t[i].Name = name:gsub('<template.-template>', 'неизвестно'):gsub('&amp;', '&')
+					t[i].Address = adr
+					if w:match('"selected"') then
+						selected = i - 1
+					end
+					i = i + 1
+				end
 			end
 			if i == 1 then return end
+			selected = selected or 0
 		if i > 2 then
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете перевод - ' .. title, 0, t, 5000, 1)
-			if not id then id = 1 end
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете перевод - ' .. title, selected, t, 8000, 1 + 2 + 4 + 8)
+			id = id or selected + 1
 			transl = t[id].Address
 		else
 			transl = t[1].Address
