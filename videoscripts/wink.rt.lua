@@ -43,6 +43,9 @@
 			end
 			if #t == 0 then return end
 		if #t > 1 then
+			if m_simpleTV.User.paramScriptForSkin_buttonOk then
+				t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			end
 			table.sort(t, function(a, b) return a.qlty < b.qlty end)
 				for i = 1, #t do
 					t[i].Id = i
