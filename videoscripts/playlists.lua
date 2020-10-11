@@ -1,4 +1,4 @@
--- видеоскрипт для открытия плейлистов с диска (9/6/20)
+-- видеоскрипт для открытия плейлистов с диска (11/10/20)
 -- необходимы скрипты: youtube
 -- открывает файлы с расширением m3u, m3u8, pls, dpl, asx, xspf, xml, kpl, zpl, aimppl4, mpcpl, Enigma2
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
@@ -408,7 +408,7 @@
 	for r = 1, #t do
 		t0[r].Address = t0[r].Address .. '$OPT:NO-STIMESHIFT'
 	end
-	if #t > 1 then
+	if #t > 0 then
 		if not m_simpleTV.User then
 			m_simpleTV.User = {}
 		end
@@ -429,6 +429,6 @@
 		t0.ExtParams = {AutoNumberFormat = num, FilterType = FilterType}
 		m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t0, 30000)
 	else
-		m_simpleTV.Control.CurrentTitle_UTF8 = t[1].Name
+	 return
 	end
 -- debug_in_file(title .. '\n')
