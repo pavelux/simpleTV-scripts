@@ -1,21 +1,24 @@
--- видеоскрипт для сайта http://kino-live2.org (30/6/20)
+-- видеоскрипт для сайта http://kino-live2.pw (11/10/20)
 -- открывает подобные ссылки:
--- http://kino-live2.org/715732764-kontakt.html
--- http://kino-live12.site/715732790-sobaki-mstiteli.html
+-- http://k34n.live2.pw/715734347-vzryv.html
+-- http://k34n.live2.pw/715734379-kurator.html
+-- http://kino-live2.pw/715732764-kontakt.html
 -- ## прокси ##
-local proxy = 'https://proxy-nossl.antizapret.prostovpn.org:29976'
+local proxy = ''
 -- '' - нет
 --  'https://proxy-nossl.antizapret.prostovpn.org:29976' (пример)
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
 		if not inAdr then return end
-		if not inAdr:match('https?://kino%-live[%d+]*%.')
-			and not inAdr:match('https?://kinolive%.')
+		if not inAdr:match('^https?://kino%-live[%d+]*%.')
+			and not inAdr:match('^https?://kinolive%.')
+			and not inAdr:match('^https?://[%w.]*live2%.pw/')
 			and not inAdr:match('&kinolive')
 		then
 		 return
 		end
+	require 'json'
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000 * 5, id = 'channelName'})
 	m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	local function showError(str)
@@ -30,7 +33,7 @@ local proxy = 'https://proxy-nossl.antizapret.prostovpn.org:29976'
 			if not session then return end
 		m_simpleTV.Http.SetTimeout(session, 8000)
 	local function nameclean(name)
-		local name = name:gsub('%sHD', ''):gsub('1080p?', ''):gsub('720p?', ''):gsub('FullHD', ''):gsub('%(HD%)', ''):gsub('%(SATRip%)', ''):gsub('%(WEBRip%)', ''):gsub('%[%]', ''):gsub('%s%)', ')'):gsub('%(%)', ''):gsub('онлайн на.+', '')
+		local name = name:gsub('%sHD', ''):gsub('1080p?', ''):gsub('720p?', ''):gsub('FullHD', ''):gsub('%(HD%)', ''):gsub('%(SATRip%)', ''):gsub('%(WEBRip%)', ''):gsub('%[%]', ''):gsub('%s%)', ')'):gsub('%(%)', ''):gsub('онлайн на.+', ''):gsub(' смотреть онлайн.-$', '')
 	 return name
 	end
 	local function GetAddressFromPlaylist(answer)
@@ -64,7 +67,7 @@ local proxy = 'https://proxy-nossl.antizapret.prostovpn.org:29976'
 					l = i
 				elseif isfile == false then l = j end
 					a[n].Name = nameclean(t[l].comment .. sezon)
-					a[n].Address = t[l].file .. '&kinolive'
+					a[n].Address = t[l].file:gsub('^https://', 'http://') .. '&kinolive'
 					n = n + 1
 			end
 		end
@@ -107,9 +110,9 @@ local proxy = 'https://proxy-nossl.antizapret.prostovpn.org:29976'
 				end
 			answer = answer:match('{.+}')
 				if not answer then m_simpleTV.Http.Close(session) return end
-			answer = answer:gsub('(%[%])', '"nil"')
+			answer = answer:gsub('(%[%])', '""')
 			retAdr = GetAddressFromPlaylist(answer, title)
-			retAdr = retAdr:gsub('&kinolive', '')
+			retAdr = retAdr:gsub('&kinolive', ''):gsub('^https://', 'http://')
 			m_simpleTV.Control.CurrentAddress = retAdr
 		 return
 		end
@@ -123,6 +126,6 @@ local proxy = 'https://proxy-nossl.antizapret.prostovpn.org:29976'
 			end
 		m_simpleTV.Http.Close(session)
 	end
-	retAdr = retAdr:gsub('&kinolive', '')
+	retAdr = retAdr:gsub('&kinolive', ''):gsub('^https://', 'http://')
 	m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
