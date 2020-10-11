@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (10/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (11/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-vod.lua
@@ -6,7 +6,11 @@
 -- https://wink.rt.ru/media_items/80307404
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
-		if not m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru') then return end
+		if not m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
+			or m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru/tv')
+		then
+		 return
+		end
 	local logo = 'https://wink.rt.ru/assets/fa4f2bd16b18b08e947d77d6b65e397e.svg'
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	if not inAdr:match('&kinopoisk') then
