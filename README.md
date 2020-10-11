@@ -14,6 +14,5 @@
  - прокси/зеркала
 ---------------------------------------------
 Совместимость:
-- в дополнении [TV Playlists](http://iptv.gen12.net/bugtracker/view.php?id=899) удалить ext_zabava.lua
 - удалить или отключить дополнение [videotracks](http://iptv.gen12.net/bugtracker/view.php?id=1704)
 ---------------------------------------------
