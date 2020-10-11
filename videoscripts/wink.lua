@@ -1,5 +1,6 @@
--- видеоскрипт для плейлиста "wink" https://wink.rt.ru (10/10/20)
+-- видеоскрипт для плейлиста "wink" https://wink.rt.ru (11/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- в архиве переключение качества сбрасывает на прямой эфир
 -- ## необходим ##
 -- расширение дополнения httptimeshift - wink
 -- ## открывает подобные ссылки ##
@@ -42,8 +43,7 @@ local proxy = ''
 	local session = m_simpleTV.Http.New(userAgent, proxy, false)
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 8000)
-	local offset = inAdr:match('%?offset=%-%d+')
-	extOpt = (offset or '') .. extOpt
+	local offset = inAdr:match('offset=%-(%d+)')
 	inAdr = inAdr:gsub('$OPT:.+', '')
 	inAdr = inAdr:gsub('bw%d+/', '')
 	inAdr = inAdr:gsub('%?.-$', '')
@@ -101,7 +101,11 @@ local proxy = ''
 			m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 32 + 64 + 128)
 		end
 	end
-	m_simpleTV.Control.CurrentAddress = t[index].Address
+	if offset then
+		m_simpleTV.Control.SetNewAddressT({address = t[index].Address, timeshiftOffset = offset * 1000})
+	else
+		m_simpleTV.Control.CurrentAddress = t[index].Address
+	end
 	function winkSaveQuality(obj, id)
 		m_simpleTV.Config.SetValue('wink_qlty', tostring(id))
 	end
