@@ -1,9 +1,8 @@
--- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (10/10/20)
+-- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (11/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- открывает подобные ссылки:
 -- https://videocdn.so/fnXOUDB9nNSO?kp_id=5928
 -- https://videocdn.so/fnXOUDB9nNSO/tv-series/92
--- https://videocdn.so/fnXOUDB9nNSO/tv-series/4592
 -- https://32.tvmovies.in/fnXOUDB9nNSO/movie/22080
 -- ## прокси ##
 local proxy = ''
@@ -12,11 +11,8 @@ local proxy = ''
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://[%w%.]*videocdn%.')
-			and not m_simpleTV.Control.CurrentAddress:match('^https?://%w+%.tvmovies%.in')
-			and not m_simpleTV.Control.CurrentAddress:match('^https?://%d+%.%d+cdn.tv')
-			and not m_simpleTV.Control.CurrentAddress:match('^https?://%w+%.checksound%.net')
-			and not m_simpleTV.Control.CurrentAddress:match('^https?://%w+%.vstream%.biz')
-			and not m_simpleTV.Control.CurrentAddress:match('^https?://%w+.svetacdn%.in')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://.-/fnXOUDB9nNSO')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://[%w%.]*svetacdn%.')
 			and not m_simpleTV.Control.CurrentAddress:match('^$videocdn')
 		then
 		 return
@@ -214,7 +210,14 @@ local proxy = ''
 		if not m_simpleTV.User.Videocdn.isVideo then
 			t.ExtButton0 = {ButtonEnable = true, ButtonName = '💾', ButtonScript = 'SaveVideocdnPlaylist()'}
 		end
-		t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		end
 		if #t > 0 then
 			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 1 + 4 + 2)
 			if ret == 1 then
@@ -270,10 +273,16 @@ local proxy = ''
 					i = i + 1
 				end
 			end
-			if i == 1 then return end
+			if #t == 0 then return end
 			selected = selected or 0
-		if i > 2 then
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете перевод - ' .. title, selected, t, 8000, 1 + 2 + 4 + 8)
+		if #t > 1 then
+			local id
+			if not fromScr then
+				if m_simpleTV.User.paramScriptForSkin_buttonOk then
+					t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+				end
+				_, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете перевод - ' .. title, selected, t, 8000, 1 + 2 + 4 + 8)
+			end
 			id = id or selected + 1
 			transl = t[id].Address
 		else
@@ -347,8 +356,19 @@ local proxy = ''
 				if i == 1 then return end
 		end
 		m_simpleTV.User.Videocdn.Tabletitle = t
-		t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_Videocdn()'}
-		t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'Qlty_Videocdn()'}
+		else
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_Videocdn()'}
+		end
 		t.ExtParams = {FilterType = 2}
 		local p = 0
 		if i == 2 then
@@ -377,8 +397,19 @@ local proxy = ''
 		t1[1].Name = title
 		t1[1].Address = inAdr
 		if not fromScr then
-			t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_Videocdn()'}
-			t1.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+			if m_simpleTV.User.paramScriptForSkin_buttonClose then
+				t1.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
+			else
+				t1.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonOk then
+				t1.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+				t1.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'Qlty_Videocdn()'}
+			else
+				t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_Videocdn()'}
+			end
 			m_simpleTV.OSD.ShowSelect_UTF8('Videocdn', 0, t1, 5000, 32 + 64 + 128)
 		end
 		m_simpleTV.User.Videocdn.isVideo = true
