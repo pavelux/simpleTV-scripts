@@ -1,10 +1,16 @@
--- видеоскрипт для сайта https://wink.rt.ru (11/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (12/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-vod.lua
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
+-- ## предпочитать HD/SD ##
+local menu = 1
+-- 0 - меню выбора
+-- 1 - HD
+-- 2 - SD
+-- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
 			or m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru/tv')
@@ -46,6 +52,22 @@
 				i = i + 1
 			end
 			if #t == 0 then return end
+		local h = {}
+		if menu > 0 and #t > 1 then
+			if menu == 1 then
+				menu = 'hd'
+			elseif menu == 2 then
+				menu = 'sd'
+			end
+				for i = 1, #t do
+					if t[i].qlty == menu then
+						h[#h + 1] = t[i]
+					end
+				end
+		end
+		if #h > 0 then
+			t = h
+		end
 		if #t > 1 then
 			if m_simpleTV.User.paramScriptForSkin_buttonOk then
 				t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
