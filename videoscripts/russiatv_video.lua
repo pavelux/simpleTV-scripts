@@ -1,22 +1,23 @@
--- видеоскрипт для сайтов (4/5/20)
+-- видеоскрипт для сайтов (12/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- http://russia.tv https://tvkultura.ru https://www.vesti.ru
 -- открывает подобные ссылки:
+-- https://tvkultura.ru/video/show/brand_id/21865/episode_id/2447557
 -- https://russia.tv/video/show/brand_id/15369/episode_id/118601/video_id/118601/
 -- https://tvkultura.ru/article/show/article_id/187807/?utm_source=sharik&utm_medium=banner&utm_campaign=sharik
 -- http://player.vgtrk.com/iframe/video/id/1302294/start_zoom/true/showZoomBtn/false/sid/vesti/isPlay/false/?acc_video_id=294126
 -- http://player.rutv.ru/iframe/video/id/996922
 -- https://www.vesti.ru/videos/show/vid/738256/
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
-	local inAdr = m_simpleTV.Control.CurrentAddress
-		if not inAdr then return end
-		if not inAdr:match('^https?://russia%.tv')
-			and not inAdr:match('^https?://tvkultura%.ru')
-			and not inAdr:match('^https?://player%.vgtrk%.com/iframe/video/')
-			and not inAdr:match('^https?://player%.rutv%.ru/iframe/video/')
-			and not inAdr:match('^https?://[w%.]*vesti%.ru')
+		if not m_simpleTV.Control.CurrentAddress:match('^https?://russia%.tv')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://tvkultura%.ru')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://player%.vgtrk%.com/iframe/video/')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://player%.rutv%.ru/iframe/video/')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://[w%.]*vesti%.ru')
 		then
 		 return
 		end
+	local inAdr = m_simpleTV.Control.CurrentAddress
 		if inAdr:match('%.m3u8') then return end
 	local logo, addTitle
 	if inAdr:match('//tvkultura%.ru') then
@@ -73,8 +74,8 @@
 			handlerInfo.luaFunction = 'PositionThumbs_russia_video'
 			handlerInfo.regexString = '//russia\.tv/.*|//tvkultura\.ru/.*|//www\.vesti\.ru/.*|//player\.rutv\.ru/.*|//player\.vgtrk\.com/.*'
 			handlerInfo.sizeFactor = m_simpleTV.User.paramScriptForSkin_thumbsSizeFactor or 0.18
-			handlerInfo.backColor = m_simpleTV.User.paramScriptForSkin_thumbsBackColor or ARGB(0, 0, 0, 0)
-			handlerInfo.textColor = m_simpleTV.User.paramScriptForSkin_thumbsTextColor or ARGB(255, 127, 255, 0)
+			handlerInfo.backColor = m_simpleTV.User.paramScriptForSkin_thumbsBackColor or 0x00000000
+			handlerInfo.textColor = m_simpleTV.User.paramScriptForSkin_thumbsTextColor or 0xff7fff00
 			handlerInfo.glowParams = m_simpleTV.User.paramScriptForSkin_thumbsGlowParams or 'glow="7" samples="5" extent="4" color="0xB0000000"'
 			handlerInfo.marginBottom = m_simpleTV.User.paramScriptForSkin_thumbsMarginBottom or 0
 			handlerInfo.minImageWidth = 80
@@ -105,16 +106,22 @@
 		 return true
 		end
 	end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3785.143 Safari/537.36')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 16000)
 		if not inAdr:match('/iframe/') then
 			local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 				if rc ~= 200 then m_simpleTV.Http.Close(session) return end
 			if inAdr:match('vesti%.ru') then
-				inAdr = answer:match('<div class="air%-video__player">.-<iframe src="([^"]+)') or answer:match('<a class="article__video%-link show%-video".-data%-video%-url="([^"]+)') or answer:match('<a class="article__video%-link" href.-data%-video%-url="([^"]+)') or answer:match('<meta property="og:video:iframe" content="([^"]+)') or answer:match('<div class="article__video".-<iframe src="([^"]+)')
+				inAdr = answer:match('<div class="air%-video__player">.-<iframe src="([^"]+)')
+						or answer:match('<a class="article__video%-link show%-video".-data%-video%-url="([^"]+)')
+						or answer:match('<a class="article__video%-link" href.-data%-video%-url="([^"]+)')
+						or answer:match('<meta property="og:video:iframe" content="([^"]+)')
+						or answer:match('<div class="article__video".-<iframe src="([^"]+)')
+						or answer:match('"twitter:player" content="([^"]+)')
 			else
-				inAdr = answer:match('<meta property="og:video:iframe" content="([^"]+)') or answer:match('<iframe src="(http.-)"')
+				inAdr = answer:match('<meta property="og:video:iframe" content="([^"]+)')
+						or answer:match('<iframe src="(http.-)"')
 			end
 				if not inAdr then
 					m_simpleTV.Http.Close(session)
@@ -127,8 +134,10 @@
 		 return
 		end
 	local rc, answer = m_simpleTV.Http.Request(session, {url = 'https://player.vgtrk.com/iframe/datavideo/id/' .. id})
-	m_simpleTV.Http.Close(session)
-		if rc ~= 200 then return end
+		if rc ~= 200 then
+			m_simpleTV.Http.Close(session)
+		 return
+		end
 	local retAdr = answer:match('"auto":"([^"]+)')
 		if not retAdr then return end
 	answer = answer:gsub('\\"', '%%22')
@@ -148,9 +157,60 @@
 		title = addTitle .. ' - ' .. title
 	end
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
-	if m_simpleTV.Common.GetVlcVersion() > 3000 then
-		retAdr = retAdr .. '$OPT:no-gnutls-system-trust$OPT:demux=adaptive,any$OPT:adaptive-use-access'
-	end
-	m_simpleTV.Control.CurrentAddress = retAdr .. '$OPT:NO-STIMESHIFT$OPT:no-spu'
+	local extOpt = '$OPT:NO-STIMESHIFT$OPT:no-spu'
 	Thumbs(answer)
--- debug_in_file(retAdr .. '\n')
+	local rc, answer = m_simpleTV.Http.Request(session, {url = retAdr})
+	m_simpleTV.Http.Close(session)
+		if rc ~= 200 then return end
+	local host = retAdr:match('.+/')
+	local t, i = {}, 1
+	local name, adr
+		for w in answer:gmatch('EXT%-X%-STREAM%-INF(.-\n.-)\n') do
+			adr = w:match('\n(.+)')
+			name = w:match('BANDWIDTH=(%d+)')
+				if not adr or not name then break end
+			name = tonumber(name)
+			t[i] = {}
+			t[i].Id = name
+			t[i].Name = (name / 1000) .. ' кбит/с'
+			if not adr:match('^http') then
+				adr = host .. adr
+			end
+			t[i].Address = adr .. extOpt
+			i = i + 1
+		end
+		if i == 1 then
+			m_simpleTV.Control.CurrentAddress = retAdr .. extOpt
+		 return
+		end
+	table.sort(t, function(a, b) return a.Id < b.Id end)
+	local lastQuality = tonumber(m_simpleTV.Config.GetValue('vgtrk_qlty') or 100000000)
+	local index = #t
+	if #t > 1 then
+		t[#t + 1] = {}
+		t[#t].Id = 100000000
+		t[#t].Name = '▫ всегда высокое'
+		t[#t].Address = t[#t - 1].Address
+		index = #t
+			for i = 1, #t do
+				if t[i].Id >= lastQuality then
+					index = i
+				 break
+				end
+			end
+		if index > 1 then
+			if t[index].Id > lastQuality then
+				index = index - 1
+			end
+		end
+		if m_simpleTV.Control.MainMode == 0 then
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+			t.ExtParams = {LuaOnOkFunName = 'vgtrkSaveQuality'}
+			m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 32 + 64 + 128)
+		end
+	end
+	m_simpleTV.Control.CurrentAddress = t[index].Address
+	function vgtrkSaveQuality(obj, id)
+		m_simpleTV.Config.SetValue('vgtrk_qlty', tostring(id))
+	end
+-- debug_in_file(m_simpleTV.Control.CurrentAddress .. '\n')
