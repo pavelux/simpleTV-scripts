@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (10/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (12/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink.rt.lua, wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
@@ -35,6 +35,7 @@ local tname = {
 	'Kodik',
 	'Videoframe',
 	'Filmix',
+	'Ustore',
 	'Collaps',
 	'Hdvb',
 	'Seasonvar',
@@ -112,6 +113,11 @@ local tname = {
 				if rc ~= 200 then return end
 				if not answer:match('"stream_type":"HLS","url":"%a') then return end
 			answer = url
+		elseif url:match('ustore%.bz') then
+			rc, answer = m_simpleTV.Http.Request(session, {url = url})
+				if rc ~= 200 then return end
+			answer = answer:match('src:"([^"]+)')
+				if not answer or not answer:match('/(%x+)/(%x+)') then return end
 		elseif url:match('videocdn%.tv') then
 			rc, answer = m_simpleTV.Http.Request(session, {url = url})
 				if rc ~= 200 then return end
@@ -350,6 +356,8 @@ local tname = {
 			retAdr = answer
 		elseif url:match('videocdn%.tv') then
 			retAdr = answer
+		elseif url:match('ustore%.bz') then
+			retAdr = answer
 		elseif url:match('iptv%.rt%.ru') then
 			local hash, rtab = {}, {}
 			local u
@@ -449,6 +457,8 @@ local tname = {
 				turl[i] = {adr = decode64('aHR0cHM6Ly9pZnJhbWUudmlkZW8vYXBpL3YyL3NlYXJjaD9rcD0') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'Kodik' then
 				turl[i] = {adr = decode64('aHR0cDovL2tvZGlrYXBpLmNvbS9nZXQtcGxheWVyP3Rva2VuPTQ0N2QxNzllODc1ZWZlNDQyMTdmMjBkMWVlMjE0NmJlJmtpbm9wb2lza0lEPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
+			elseif tname[i] == 'Ustore' then
+				turl[i] = {adr = decode64('aHR0cDovL3VzdG9yZS5iei92aWRlby5qcz9oYXNoPTRjMzg0MTkyYzM1MjQ1YzdkNTI3YmM5ODQ1NjczMjM3JmtwX2lkPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'КиноПоиск онлайн' then
 				turl[i] = {adr = decode64('aHR0cHM6Ly9vdHQtd2lkZ2V0Lmtpbm9wb2lzay5ydS9raW5vcG9pc2suanNvbj9lcGlzb2RlPSZzZWFzb249JmZyb209a3AmaXNNb2JpbGU9MCZrcElkPQ==') .. kpid, tTitle = 'Фильмы и сериалы с Яндекс.Эфир', tLogo = 'https://www.torpedo.ru/upload/resize_cache/iblock/cad/325_325_1/caddb19b51cd12166d1261700046a8f7.png'}
 			elseif tname[i] == 'ZonaMobi' then
