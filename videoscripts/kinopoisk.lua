@@ -2,7 +2,7 @@
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink.rt.lua, wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
--- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua
+-- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua, ustore.lua
 -- ## открывает подобные ссылки ##
 -- https://www.kinopoisk.ru/film/336434
 -- https://www.kinopoisk.ru/level/1/film/46225/sr/1/
@@ -172,6 +172,7 @@ local tname = {
 					if year == yearRt
 						and kp_r <= kpRt + 0.1
 						and kp_r >= kpRt - 0.1
+						and kp_r > 0.1
 					then
 						Rt[uRt] = {}
 						Rt[uRt].Id = uRt
