@@ -96,7 +96,6 @@ local proxy = ''
 			end
 		end
 		if m_simpleTV.Control.MainMode == 0 then
-			os.remove(m_simpleTV.MainScriptDir .. decode64('dXNlci9zdGFydHVwL3ZpZGVvdHJhY2tzLmx1YQ'))
 			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 			t.ExtParams = {LuaOnOkFunName = 'winkSaveQuality'}
 			m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 32 + 64 + 128)
