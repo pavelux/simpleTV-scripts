@@ -40,7 +40,7 @@
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
-	local headers = 'Referer: https://kino-2020.online/'
+	local headers = 'Referer: https://4h0y.gitlab.io/'
 	local function ustoreDecode(data)
 		local js = m_simpleTV.User.ustore.js
 		data = jsdecode.DoDecode('qp.decodeUrl32("' .. data .. '")', false, js, 0)
