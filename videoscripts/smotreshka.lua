@@ -53,7 +53,6 @@
 		pass = m_simpleTV.Common.toPercentEncoding(pass)
 		local body = 'email=' .. login .. '&password=' .. pass
 		local headers = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8\nReferer: ' .. url
-		os.remove(m_simpleTV.MainScriptDir .. decode64('dXNlci9zdGFydHVwL3ZpZGVvdHJhY2tzLmx1YQ'))
 		local rc, answer = m_simpleTV.Http.Request(session, {body = body, url = url .. 'login', method = 'post', headers = headers})
 			if rc ~= 200 then return end
 		local tab = json.decode(answer)
