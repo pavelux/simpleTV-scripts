@@ -1,4 +1,4 @@
--- видеоскрипт для плейлиста "megafon" https://megafon.tv (6/10/20)
+-- видеоскрипт для плейлиста "megafon" https://megafon.tv (12/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- скрапер TVS: megafon_pls.lua
@@ -13,7 +13,6 @@
 		end
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
-		os.remove(m_simpleTV.MainScriptDir .. decode64('dXNlci9zdGFydHVwL3ZpZGVvdHJhY2tzLmx1YQ'))
 	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
