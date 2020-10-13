@@ -1,6 +1,8 @@
--- скрапер TVS для загрузки плейлиста "ДомаТвНет" с сайта http://tv.domatv.net (28/6/20)
--- необходим видоскрипт: domatv
--- переименовать каналы ------------------------------------------------------------------
+-- скрапер TVS для загрузки плейлиста "ДомаТвНет" с сайта http://tv.domatv.net (14/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- видоскрипт: domatv.lua
+-- ## переименовать каналы ##
 local filter = {
 	{'1000', 'TV1000'},
 	{'1000 Action', 'TV1000 Action'},
@@ -20,7 +22,7 @@ local filter = {
 	{'Кино HD', 'Кинопремьера'},
 	{'Комедия', 'Кинокомедия'},
 	}
-------------------------------------------------------------------------------------------
+-- ##
 	module('domatv_pls', package.seeall)
 	local my_src_name = 'ДомаТвНет'
 	local function ProcessFilterTableLocal(t)
@@ -33,19 +35,19 @@ local filter = {
 				end
 			end
 		end
-	  return t
+	 return t
 	end
 	function GetSettings()
-		local scrap_settings
-		scrap_settings = {name = my_src_name, sortname = '', scraper = '', m3u = 'out_' .. my_src_name .. '.m3u', logo = '..\\Channel\\logo\\Icons\\domatv.png', TypeSource = 1, TypeCoding = 1, DeleteM3U = 1, RefreshButton = 1, AutoBuild = 0, AutoBuildDay = {0, 0, 0, 0, 0, 0, 0}, LastStart = 0, TVS = {add = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, LogoTVG = 1}, STV = {add = 0, ExtFilter = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, HDGroup = 0, AutoSearch = 1, AutoNumber = 0, NumberM3U = 0, GetSettings = 0, NotDeleteCH = 0, TypeSkip = 1, TypeFind = 1, TypeMedia = 0}}
-	 return scrap_settings
+	 return {name = my_src_name, sortname = '', scraper = '', m3u = 'out_' .. my_src_name .. '.m3u', logo = '..\\Channel\\logo\\Icons\\domatv.png', TypeSource = 1, TypeCoding = 1, DeleteM3U = 1, RefreshButton = 1, show_progress = 0, AutoBuild = 0, AutoBuildDay = {0, 0, 0, 0, 0, 0, 0}, LastStart = 0, TVS = {add = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, LogoTVG = 1}, STV = {add = 1, ExtFilter = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, HDGroup = 1, AutoSearch = 1, AutoNumber = 0, NumberM3U = 0, GetSettings = 0, NotDeleteCH = 0, TypeSkip = 1, TypeFind = 1, TypeMedia = 0, RemoveDupCH = 1}}
 	end
-	function GetVersion() return 2, 'UTF-8' end
+	function GetVersion()
+	 return 2, 'UTF-8'
+	end
 	function LoadFromSite()
-		local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.2785.143 Safari/537.36')
+		local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 			if not session then return end
 		m_simpleTV.Http.SetTimeout(session, 8000)
-		local url = 'http://tv.domatv.net/211-tnv-planeta.html'
+		local url = 'http://nv.domatv.net/211-tnv-planeta.html'
 		local rc, answer = m_simpleTV.Http.Request(session, {url = url})
 		m_simpleTV.Http.Close(session)
 			if rc ~= 200 then return end
@@ -70,14 +72,20 @@ local filter = {
 		local Source = TVSources_var.tmp.source[UpdateID]
 		local t_pls = LoadFromSite()
 			if not t_pls then
-				m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' -> ошибка загрузки плейлиста', color = 0xffff6600, showTime = 1000 * 5, id = 'channelName'})
+				m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' - ошибка загрузки плейлиста'
+											, color = 0xffff6600
+											, showTime = 1000 * 5
+											, id = 'channelName'})
 			 return
 			end
 		t_pls = ProcessFilterTableLocal(t_pls)
-		m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' - ' .. #t_pls, color = 0xff99ff99, showTime = 1000 * 5, id = 'channelName'})
+		m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' (' .. #t_pls .. ')'
+									, color = 0xff99ff99
+									, showTime = 1000 * 5
+									, id = 'channelName'})
 		local m3ustr = tvs_core.ProcessFilterTable(UpdateID, Source, t_pls)
 		local handle = io.open(m3u_file, 'w+')
-			if not handle then return nil end
+			if not handle then return end
 		handle:write(m3ustr)
 		handle:close()
 	 return 'ok'
