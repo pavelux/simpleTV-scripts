@@ -1,28 +1,33 @@
--- скрапер TVS для загрузки плейлиста "moreTV" https://more.tv (21/1/20)
+-- скрапер TVS для загрузки плейлиста "moreTV" https://more.tv (14/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- видоскрипт: mediavitrina.lua
 -- ## переименовать каналы ##
 local filter = {
 	{'Animal Planet', 'Animal Planet HD'},
 	{'Cartoon Network', 'Cartoon Network HD'},
-	{'Discovery', 'Discovery Channel HD'},
 	{'Discovery Science', 'Discovery Science HD'},
+	{'Discovery', 'Discovery Channel HD'},
 	{'EUROSPORT 1', 'Eurosport 1 HD'},
-	{'Fox', 'FOX HD'},
 	{'Fox life', 'FOX Life HD'},
+	{'Fox', 'FOX HD'},
 	{'National Geographic', 'National Geographic HD'},
 	{'TLC', 'TLC HD'},
-	{'TV1000', 'TV 1000 HD'},
 	{'TV1000 Action', 'TV 1000 Action HD'},
 	{'TV1000 Русское кино', 'TV 1000 Русское кино HD'},
-	{'Viasat Explore', 'Viasat Explore HD'},
-	{'Viasat History', 'Viasat History HD'},
-	{'Viasat Nature', 'Viasat Nature HD'},
+	{'TV1000', 'TV 1000 HD'},
 	{'VIASAT SPORT', 'Viasat Sport HD'},
 	{'ViP COMEDY', 'VIP Comedy HD'},
 	{'ViP MEGAHIT', 'VIP Megahit HD'},
 	{'ViP Premiere', 'ViP Premiere HD'},
+	{'Viasat Explore', 'Viasat Explore HD'},
+	{'Viasat History', 'Viasat History HD'},
+	{'Viasat Nature', 'Viasat Nature HD'},
 	{'Vip Serial', 'ViP Serial HD'},
 	{'Первый канал', 'Первый канал HD'},
 	{'Россия 1', 'Россия 1 HD'},
+	{'Россия-1', 'Россия 1 HD'},
+	{'Россия-К', 'Россия К'},
 	{'СТС Kids', 'СТС Kids HD'},
 	}
 -- ##
@@ -41,13 +46,13 @@ local filter = {
 	 return t
 	end
 	function GetSettings()
-	 return {name = my_src_name, sortname = '', scraper = '', m3u = 'out_' .. my_src_name .. '.m3u', logo = '..\\Channel\\logo\\Icons\\moretv.png', TypeSource = 1, TypeCoding = 1, DeleteM3U = 1, RefreshButton = 1, AutoBuild = 0, AutoBuildDay = {0, 0, 0, 0, 0, 0, 0}, LastStart = 0, TVS = {add = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, LogoTVG = 1}, STV = {add = 0, ExtFilter = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, HDGroup = 0, AutoSearch = 1, AutoNumber = 0, NumberM3U = 0, GetSettings = 1, NotDeleteCH = 0, TypeSkip = 1, TypeFind = 1, TypeMedia = 0}}
+	 return {name = my_src_name, sortname = '', scraper = '', m3u = 'out_' .. my_src_name .. '.m3u', logo = '..\\Channel\\logo\\Icons\\moretv.png', TypeSource = 1, TypeCoding = 1, DeleteM3U = 1, RefreshButton = 1, show_progress = 0, AutoBuild = 0, AutoBuildDay = {0, 0, 0, 0, 0, 0, 0}, LastStart = 0, TVS = {add = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, LogoTVG = 1}, STV = {add = 1, ExtFilter = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, HDGroup = 1, AutoSearch = 1, AutoNumber = 0, NumberM3U = 0, GetSettings = 0, NotDeleteCH = 0, TypeSkip = 1, TypeFind = 1, TypeMedia = 0, RemoveDupCH = 1}}
 	end
 	function GetVersion()
 	 return 2, 'UTF-8'
 	end
-	local function moreGetTab()
-		local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36')
+	local function LoadFromSite()
+		local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 			if not session then return end
 		m_simpleTV.Http.SetTimeout(session, 8000)
 		local rc, answer = m_simpleTV.Http.Request(session, {url = decode64('aHR0cHM6Ly9tb3JlLnR2L2FwaS93ZWIvY2hhbm5lbHM')})
@@ -61,9 +66,8 @@ local filter = {
 		local t, i = {}, 1
 		local j	= 1
 		local adr
-			while true do
-					if not tab.data[j] then break end
-				adr = tab.data[j].HLS
+			while tab.data[j] do
+				adr = tab.data[j].vitrinaSamsungTizenSDK
 				if adr then
 					t[i] = {}
 					t[i].name = tab.data[j].title
@@ -80,13 +84,19 @@ local filter = {
 			if not m3u_file then return end
 			if not TVSources_var.tmp.source[UpdateID] then return end
 		local Source = TVSources_var.tmp.source[UpdateID]
-		local t_pls = moreGetTab()
+		local t_pls = LoadFromSite()
 			if not t_pls then
-				m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' - ошибка загрузки плейлиста', color = ARGB(255, 255, 0, 0)})
+				m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' - ошибка загрузки плейлиста'
+											, color = 0xffff6600
+											, showTime = 1000 * 5
+											, id = 'channelName'})
 			 return
 			end
 		t_pls = ProcessFilterTableLocal(t_pls)
-		m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' (' .. #t_pls .. ')', color = ARGB(255, 155, 255, 155), showTime = 1000 * 5, id = 'channelName'})
+		m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' (' .. #t_pls .. ')'
+									, color = 0xff99ff99
+									, showTime = 1000 * 5
+									, id = 'channelName'})
 		local m3ustr = tvs_core.ProcessFilterTable(UpdateID, Source, t_pls)
 		local handle = io.open(m3u_file, 'w+')
 			if not handle then return end
