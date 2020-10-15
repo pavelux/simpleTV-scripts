@@ -1,6 +1,6 @@
-[![simpleTV IPTV player](https://img.shields.io/badge/simpleTV%20IPTV%20player-YouTube%20script-blue)](https://github.com/Nexterr/simpleTV.youtube)
+[![simpleTV IPTV player](https://img.shields.io/badge/simpleTV%20IPTV%20player-YouTube%20script-red)](https://github.com/Nexterr/simpleTV.youtube)
 [![simpleTV IPTV player](https://img.shields.io/badge/simpleTV%20IPTV%20player-API-blue)](http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api)
-[![simpleTV IPTV player](https://img.shields.io/badge/simpleTV%20IPTV%20player-lua%205.1-blue)](https://www.lua.org/manual/5.1/)
+[![simpleTV IPTV player](https://img.shields.io/badge/simpleTV%20IPTV%20player-Lua%205.1-blue)](https://www.lua.org/manual/5.1/)
 <div class="table sectionedit1">
 <table class="inline" style="height: 107px;" width="586">
 <tbody>
