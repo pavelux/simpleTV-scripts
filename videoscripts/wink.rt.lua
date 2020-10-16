@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (16/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (17/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-vod.lua
@@ -38,7 +38,7 @@ local hd_sd = 0
 		end
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then return end
-	m_simpleTV.Http.SetTimeout(session, 25000)
+	m_simpleTV.Http.SetTimeout(session, 12000)
 	local function getAdr(answer, patt)
 		local t, i = {}, 1
 			for adr in answer:gmatch(patt) do
