@@ -124,7 +124,6 @@ local tname = {
 			answer = answer:match('"iframe_src":"([^"]+)')
 				if not answer then return end
 		elseif url:match('iptv%.rt%.ru') then
-				if zonaSerial then return end
 				local function fingerprint()
 					local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
 					local t = {}
