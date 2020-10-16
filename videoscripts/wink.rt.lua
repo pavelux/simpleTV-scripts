@@ -68,9 +68,8 @@ local hd_sd = 0
 	 return adr or t[1].Address
 	end
 	local function getUrl(id)
-		local url = decode64('aHR0cDovL2ZlLnN2Yy5pcHR2LnJ0LnJ1L0NhY2hlQ2xpZW50L25jZHhtbC9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9QW5kcm9pZCZJRD0') .. id
-		local headers = 'User-Agent: SmartLabs/1.51652.472 (sml723x; SML-482) SmartSDK/1.5.63-rt-21.1 Qt/4.7.3 API/20121210'
-		local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
+		local url = decode64('aHR0cDovL3NkcC5zdmMuaXB0di5ydC5ydTo4MDgwL0NhY2hlQ2xpZW50L25jZHhtbC9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9T1RUU1RCJklEPQ') .. id
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url})
 			if rc ~= 200 then return end
 		answer = answer:gsub('\n+', ''):gsub('%s+', '')
 	 return getAdr(answer, 'CONTENT</type><ifn>([^<]+)') or getAdr(answer, 'PREVIEW</type><ifn>([^<]+)')
@@ -136,7 +135,7 @@ local hd_sd = 0
 			end
 			if #t == 0 then return end
 		if #t > 1 then
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000, 1)
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000, 1 + 2)
 			id = id or 1
 			seasonId = t[id].Address
 		else
