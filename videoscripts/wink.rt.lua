@@ -6,10 +6,9 @@
 -- https://wink.rt.ru/media_items/80307404
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
 -- ## предпочитать HD/SD ##
-local menu = 1
--- 0 - меню выбора
--- 1 - HD
--- 2 - SD
+local hd_sd = 0
+-- 0 - HD
+-- 1 - SD
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
@@ -33,63 +32,49 @@ local menu = 1
 	local function showError(str)
 		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
-	local function getAdr(answer, title, poster, patt)
-		local t, i = {}, 1
-		local preview = patt:match('PREVIEW')
-		if preview then
-			preview = ' (предосмотр)'
+		if not inAdr:match('/media_items/(%d+)') then
+			showError('эти ссылки не открываются')
+		 return
 		end
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
+		if not session then return end
+	m_simpleTV.Http.SetTimeout(session, 25000)
+	local function getAdr(answer, patt)
+		local t, i = {}, 1
 			for adr in answer:gmatch(patt) do
 				local qlty = adr:match('hls/([^_]+)') or ''
 				if qlty ~= '4K'then
 					t[i] = {}
-					t[i].Name = title .. ' (' .. qlty:upper() .. ')' .. (preview or '')
 					t[i].Address = 'https://zabava-htvod.cdn.ngenix.net/' .. adr
-					t[i].InfoPanelLogo = poster
-					t[i].InfoPanelName = title
-					t[i].InfoPanelShowTime = 8000
 					t[i].qlty = qlty
 				end
 				i = i + 1
 			end
 			if #t == 0 then return end
-		local h = {}
-		if menu > 0 and #t > 1 then
-			if menu == 1 then
-				menu = 'hd'
-			elseif menu == 2 then
-				menu = 'sd'
+		local adr
+			if hd_sd == 0 then
+				hd_sd = 'hd'
+			elseif hd_sd == 1 then
+				hd_sd = 'sd'
+			else
+			 return	t[1].Address
 			end
-				for i = 1, #t do
-					if t[i].qlty == menu then
-						h[#h + 1] = t[i]
-					end
+			for _, v in pairs(t) do
+				if v.qlty == hd_sd then
+					adr = v.Address
+				 break
 				end
-		end
-		if #h > 0 then
-			t = h
-		end
-		if #t > 1 then
-			if m_simpleTV.User.paramScriptForSkin_buttonOk then
-				t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 			end
-			table.sort(t, function(a, b) return a.qlty < b.qlty end)
-				for i = 1, #t do
-					t[i].Id = i
-				end
-		end
-	 return t
+	 return adr or t[1].Address
 	end
-		if not inAdr:match('/media_items/(%d+)') then
-			showError('1\nэта ссылка не открывается ')
-		 return
-		end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
-		if not session then
-			showError('2')
-		 return
-		end
-	m_simpleTV.Http.SetTimeout(session, 25000)
+	local function getUrl(id)
+		local url = decode64('aHR0cDovL2ZlLnN2Yy5pcHR2LnJ0LnJ1L0NhY2hlQ2xpZW50L25jZHhtbC9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9QW5kcm9pZCZJRD0') .. id
+		local headers = 'User-Agent: SmartLabs/1.51652.472 (sml723x; SML-482) SmartSDK/1.5.63-rt-21.1 Qt/4.7.3 API/20121210'
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
+			if rc ~= 200 then return end
+		answer = answer:gsub('\n+', ''):gsub('%s+', '')
+	 return getAdr(answer, 'CONTENT</type><ifn>([^<]+)') or getAdr(answer, 'PREVIEW</type><ifn>([^<]+)')
+	end
 	local function session_id()
 		local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
 		local t = {}
@@ -163,57 +148,34 @@ local menu = 1
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
-			showError('3')
+			showError('1')
 		 return
 		end
-	local id, title
+	local title = answer:match('"TVSeries","name":"([^"]+)')
+			or answer:match('"Movie","name":"([^"]+)')
+			or 'wink.rt'
+	local id
 	local season = answer:match('"season_id"')
 	if season then
-		title = answer:match('"TVSeries","name":"([^"]+)')
 		id = Serias(answer, title)
 	else
 		id = answer:match('"content_id":(%d+)')
-		title = answer:match('"Movie","name":"([^"]+)')
 	end
 		if not id then
-			showError('4')
+			showError('2')
 		 return
 		end
-	title = title or 'wink.rt'
+	local retAdr = getUrl(id)
+		if not retAdr then
+			showError('3')
+		 return
+		end
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
-	local url = decode64('aHR0cDovL2ZlLnN2Yy5pcHR2LnJ0LnJ1L0NhY2hlQ2xpZW50L25jZHhtbC9WaWRlb01vdmllL2xpc3RfYXNzZXRzP2xvY2F0aW9uSWQ9MTAwMDAxJmRldmljZVR5cGU9QW5kcm9pZCZJRD0') .. id
-	rc, answer = m_simpleTV.Http.Request(session, {url = url})
-	m_simpleTV.Http.Close(session)
-		if rc ~= 200 then
-			m_simpleTV.Http.Close(session)
-			showError('5\nсервер не доступен')
-		return
-		end
-	answer = answer:gsub('\n+', ''):gsub('%s+', '')
-	local patt = {'CONTENT</type><ifn>([^<]+)', 'PREVIEW</type><ifn>([^<]+)'}
-	local t
-		for i = 1, #patt do
-			t = getAdr(answer, title, poster, patt[i])
-				if t then break end
-		end
-		if not t then
-			showError('6\nадрес не найден')
-		 return
-		end
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
 	end
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
-	local retAdr
-	if #t > 1 then
-		local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 8000, 1 + 4 + 8 + 2)
-		id = id or 1
-		retAdr = t[id].Address
-		m_simpleTV.Control.ExecuteAction(37)
-	else
-		retAdr = t[1].Address
-	end
 	m_simpleTV.Control.ChangeAddress = 'No'
 	m_simpleTV.Control.CurrentAddress = retAdr
 	dofile(m_simpleTV.MainScriptDir .. 'user\\video\\video.lua')
