@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (12/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (16/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-vod.lua
@@ -27,6 +27,7 @@ local menu = 1
 	else
 		inAdr = inAdr:gsub('&kinopoisk', '')
 	end
+	require 'json'
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local function showError(str)
@@ -83,12 +84,82 @@ local menu = 1
 			showError('1\nэта ссылка не открывается ')
 		 return
 		end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Linux; Android 10; Z832 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Mobile Safari/537.36')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then
 			showError('2')
 		 return
 		end
 	m_simpleTV.Http.SetTimeout(session, 25000)
+	local function session_id()
+		local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
+		local t = {}
+		local math_random = math.random
+		local a = #alphabet
+			for i = 1, 21 do
+				local rand = math_random(1, a)
+				t[i] = {}
+				t[i] = alphabet:sub(rand, rand)
+			end
+		local headers = 'Content-Type: application/json;charset=utf-8'
+		local body = '{"fingerprint":"'.. table.concat(t) .. '"}'
+		local adr = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens'
+		local rc, answer = m_simpleTV.Http.Request(session, {url = adr, method = 'post', body = body, headers = headers})
+			if rc ~= 200 then return end
+		local s = answer:match('"session_id":"([^"]+)')
+			if not s then return end
+	 return s
+	end
+	local function Serias(answer, title)
+		local s = session_id()
+			if not s then return end
+		local t0, i = {}, 1
+		local seasonId, name
+			for w in answer:gmatch('<label.-</label>') do
+				seasonId = w:match('for="([^"]+)')
+				name = w:match('<span class.->([^<]+)')
+				if seasonId and name then
+					t0[i] = {}
+					t0[i].Id = i
+					t0[i].Name = name
+					t0[i].Address = seasonId
+					i = i + 1
+				end
+			end
+			if #t0 == 0 then return end
+		if #t0 > 1 then
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t0, 5000, 1 + 2)
+			id = id or 1
+			seasonId = t0[id].Address
+		else
+			seasonId = t0[1].Address
+		end
+		local headers = 'session_id: ' .. s
+		local url = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/episodes?with_media_position=true&season_id=' .. seasonId
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
+			if rc ~= 200 then return end
+		answer = answer:gsub(':%s*%[%]', ':""')
+		answer = answer:gsub('%[%]', ' ')
+		local tab = json.decode(answer)
+			if not tab or not tab.items[1] then return end
+		local t, i = {}, 1
+			while tab.items[i] do
+				t[i] = {}
+				t[i].Id = i
+				t[i].Name = tab.items[i].short_name
+				t[i].Address = tab.items[i].id
+				i = i + 1
+			end
+			if #t == 0 then return end
+		if #t > 1 then
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000, 1)
+			id = id or 1
+			seasonId = t[id].Address
+		else
+			seasonId = t[1].Address
+		end
+	 return seasonId
+	end
+	inAdr = inAdr:gsub('^(.-/%d+).-$', '%1')
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
@@ -98,8 +169,8 @@ local menu = 1
 	local id, title
 	local season = answer:match('"season_id"')
 	if season then
-		id = answer:match('"episode_id":(%d+)')
-		title = answer:match('"episode","([^"]+)') or answer:match('"TVSeries","name":"([^"]+)')
+		title = answer:match('"TVSeries","name":"([^"]+)')
+		id = Serias(answer, title)
 	else
 		id = answer:match('"content_id":(%d+)')
 		title = answer:match('"Movie","name":"([^"]+)')
