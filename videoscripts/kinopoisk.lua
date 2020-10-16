@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (12/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (16/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink.rt.lua, wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
@@ -144,7 +144,7 @@ local tname = {
 				if rc ~= 200 then return end
 			local s = answer:match('"session_id":"([^"]+)')
 				if not s then return end
-			adr = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/search?&limit=15&offset=0&content_types=media_item&query=' .. m_simpleTV.Common.toPercentEncoding(title)
+			adr = 'https://cnt-vlmr-itv02.svc.iptv.rt.ru/api/v2/portal/search?&limit=10&offset=0&content_types=media_item&query=' .. m_simpleTV.Common.toPercentEncoding(title)
 			headers = headers .. '\nsession_id: ' .. s
 			rc, answer = m_simpleTV.Http.Request(session, {url = adr, headers = headers})
 				if rc ~= 200 then return end
@@ -156,23 +156,28 @@ local tname = {
 				 return
 				end
 			local uRt, i = 1, 1
-			local yearRt, nameRt, kpRt
+			local yearRt, nameRt, kpRt, imdbRt
 				while tab.items[i] do
 					yearRt = tab.items[i].media_item.year
 					nameRt = tab.items[i].media_item.name
-					kpRt = tab.items[i].media_item.ratings.kinopoisk
 						if not nameRt
 							or not yearRt
-							or not kpRt
 						then
 						 break
 						end
-					yearRt = tonumber(yearRt)
-					kpRt = tonumber(kpRt)
-					if year == yearRt
-						and kp_r <= kpRt + 0.1
-						and kp_r >= kpRt - 0.1
-						and kp_r > 0.1
+					-- kpRt = tab.items[i].media_item.ratings.kinopoisk or 0
+					-- imdbRt = tab.items[i].media_item.ratings.imdb or 0
+					if year == tonumber(yearRt)
+						and
+						-- (
+							-- (imdb_r <= imdbRt + 0.3 and imdb_r >= imdbRt + 0.3 and imdb_r > 0.3)
+						-- or
+							-- (kp_r <= kpRt + 0.1 and kp_r >= kpRt - 0.1 and kp_r > 0.1)
+						-- or
+							-- (kp_r == 0 and kpRt == 0)
+						-- )
+						-- and
+							nameRt:match(title)
 					then
 						Rt[uRt] = {}
 						Rt[uRt].Id = uRt
