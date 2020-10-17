@@ -88,9 +88,12 @@ local hd_sd = 0
 		t[#t].qlty = 100000000
 		t[#t].Name = '▫ всегда высокое'
 		t[#t].Address = t[#t - 1].Address
+		t[#t].Id = 500000000
+		t[#t].Name = '▫ адаптивное'
+		t[#t].Address = url
 		for i = 1, #t do
 			t[i].Id = i
-			t[i].Address = t[i].Address .. extOpt
+			t[i].Address = t[i].Address .. '?wink_rt' .. extOpt
 		end
 		m_simpleTV.User.wink_rt.qlty_tab = t
 		local index = wink_rt_Index(t)
@@ -306,7 +309,7 @@ local hd_sd = 0
 		end
 		local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 1 + 4 + 2)
 		if ret == 1 then
-			m_simpleTV.Control.SetNewAddress(t[id].Address, m_simpleTV.Control.GetPosition())
+			m_simpleTV.Control.SetNewAddressT({address = t[id].Address, position = m_simpleTV.Control.GetPosition()})
 			m_simpleTV.Config.SetValue('wink_rt_qlty', t[id].qlty)
 		end
 	end
@@ -321,7 +324,7 @@ local hd_sd = 0
 		if m_simpleTV.User.wink_rt.DelayedAddress then
 			local state = m_simpleTV.Control.GetState()
 			if state == 0 then
-				m_simpleTV.Control.SetNewAddress(m_simpleTV.User.wink_rt.DelayedAddress)
+				m_simpleTV.Control.SetNewAddressT({address = m_simpleTV.User.wink_rt.DelayedAddress})
 			end
 			m_simpleTV.User.wink_rt.DelayedAddress = nil
 		end
