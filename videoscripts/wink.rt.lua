@@ -32,6 +32,7 @@ local hd_sd = 0
 	if not m_simpleTV.User.wink_rt then
 		m_simpleTV.User.wink_rt = {}
 	end
+	m_simpleTV.User.wink_rt.DelayedAddress = nil
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local function showError(str)
@@ -87,10 +88,6 @@ local hd_sd = 0
 		t[#t].qlty = 100000000
 		t[#t].Name = '▫ всегда высокое'
 		t[#t].Address = t[#t - 1].Address
-		t[#t + 1] = {}
-		t[#t].qlty = 500000000
-		t[#t].Name = '▫ адаптивное'
-		t[#t].Address = url .. extOpt
 		for i = 1, #t do
 			t[i].Id = i
 			t[i].Address = t[i].Address .. extOpt
@@ -196,7 +193,10 @@ local hd_sd = 0
 				t[i].InfoPanelTitle = tab.items[i].short_description
 				i = i + 1
 			end
-			if #t == 0 then return end
+			if #t == 0 then
+				showError('1.1')
+			 return
+			end
 		if m_simpleTV.User.paramScriptForSkin_buttonClose then
 			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 		else
@@ -210,14 +210,39 @@ local hd_sd = 0
 		else
 			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
 		end
+		t.ExtParams = {}
+		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_rt'
+		t.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_wink_rt'
+		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_rt'
+		local pl
 		if #t > 1 then
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000)
-			id = id or 1
-			seasonId = t[id].Address
+			pl = 0
 		else
-			seasonId = t[1].Address
+			pl = 32
 		end
-	 return seasonId, title
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink.rt', 0, t, 10000, 2 + 64 + pl)
+		local retAdr = t[1].Address:match('%d+')
+			if not retAdr then
+				showError('1.2')
+			 return
+			end
+		retAdr = getUrl(retAdr)
+			if not retAdr then
+				showError('1.3')
+			 return
+			end
+		retAdr = qltyFromUrl(retAdr)
+		m_simpleTV.Http.Close(session)
+			if not retAdr then
+				showError('1.4')
+			 return
+			end
+		m_simpleTV.User.wink_rt.DelayedAddress = retAdr
+		if #t > 1 then
+			retAdr = 'wait'
+		end
+		m_simpleTV.Control.CurrentTitle_UTF8 = title
+		m_simpleTV.Control.CurrentAddress = retAdr
 	end
 	local function movie(answer, title)
 		local id = answer:match('"content_id":(%d+)')
@@ -267,9 +292,9 @@ local hd_sd = 0
 -- debug_in_file(retAdr .. '\n')
 	end
 	function qltySelect_wink_rt()
+		m_simpleTV.Control.ExecuteAction(36, 0)
 		local t = m_simpleTV.User.wink_rt.qlty_tab
 			if not t then return end
-		m_simpleTV.Control.ExecuteAction(37)
 		local index = wink_rt_Index(t)
 		if m_simpleTV.User.paramScriptForSkin_buttonOk then
 			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
@@ -285,6 +310,23 @@ local hd_sd = 0
 			m_simpleTV.Config.SetValue('wink_rt_qlty', t[id].qlty)
 		end
 	end
+	function OnMultiAddressOk_wink_rt(Object, id)
+		if id == 0 then
+			OnMultiAddressCancel_wink_rt(Object)
+		else
+			m_simpleTV.User.wink_rt.DelayedAddress = nil
+		end
+	end
+	function OnMultiAddressCancel_wink_rt(Object)
+		if m_simpleTV.User.wink_rt.DelayedAddress then
+			local state = m_simpleTV.Control.GetState()
+			if state == 0 then
+				m_simpleTV.Control.SetNewAddress(m_simpleTV.User.wink_rt.DelayedAddress)
+			end
+			m_simpleTV.User.wink_rt.DelayedAddress = nil
+		end
+		m_simpleTV.Control.ExecuteAction(36, 0)
+	end
 		if inAdr:match('^wink_rt') then
 			play(inAdr)
 		 return
@@ -299,7 +341,6 @@ local hd_sd = 0
 	local title = answer:match('"TVSeries","name":"([^"]+)')
 			or answer:match('"Movie","name":"([^"]+)')
 			or 'wink.rt'
-	m_simpleTV.User.wink_rt.title = title
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
@@ -307,8 +348,8 @@ local hd_sd = 0
 	end
 	local season = answer:match('"season_id"')
 	if season then
-		inAdr, title = serias(answer, title)
+		serias(answer, title)
+	 return
 	else
-		inAdr, title = movie(answer, title)
+		play(movie(answer, title))
 	end
-	play(inAdr, title)
