@@ -4,7 +4,7 @@
 -- https://wink.rt.ru/media_items/80307404
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
 -- ## предпочитать HD/SD ##
-local hd_sd = 1
+local hd_sd = 0
 -- 0 - HD
 -- 1 - SD
 -- ##
