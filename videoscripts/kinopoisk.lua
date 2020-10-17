@@ -155,7 +155,7 @@ local tname = {
 				 return
 				end
 			local uRt, i = 1, 1
-			local name = title:gsub('ё', 'е'):gsub('%-', '–'):gsub('—', '–')
+			local name = title:gsub('ё', 'е'):gsub('%-', '–'):gsub('—', '–'):gsub(' I$', ' 1'):gsub(' II$', ' 2'):gsub(' III$', ' 3'):gsub(' I:', ' 1:'):gsub(' II:', ' 2:'):gsub(' III:', ' 3:'):gsub(' IV:', ' 4:'):gsub(' IV$', ' 4'):gsub(' V:', ' 5:'):gsub(' V$', ' 5')
 			local yearRt, nameRt, kpRt, imdbRt
 				while tab.items[i] do
 					yearRt = tab.items[i].media_item.year
@@ -165,7 +165,7 @@ local tname = {
 						then
 						 break
 						end
-					nameRt = nameRt:gsub('ё', 'е'):gsub('%-', '–'):gsub('—', '–')
+					nameRt = nameRt:gsub('ё', 'е'):gsub('%-', '–'):gsub('—', '–'):gsub(' I$', ' 1'):gsub(' II$', ' 2'):gsub(' III$', ' 3'):gsub(' I:', ' 1:'):gsub(' II:', ' 2:'):gsub(' III:', ' 3:'):gsub(' IV:', ' 4:'):gsub(' IV$', ' 4'):gsub(' V:', ' 5:'):gsub(' V$', ' 5')
 					if year == tonumber(yearRt)
 						and nameRt:match(name)
 					then
