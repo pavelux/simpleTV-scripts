@@ -4,7 +4,7 @@
 -- https://wink.rt.ru/media_items/80307404
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
 -- ## предпочитать HD/SD ##
-local hd_sd = 0
+local hd_sd = 1
 -- 0 - HD
 -- 1 - SD
 -- ##
@@ -273,6 +273,7 @@ local hd_sd = 0
 		end
 		t.ExtParams = {}
 		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_rt'
+		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_rt'
 		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
 	 return id, title
 	end
