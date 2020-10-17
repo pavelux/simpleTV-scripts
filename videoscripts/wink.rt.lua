@@ -223,7 +223,7 @@ local hd_sd = 0
 		else
 			pl = 32
 		end
-		m_simpleTV.OSD.ShowSelect_UTF8('Wink.rt', 0, t, 10000, 2 + 64 + pl)
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 10000, 2 + 64 + pl)
 		local retAdr = t[1].Address:match('%d+')
 			if not retAdr then
 				showError('1.2')
@@ -271,7 +271,9 @@ local hd_sd = 0
 		else
 			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
 		end
-		m_simpleTV.OSD.ShowSelect_UTF8('Wink.rt', 0, t, 5000, 32 + 64 + 128)
+		t.ExtParams = {}
+		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_rt'
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
 	 return id, title
 	end
 	local function play(retAdr, title)
@@ -343,7 +345,7 @@ local hd_sd = 0
 		end
 	local title = answer:match('"TVSeries","name":"([^"]+)')
 			or answer:match('"Movie","name":"([^"]+)')
-			or 'wink.rt'
+			or 'Wink'
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
