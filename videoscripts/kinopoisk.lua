@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (17/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (18/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink.rt.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
@@ -155,7 +155,7 @@ local tname = {
 				 return
 				end
 			local uRt, i = 1, 1
-			local name = title:gsub('ё', 'е')
+			local name = title:gsub('ё', 'е'):gsub('%-', '–'):gsub('—', '–')
 			local yearRt, nameRt, kpRt, imdbRt
 				while tab.items[i] do
 					yearRt = tab.items[i].media_item.year
@@ -165,7 +165,7 @@ local tname = {
 						then
 						 break
 						end
-					nameRt = nameRt:gsub('ё', 'е')
+					nameRt = nameRt:gsub('ё', 'е'):gsub('%-', '–'):gsub('—', '–')
 					if year == tonumber(yearRt)
 						and nameRt:match(name)
 					then
