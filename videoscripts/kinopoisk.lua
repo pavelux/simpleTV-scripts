@@ -1,7 +1,7 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (16/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (17/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
--- wink.rt.lua, wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
+-- wink.rt.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
 -- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua, ustore.lua
 -- ## открывает подобные ссылки ##
 -- https://www.kinopoisk.ru/film/336434
