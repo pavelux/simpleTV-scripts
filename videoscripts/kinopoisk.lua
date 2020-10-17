@@ -52,6 +52,7 @@ local tname = {
 		 return
 		end
 	require 'json'
+	local htmlEntities = require 'htmlEntities'
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 3, Once = 1})
@@ -80,21 +81,7 @@ local tname = {
 	local rc, answer, retAdr, title, orig_title, year, kp_r, imdb_r, zonaAbuse, zonaUrl, zonaSerial, zonaId, zonaDesc, logourl, eng_title, languages_imdb
 	local usvar, i, u = 1, 1, 1
 	local function unescape_html(str)
-		str = str:gsub('&rsquo;', 'e')
-		str = str:gsub('&eacute;', "'")
-		str = str:gsub('&#039;', "'")
-		str = str:gsub('&ndash;', "-")
-		str = str:gsub('&#8217;', "'")
-		str = str:gsub('&raquo;', '"')
-		str = str:gsub('&laquo;', '"')
-		str = str:gsub('&lt;', '<')
-		str = str:gsub('&gt;', '>')
-		str = str:gsub('&quot;', '"')
-		str = str:gsub('&apos;', "'")
-		str = str:gsub('&#(%d+);', function(n) return string.char(n) end)
-		str = str:gsub('&#x(%d+);', function(n) return string.char(tonumber(n, 16)) end)
-		str = str:gsub('&amp;', '&') -- Be sure to do this after all others
-	 return str
+	 return htmlEntities.decode(str)
 	end
 	local function answerZonaMovie()
 		local rc, answer = m_simpleTV.Http.Request(session, {url = decode64('aHR0cDovL3pzb2xyMy56b25hc2VhcmNoLmNvbS9zb2xyL21vdmllL3NlbGVjdC8/d3Q9anNvbiZmbD1uYW1lX29yaWdpbmFsLHllYXIsc2VyaWFsLHJhdGluZ19raW5vcG9pc2ssbmFtZV9ydXMscmF0aW5nX2ltZGIsbW9iaV91cmwsbGFuZ3VhZ2VzX2ltZGIsbmFtZV9lbmcsYWJ1c2UsbW9iaV9saW5rX2lkLGRlc2NyaXB0aW9uJnE9aWQ6') .. kpid})
