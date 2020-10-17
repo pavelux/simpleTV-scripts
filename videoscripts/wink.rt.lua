@@ -1,7 +1,5 @@
 -- видеоскрипт для сайта https://wink.rt.ru (17/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
--- ## необходим ##
--- видоскрипт: wink-vod.lua
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
@@ -11,7 +9,8 @@ local hd_sd = 0
 -- 1 - SD
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
-		if not m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
+		if not (m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
+			or m_simpleTV.Control.CurrentAddress:match('^wink_rt'))
 			or m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru/tv')
 		then
 		 return
@@ -27,18 +26,79 @@ local hd_sd = 0
 		inAdr = inAdr:gsub('&kinopoisk', '')
 	end
 	require 'json'
+	if not m_simpleTV.User then
+		m_simpleTV.User = {}
+	end
+	if not m_simpleTV.User.wink_rt then
+		m_simpleTV.User.wink_rt = {}
+	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local function showError(str)
 		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
-		if not inAdr:match('/media_items/(%d+)') then
+		if not inAdr:match('/media_items/(%d+)')
+			and not inAdr:match('^wink_rt')
+		then
 			showError('эти ссылки не открываются')
 		 return
 		end
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
+	local function wink_rt_Index(t)
+		local lastQuality = tonumber(m_simpleTV.Config.GetValue('wink_rt_qlty') or 100000000)
+		local index = #t
+			for i = 1, #t do
+				if t[i].qlty >= lastQuality then
+					index = i
+				 break
+				end
+			end
+		if index > 1 then
+			if t[index].qlty > lastQuality then
+				index = index - 1
+			end
+		end
+	 return index
+	end
+	local function qltyFromUrl(url)
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url})
+			if rc ~= 200 then return end
+		answer = answer .. '\n'
+		local t, i = {}, 1
+		local name, adr
+			for w in answer:gmatch('EXT%-X%-STREAM%-INF(.-\n.-)\n') do
+				adr = w:match('\n(.+)')
+				name = w:match('BANDWIDTH=(%d+)')
+				if adr and name then
+					name = tonumber(name)
+					t[i] = {}
+					t[i].Name = (name / 1000) .. ' кбит/с'
+					t[i].Address = adr
+					t[i].qlty = name
+					i = i + 1
+				end
+			end
+			if #t == 0 then return end
+		local extOpt = '$OPT:NO-STIMESHIFT'
+		table.sort(t, function(a, b) return a.qlty < b.qlty end)
+		t[#t + 1] = {}
+		t[#t].qlty = 100000000
+		t[#t].Name = '▫ всегда высокое'
+		t[#t].Address = t[#t - 1].Address
+		t[#t + 1] = {}
+		t[#t].qlty = 500000000
+		t[#t].Name = '▫ адаптивное'
+		t[#t].Address = url .. extOpt
+		for i = 1, #t do
+			t[i].Id = i
+			t[i].Address = t[i].Address .. extOpt
+		end
+		m_simpleTV.User.wink_rt.qlty_tab = t
+		local index = wink_rt_Index(t)
+	 return t[index].Address
+	end
 	local function getAdr(answer, patt)
 		local t, i = {}, 1
 			for adr in answer:gmatch(patt) do
@@ -93,7 +153,7 @@ local hd_sd = 0
 			if not s then return end
 	 return s
 	end
-	local function Serias(answer, title)
+	local function serias(answer, title)
 		local s = session_id()
 			if not s then return end
 		local t0, i = {}, 1
@@ -129,20 +189,106 @@ local hd_sd = 0
 			while tab.items[i] do
 				t[i] = {}
 				t[i].Id = i
-				t[i].Name = tab.items[i].short_name
-				t[i].Address = tab.items[i].id
+				t[i].Name = tab.items[i].name
+				t[i].Address = 'wink_rt_' .. tab.items[i].id
+				t[i].InfoPanelShowTime = 8000
+				t[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab.items[i].screenshots
+				t[i].InfoPanelTitle = tab.items[i].short_description
 				i = i + 1
 			end
 			if #t == 0 then return end
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_rt()'}
+		else
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
+		end
 		if #t > 1 then
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000, 1 + 2)
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000)
 			id = id or 1
 			seasonId = t[id].Address
 		else
 			seasonId = t[1].Address
 		end
-	 return seasonId
+	 return seasonId, title
 	end
+	local function movie(answer, title)
+		local id = answer:match('"content_id":(%d+)')
+			if not id then return end
+		local t = {}
+		t[1] = {}
+		t[1].Id = 1
+		t[1].Name = title
+		t[1].Address = id
+		t[1].InfoPanelShowTime = 8000
+		t[1].InfoPanelLogo = answer:match('"thumbnailUrl":"([^"]+)')
+		t[1].InfoPanelTitle = answer:match('"description":"([^"]+)')
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_rt()'}
+		else
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
+		end
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink.rt', 0, t, 5000, 32 + 64 + 128)
+	 return id, title
+	end
+	local function play(retAdr, title)
+		retAdr = retAdr:match('%d+')
+			if not retAdr then
+				showError('2')
+			 return
+			end
+		retAdr = getUrl(retAdr)
+			if not retAdr then
+				showError('3')
+			 return
+			end
+		retAdr = qltyFromUrl(retAdr)
+		m_simpleTV.Http.Close(session)
+			if not retAdr then
+				showError('4')
+			 return
+			end
+		m_simpleTV.Control.CurrentAddress = retAdr
+-- debug_in_file(retAdr .. '\n')
+	end
+	function qltySelect_wink_rt()
+		local t = m_simpleTV.User.wink_rt.qlty_tab
+			if not t then return end
+		m_simpleTV.Control.ExecuteAction(37)
+		local index = wink_rt_Index(t)
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+		end
+		local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 1 + 4 + 2)
+		if ret == 1 then
+			m_simpleTV.Control.SetNewAddress(t[id].Address, m_simpleTV.Control.GetPosition())
+			m_simpleTV.Config.SetValue('wink_rt_qlty', t[id].qlty)
+		end
+	end
+		if inAdr:match('^wink_rt') then
+			play(inAdr)
+		 return
+		end
 	inAdr = inAdr:gsub('^(.-/%d+).-$', '%1')
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
@@ -153,29 +299,16 @@ local hd_sd = 0
 	local title = answer:match('"TVSeries","name":"([^"]+)')
 			or answer:match('"Movie","name":"([^"]+)')
 			or 'wink.rt'
-	local id
-	local season = answer:match('"season_id"')
-	if season then
-		id = Serias(answer, title)
-	else
-		id = answer:match('"content_id":(%d+)')
-	end
-		if not id then
-			showError('2')
-		 return
-		end
-	local retAdr = getUrl(id)
-		if not retAdr then
-			showError('3')
-		 return
-		end
+	m_simpleTV.User.wink_rt.title = title
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
 	end
-	m_simpleTV.Control.CurrentTitle_UTF8 = title
-	m_simpleTV.Control.ChangeAddress = 'No'
-	m_simpleTV.Control.CurrentAddress = retAdr
-	dofile(m_simpleTV.MainScriptDir .. 'user\\video\\video.lua')
--- debug_in_file(retAdr .. '\n')
+	local season = answer:match('"season_id"')
+	if season then
+		inAdr, title = serias(answer, title)
+	else
+		inAdr, title = movie(answer, title)
+	end
+	play(inAdr, title)
