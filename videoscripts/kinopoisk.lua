@@ -155,6 +155,7 @@ local tname = {
 				 return
 				end
 			local uRt, i = 1, 1
+			local name = title:gsub('ё', 'е')
 			local yearRt, nameRt, kpRt, imdbRt
 				while tab.items[i] do
 					yearRt = tab.items[i].media_item.year
@@ -164,19 +165,9 @@ local tname = {
 						then
 						 break
 						end
-					-- kpRt = tab.items[i].media_item.ratings.kinopoisk or 0
-					-- imdbRt = tab.items[i].media_item.ratings.imdb or 0
+					nameRt = nameRt:gsub('ё', 'е')
 					if year == tonumber(yearRt)
-						and
-						-- (
-							-- (imdb_r <= imdbRt + 0.3 and imdb_r >= imdbRt + 0.3 and imdb_r > 0.3)
-						-- or
-							-- (kp_r <= kpRt + 0.1 and kp_r >= kpRt - 0.1 and kp_r > 0.1)
-						-- or
-							-- (kp_r == 0 and kpRt == 0)
-						-- )
-						-- and
-							nameRt:match(title)
+						and nameRt:match(name)
 					then
 						Rt[uRt] = {}
 						Rt[uRt].Id = uRt
