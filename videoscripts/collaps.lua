@@ -1,6 +1,7 @@
--- видеоскрипт для видеобазы "Collaps" https://collaps.org (18/4/20)
--- открывает подобные ссылки:
--- https://api1571722975.delivembed.cc/embed/movie/10517
+-- видеоскрипт для видеобазы "Collaps" https://collaps.org (19/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
+-- https://api1603044906.placehere.link/embed/movie/7059
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://api%d+%..-/embed/movie/%d+')
 			and not m_simpleTV.Control.CurrentAddress:match('^https?://api%d+%..-/embed/kp/%d+')
@@ -18,22 +19,15 @@
 	m_simpleTV.Control.CurrentAddress = ''
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3945.79 Safari/537.36')
 		if not session then return end
-	m_simpleTV.Http.SetTimeout(session, 8000)
+	m_simpleTV.Http.SetTimeout(session, 12000)
 	if not m_simpleTV.User then
 		m_simpleTV.User = {}
 	end
 	if not m_simpleTV.User.collaps then
 		m_simpleTV.User.collaps = {}
 	end
-	local title
 	local refer = 'https://zombie-film.com/'
 	local host = inAdr:match('https?://.-/')
-	if m_simpleTV.User.collaps.TabTitle then
-		local index = m_simpleTV.Control.GetMultiAddressIndex()
-		if index then
-			title = m_simpleTV.User.collaps.title .. ' - ' .. m_simpleTV.User.collaps.TabTitle[index].Name
-		end
-	end
 	local function collapsIndex(t)
 		local lastQuality = tonumber(m_simpleTV.Config.GetValue('collaps_qlty') or 5000)
 		local index = #t
@@ -51,12 +45,21 @@
 	 return index
 	end
 	local function GetcollapsAdr(url)
+		url = url:gsub('^https://', 'http://')
+		url = url:match('"%d+":"(https?://.-)"')
+		url = url:gsub('%.mp4.-$', '.mp4/master.m3u8')
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url})
+			if rc ~= 200 then return end
 		local t, i = {}, 1
-		local qlty, adr
-			for qlty, adr in url:gmatch('"(%d+)":"(https?://.-)"') do
+			for w in answer:gmatch('EXT%-X%-STREAM.-\n.-\n') do
+				adr = w:match('\n(.-)%c')
+				name = w:match('RESOLUTION=%d+x(%d+)')
+					if not adr or not name then break end
+				name = tonumber(name)
 				t[i] = {}
+				t[i].Name = name .. 'p'
 				t[i].Address = adr
-				t[i].qlty = qlty
+				t[i].qlty = name
 				i = i + 1
 			end
 			if i == 1 then return end
@@ -86,7 +89,8 @@
 		table.sort(t, function(a, b) return a.qlty < b.qlty end)
 		for i = 1, #t do
 			t[i].Id = i
-			t[i].Address = t[i].Address .. '$OPT:NO-STIMESHIFT$OPT:http-referrer=' .. refer
+			t[i].Address = t[i].Address:gsub('%.m3u8$', '-a1.m3u8'):gsub('^https://', 'http://')
+							.. '$OPT:NO-STIMESHIFT'
 		end
 		m_simpleTV.User.collaps.Tab = t
 		local index = collapsIndex(t)
@@ -114,7 +118,7 @@
 		if m_simpleTV.Control.CurrentTitle_UTF8 then
 			m_simpleTV.Control.CurrentTitle_UTF8 = title
 		end
-		m_simpleTV.OSD.ShowMessageT({text = title, color = ARGB(255, 155, 155, 255), showTime = 1000 * 5, id = 'channelName'})
+		m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 		m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
 	end
@@ -123,85 +127,60 @@
 		 return
 		end
 	inAdr = inAdr:gsub('&kinopoisk', ''):gsub('buildplayer%.com', 'iframecdn.club')
-	m_simpleTV.User.collaps.TabTitle = nil
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr, headers = 'Referer: ' .. refer})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
-			m_simpleTV.OSD.ShowMessageT({text = 'collaps ошибка[1]-' .. rc, color = ARGB(255, 255, 0, 0), showTime = 1000 * 5, id = 'channelName'})
+			m_simpleTV.OSD.ShowMessageT({text = 'collaps ошибка[1]-' .. rc, color = 0xffff1000, showTime = 1000 * 5, id = 'channelName'})
 		 return
 		end
 	local season_title = ''
 	local seson = ''
-	title = m_simpleTV.Control.CurrentTitle_UTF8 or 'Collaps'
+	local title = m_simpleTV.Control.CurrentTitle_UTF8 or 'Collaps'
 	m_simpleTV.Control.SetTitle(title)
-	local seasons = answer:match('franchise:%s*(%d+)')
-	if seasons then
-		inAdr = host .. 'contents/season/by-franchise/?id=' .. seasons
-		local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr, headers = 'Referer: ' .. refer})
-			if rc ~= 200 then return end
-		answer = answer:gsub('(%[%])', '"nil"')
-		local tab = json.decode(answer)
+	local serials = answer:match('seasons:(%[.-%]}%])')
+	if serials then
+		serials = serials:gsub('%[%]', '""')
+		local tab = json.decode(serials)
 			if not tab then return end
-		local t, i = {}, 1
+		local t0, i = {}, 1
 			while true do
 					if not tab[i] then break end
-				t[i] = {}
-				t[i].Id = i
-				t[i].Name = tab[i].season .. ' сезон'
-				t[i].forSort = tab[i].season
-				t[i].Address = tab[i].id
+				t0[i] = {}
+				t0[i].Name = tab[i].season .. ' сезон'
+				t0[i].Address = i
 				i = i + 1
 			end
 			if i == 1 then return end
 		if i > 2 then
-			table.sort(t, function(a, b) return a.forSort < b.forSort end)
-			for i = 1, #t do
-				t[i].Id = i
+			table.sort(t0, function(a, b) return a.Name < b.Name end)
+			for i = 1, #t0 do
+				t0[i].Id = i
 			end
-			t.ExtParams = {FilterType = 2}
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете сезон - ' .. title, 0, t, 5000, 1)
-			if not id then
-				id = 1
-			end
-		 	seson = t[id].Address
-			season_title = ' (' .. t[id].Name .. ')'
+			t0.ExtParams = {FilterType = 2}
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете сезон - ' .. title, 0, t0, 5000, 1)
+			id = id or 1
+		 	seson = t0[id].Address
+			season_title = ' (' .. t0[id].Name .. ')'
 		else
-			seson = t[1].Address
-			local ses = t[1].Name:match('%d+') or '0'
+			seson = t0[1].Address
+			local ses = t0[1].Name:match('%d+') or '0'
 			if tonumber(ses) > 1 then
-				season_title = ' (' .. t[1].Name .. ')'
+				season_title = ' (' .. t0[1].Name .. ')'
 			end
 		end
-	end
-	local episodes = answer:match('seasonId:%s*(%d+)')
-	if episodes then
-		inAdr = host .. 'contents/video/by-season/?id=' .. seson
-		local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr, headers = 'Referer: ' .. refer})
-			if rc ~= 200 then return end
-		answer = answer:gsub('(%[%])', '"nil"')
-		local tab = json.decode(answer)
-			if not tab then return end
 		local t, i = {}, 1
-		local Adr, name, poster
-			for w in answer:gmatch('"id":.-"blocked"') do
-				Adr = w:match('"urlQuality":{(.-)}')
-				name = w:match('"episode":"(%d+)')
-					if not Adr or not name then break end
+			while tab[seson].episodes[i] do
 				t[i] = {}
 				t[i].Id = i
-				t[i].Name = name .. ' серия'
-				t[i].Address = '$collaps' .. Adr
-				poster = w:match('"small":"(.-)"')
-				if poster and poster:match('%.jpg') then
-					t[i].InfoPanelName = title
-					t[i].InfoPanelTitle = w:match('"name":"(.-)",') or t[i].Name
-					t[i].InfoPanelShowTime = 5000
-					t[i].InfoPanelLogo = poster
-				end
+				t[i].Name = tab[seson].episodes[i].episode .. ' серия'
+				local adr = ''
+					for k, v in pairs(tab[seson].episodes[i].hlsList) do
+						adr = adr .. '"' .. k .. '":"' .. v .. '"'
+					end
+				t[i].Address = '$collaps' .. adr
 				i = i + 1
 			end
 			if i == 1 then return end
-		m_simpleTV.User.collaps.TabTitle = t
 		t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 		t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_collaps()'}
 		local p = 0
@@ -211,17 +190,13 @@
 		t.ExtParams = {FilterType = 2}
 		title = title .. season_title
 		local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t, 5000, p)
-		if not id then
-			id = 1
-		end
+		id = id or 1
 		inAdr = t[id].Address
-		m_simpleTV.User.collaps.title = title
-		title = title .. ' - ' .. m_simpleTV.User.collaps.TabTitle[1].Name
 	else
 		inAdr = answer:match('hlsList:%s*{(.-)}')
 			if not inAdr then
 				m_simpleTV.Http.Close(session)
-				m_simpleTV.OSD.ShowMessageT({text = 'collaps ошибка[3]', color = ARGB(255, 155, 255, 155), showTime = 1000 * 5, id = 'channelName'})
+				m_simpleTV.OSD.ShowMessageT({text = 'collaps ошибка[3]', color = 0xff99ff99, showTime = 1000 * 5, id = 'channelName'})
 			 return
 			end
 		title = answer:match('title:%s*"(.-)",') or 'Collaps'
