@@ -45,7 +45,8 @@
 	 return index
 	end
 	local function GetcollapsAdr(url)
-		url = url:gsub('^https://', 'http://')
+		url = m_simpleTV.Common.fromPercentEncoding(url)
+		url = url:gsub('https://', 'http://')
 		url = url:match('"%d+":"(https?://.-)"')
 		url = url:gsub('%.mp4.-$', '.mp4/master.m3u8')
 		local rc, answer = m_simpleTV.Http.Request(session, {url = url})
@@ -89,8 +90,8 @@
 		table.sort(t, function(a, b) return a.qlty < b.qlty end)
 		for i = 1, #t do
 			t[i].Id = i
-			t[i].Address = t[i].Address:gsub('%.m3u8$', '-a1.m3u8'):gsub('^https://', 'http://')
-							.. '$OPT:NO-STIMESHIFT'
+			t[i].Address = m_simpleTV.Common.fromPercentEncoding(t[i].Address)
+			t[i].Address = t[i].Address:gsub('%.m3u8$', '-a1.m3u8'):gsub('https://', 'http://') .. '$OPT:NO-STIMESHIFT'
 		end
 		m_simpleTV.User.collaps.Tab = t
 		local index = collapsIndex(t)
