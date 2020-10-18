@@ -1,4 +1,4 @@
--- видеоскрипт для видеобазы "Wink" https://wink.rt.ru (17/10/20)
+-- видеоскрипт для видеобазы "Wink" https://wink.rt.ru (18/10/20)
 -- открывает подобные ссылки:
 -- http://vod-ott.svc.iptv.rt.ru/hls/sd_2017_Istorii_prizrakov__q0w2_film/variant.m3u8
 -- https://zabava-htvod.cdn.ngenix.net/hls/hd_1997_Zvezdnyy_desant__q0w0_ar6e6_film/variant.m3u8
@@ -13,7 +13,7 @@ local proxy = ''
 		then
 		 return
 		end
-		if m_simpleTV.Control.CurrentAddress:match('?wink_rt') then return end
+		if m_simpleTV.Control.CurrentAddress:match('%?wink_rt') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	local fromScr
 	if inAdr:match('&fromScr=true') then
