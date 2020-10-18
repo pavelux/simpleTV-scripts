@@ -11,7 +11,6 @@ local hd_sd = 0
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not (m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
 			or m_simpleTV.Control.CurrentAddress:match('^wink_rt'))
-			or m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru/tv')
 		then
 		 return
 		end
