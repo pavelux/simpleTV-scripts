@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (18/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (19/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
@@ -222,7 +222,7 @@ local hd_sd = 0
 		else
 			pl = 32
 		end
-		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 10000, 2 + 64 + pl)
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 10000, 2 + pl)
 		local retAdr = t[1].Address:match('%d+')
 			if not retAdr then
 				showError('1.2')
@@ -243,7 +243,6 @@ local hd_sd = 0
 		if #t > 1 then
 			retAdr = 'wait'
 		end
-		m_simpleTV.Control.CurrentTitle_UTF8 = title
 		m_simpleTV.Control.CurrentAddress = retAdr
 	end
 	local function movie(answer, title)
@@ -346,6 +345,7 @@ local hd_sd = 0
 	local title = answer:match('"TVSeries","name":"([^"]+)')
 			or answer:match('"Movie","name":"([^"]+)')
 			or 'Wink'
+	m_simpleTV.Control.CurrentTitle_UTF8 = title
 	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
