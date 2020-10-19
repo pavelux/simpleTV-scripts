@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://yandex.ru (6/10/20)
+-- видеоскрипт для сайта https://yandex.ru (19/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- открывает подобные ссылки:
 -- https://yandex.ru/portal/video?from=videohub&stream_id=4ec8f2d80cb564848e37d63ae22976d6
@@ -11,23 +11,17 @@
 -- https://frontend.vh.yandex.ru/player/414780668cb673c2b384e399e52a9ff4.json
 -- https://yandex.ru/efir?stream_id=45685261fef35f8aa367435e40e862a9
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
-	local inAdr = m_simpleTV.Control.CurrentAddress
-		if not inAdr then return end
-		if not inAdr:match('^https?://strm%.yandex%.ru/vh')
-			and not inAdr:match('^https?://[w%.]*yandex.ru/portal/')
-			and not inAdr:match('^https?://ott%-widget%.kinopoisk%.ru')
-			and not inAdr:match('^https?://frontend%.vh%.yandex%.ru')
-			and not inAdr:match('^https?://[w%.]*yandex.ru/efir')
-			and not inAdr:match('^%$yndex')
-			and not inAdr:match('^%$Q_videoYandex')
+		if not m_simpleTV.Control.CurrentAddress:match('^https?://strm%.yandex%.ru/vh')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://[w%.]*yandex.ru/portal/')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://ott%-widget%.kinopoisk%.ru')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://frontend%.vh%.yandex%.ru')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://[w%.]*yandex.ru/efir')
+			and not m_simpleTV.Control.CurrentAddress:match('^%$yndex')
 		then
 		 return
 		end
-		if inAdr:match('^%$Q_videoYandex') then
-			m_simpleTV.Control.ChangeAddress = 'Yes'
-			m_simpleTV.Control.CurrentAddress = inAdr:gsub('%$Q_videoYandex', '')
-		 return
-		end
+		if m_simpleTV.Control.CurrentAddress:match('PARAMS=yandex_vod') then return end
+	local inAdr = m_simpleTV.Control.CurrentAddress
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 	local logo = 'https://www.softportal.com/scr/24598/icon128.png'
 	if inAdr:match('^$yndex') or not inAdr:match('&kinopoisk') then
@@ -118,7 +112,8 @@
 			end
 		for i = 1, #tab do
 			tab[i].Id = i
-			tab[i].Address = '$Q_videoYandex' .. url .. tab[i].Address .. '$OPT:NO-STIMESHIFT$OPT:no-gnutls-system-trust'
+			tab[i].Address = url .. tab[i].Address
+						.. '$OPT:INT-SCRIPT-PARAMS=yandex_vod$OPT:NO-STIMESHIFT$OPT:no-gnutls-system-trust'
 		end
 		m_simpleTV.User.videoYndx.Tab = tab
 		local index = yndxIndex(tab)
@@ -383,6 +378,5 @@
 	if inAdr:match('&fromScr=true') then
 		retAdr = retAdr .. '$OPT:NO-SEEKABLE'
 	end
-	retAdr = retAdr:gsub('%$Q_videoYandex', '') .. '$OPT:POSITIONTOCONTINUE=0$OPT:NO-STIMESHIFT'
 	m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
