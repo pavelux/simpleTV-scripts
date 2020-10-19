@@ -1,4 +1,4 @@
--- видеоскрипт для плейлиста "wink" https://wink.rt.ru (12/10/20)
+-- видеоскрипт для плейлиста "wink" https://wink.rt.ru (19/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- в архиве переключение качества сбрасывает на прямой эфир
 -- ## необходим ##
@@ -24,6 +24,7 @@ local proxy = ''
 		then
 		 return
 		end
+		if m_simpleTV.Control.CurrentAddress:match('PARAMS=wink_tv') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
@@ -36,7 +37,7 @@ local proxy = ''
 		inAdr = inAdr:gsub('^https://', 'http://')
 	end
 	local host = inAdr:match('https?://.-/')
-	local extOpt = '$OPT:http-user-agent=' .. userAgent
+	local extOpt = '$OPT:INT-SCRIPT-PARAMS=wink_tv$OPT:http-user-agent=' .. userAgent
 	if proxy ~= '' then
 		extOpt = extOpt .. '$OPT:http-proxy=' .. proxy
 	end
