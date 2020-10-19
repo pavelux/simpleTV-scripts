@@ -92,7 +92,7 @@ local hd_sd = 0
 		t[#t].Address = url
 		for i = 1, #t do
 			t[i].Id = i
-			t[i].Address = t[i].Address .. '?wink_rt' .. extOpt
+			t[i].Address = t[i].Address .. '$OPT:INT-SCRIPT-PARAMS=wink_rt' .. extOpt
 		end
 		m_simpleTV.User.wink_rt.qlty_tab = t
 		local index = wink_rt_Index(t)
