@@ -12,7 +12,7 @@ local hd_sd = 0
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not (m_simpleTV.Control.CurrentAddress:match('^https://wink%.rt%.ru')
-			or m_simpleTV.Control.CurrentAddress:match('^wink_rt')
+			or m_simpleTV.Control.CurrentAddress:match('^wink_vod')
 			or m_simpleTV.Control.CurrentAddress:match('^https?://vod%-ott%.svc%.iptv%.rt%.ru/.+')
 			or m_simpleTV.Control.CurrentAddress:match('^https?://zabava%-htvod%.cdn%.ngenix%.net/.+'))
 		then
@@ -45,17 +45,17 @@ local hd_sd = 0
 	if not m_simpleTV.User then
 		m_simpleTV.User = {}
 	end
-	if not m_simpleTV.User.wink_rt then
-		m_simpleTV.User.wink_rt = {}
+	if not m_simpleTV.User.wink_vod then
+		m_simpleTV.User.wink_vod = {}
 	end
-	m_simpleTV.User.wink_rt.DelayedAddress = nil
+	m_simpleTV.User.wink_vod.DelayedAddress = nil
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local function showError(str)
 		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
 		if not (inAdr:match('/media_items/(%d+)')
-			or inAdr:match('^wink_rt')
+			or inAdr:match('^wink_vod')
 			or inAdr:match('iptv%.rt%.ru')
 			or inAdr:match('ngenix%.net'))
 		then
@@ -65,7 +65,7 @@ local hd_sd = 0
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
-	local function wink_rt_Index(t)
+	local function wink_vod_Index(t)
 		local lastQuality = tonumber(m_simpleTV.Config.GetValue('wink_vod_qlty') or 100000000)
 		local index = #t
 			for i = 1, #t do
@@ -112,8 +112,8 @@ local hd_sd = 0
 			t[i].Id = i
 			t[i].Address = t[i].Address .. '$OPT:INT-SCRIPT-PARAMS=wink_vod' .. extOpt
 		end
-		m_simpleTV.User.wink_rt.qlty_tab = t
-		local index = wink_rt_Index(t)
+		m_simpleTV.User.wink_vod.qlty_tab = t
+		local index = wink_vod_Index(t)
 	 return t[index].Address
 	end
 	local function getAdr(answer, patt)
@@ -207,7 +207,7 @@ local hd_sd = 0
 				t[i] = {}
 				t[i].Id = i
 				t[i].Name = tab.items[i].name
-				t[i].Address = 'wink_rt_' .. tab.items[i].id
+				t[i].Address = 'wink_vod_' .. tab.items[i].id
 				t[i].InfoPanelShowTime = 8000
 				t[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab.items[i].screenshots
 				t[i].InfoPanelTitle = tab.items[i].short_description
@@ -226,14 +226,14 @@ local hd_sd = 0
 			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 		end
 		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
-			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_rt()'}
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
 		else
-			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
 		end
 		t.ExtParams = {}
-		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_rt'
-		t.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_wink_rt'
-		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_rt'
+		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
+		t.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_wink_vod'
+		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
 		local pl
 		if #t > 1 then
 			pl = 0
@@ -257,7 +257,7 @@ local hd_sd = 0
 				showError('1.4')
 			 return
 			end
-		m_simpleTV.User.wink_rt.DelayedAddress = retAdr
+		m_simpleTV.User.wink_vod.DelayedAddress = retAdr
 		if #t > 1 then
 			retAdr = 'wait'
 		end
@@ -283,17 +283,17 @@ local hd_sd = 0
 			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 		end
 		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
-			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_rt()'}
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
 		else
-			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
 		end
 		t.ExtParams = {}
-		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_rt'
-		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_rt'
+		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
+		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
 		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
-	 return id, title
+	 return id
 	end
-	local function play(retAdr, title)
+	local function play(retAdr)
 		retAdr = retAdr:match('%d+')
 			if not retAdr then
 				showError('2')
@@ -313,11 +313,58 @@ local hd_sd = 0
 		m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
 	end
-	function qltySelect_wink_rt()
+	local function playUrl(inAdr)
+		inAdr = inAdr:gsub('%$OPT:.+', '')
+		inAdr = inAdr:gsub('bw%d+/', '')
+		inAdr = inAdr:gsub('%?.-$', '')
+		if fromScr then
+			local title
+			local t = m_simpleTV.Control.GetCurrentChannelInfo()
+			if t
+				and t.MultiHeader
+				and t.MultiName
+			then
+				title = t.MultiHeader .. ': ' .. t.MultiName
+			end
+			m_simpleTV.Control.SetTitle(title)
+			m_simpleTV.Control.CurrentTitle_UTF8 = title
+			m_simpleTV.OSD.ShowMessageT({text = title, showTime = 1000 * 5, id = 'channelName'})
+		end
+		local t = {}
+		t[1] = {}
+		t[1].Id = 1
+		t[1].Name = m_simpleTV.Control.CurrentTitle_UTF8 or 'Wink'
+		t[1].Address = inAdr
+		if not inAdr:match('&fromScr=true') then
+			if m_simpleTV.User.paramScriptForSkin_buttonClose then
+				t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
+			else
+				t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonOk then
+				t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+			end
+			if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+				t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
+			else
+				t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
+			end
+			m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
+		end
+		local retAdr = qltyFromUrl(t[1].Address)
+		m_simpleTV.Http.Close(session)
+			if not retAdr then
+				showError('1.1')
+			 return
+			end
+		m_simpleTV.Control.CurrentAddress = retAdr
+-- debug_in_file(retAdr .. '\n')
+	end
+	function qltySelect_wink_vod()
 		m_simpleTV.Control.ExecuteAction(36, 0)
-		local t = m_simpleTV.User.wink_rt.qlty_tab
+		local t = m_simpleTV.User.wink_vod.qlty_tab
 			if not t then return end
-		local index = wink_rt_Index(t)
+		local index = wink_vod_Index(t)
 		if m_simpleTV.User.paramScriptForSkin_buttonOk then
 			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 		end
@@ -332,75 +379,31 @@ local hd_sd = 0
 			m_simpleTV.Config.SetValue('wink_vod_qlty', t[id].qlty)
 		end
 	end
-	function OnMultiAddressOk_wink_rt(Object, id)
+	function OnMultiAddressOk_wink_vod(Object, id)
 		if id == 0 then
-			OnMultiAddressCancel_wink_rt(Object)
+			OnMultiAddressCancel_wink_vod(Object)
 		else
-			m_simpleTV.User.wink_rt.DelayedAddress = nil
+			m_simpleTV.User.wink_vod.DelayedAddress = nil
 		end
 	end
-	function OnMultiAddressCancel_wink_rt(Object)
-		if m_simpleTV.User.wink_rt.DelayedAddress then
+	function OnMultiAddressCancel_wink_vod(Object)
+		if m_simpleTV.User.wink_vod.DelayedAddress then
 			local state = m_simpleTV.Control.GetState()
 			if state == 0 then
-				m_simpleTV.Control.SetNewAddressT({address = m_simpleTV.User.wink_rt.DelayedAddress})
+				m_simpleTV.Control.SetNewAddressT({address = m_simpleTV.User.wink_vod.DelayedAddress})
 			end
-			m_simpleTV.User.wink_rt.DelayedAddress = nil
+			m_simpleTV.User.wink_vod.DelayedAddress = nil
 		end
 		m_simpleTV.Control.ExecuteAction(36, 0)
 	end
-		if inAdr:match('^wink_rt') then
+		if inAdr:match('^wink_vod') then
 			play(inAdr)
 		 return
 		end
 		if inAdr:match('iptv%.rt%.ru')
 			or inAdr:match('ngenix%.net')
 		then
-			inAdr = inAdr:gsub('%$OPT:.+', '')
-			inAdr = inAdr:gsub('bw%d+/', '')
-			inAdr = inAdr:gsub('%?.-$', '')
-			if fromScr then
-				local title
-				local t = m_simpleTV.Control.GetCurrentChannelInfo()
-				if t
-					and t.MultiHeader
-					and t.MultiName
-				then
-					title = t.MultiHeader .. ': ' .. t.MultiName
-				end
-				m_simpleTV.Control.SetTitle(title)
-				m_simpleTV.Control.CurrentTitle_UTF8 = title
-				m_simpleTV.OSD.ShowMessageT({text = title, showTime = 1000 * 5, id = 'channelName'})
-			end
-			local t = {}
-			t[1] = {}
-			t[1].Id = 1
-			t[1].Name = m_simpleTV.Control.CurrentTitle_UTF8 or 'Wink'
-			t[1].Address = inAdr
-			if not inAdr:match('&fromScr=true') then
-				if m_simpleTV.User.paramScriptForSkin_buttonClose then
-					t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-				else
-					t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-				end
-				if m_simpleTV.User.paramScriptForSkin_buttonOk then
-					t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
-				end
-				if m_simpleTV.User.paramScriptForSkin_buttonOptions then
-					t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_rt()'}
-				else
-					t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_rt()'}
-				end
-				m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
-			end
-			local retAdr = qltyFromUrl(t[1].Address)
-			m_simpleTV.Http.Close(session)
-				if not retAdr then
-					showError('1.1')
-				 return
-				end
-			m_simpleTV.Control.CurrentAddress = retAdr
--- debug_in_file(retAdr .. '\n')
+			playUrl(inAdr)
 		 return
 		end
 	inAdr = inAdr:gsub('^(.-/%d+).-$', '%1')
@@ -422,7 +425,6 @@ local hd_sd = 0
 	local season = answer:match('"season_id"')
 	if season then
 		serias(answer, title)
-	 return
 	else
 		play(movie(answer, title))
 	end
