@@ -1,6 +1,6 @@
--- видеоскрипт для сайта https://yandex.ru (19/10/20)
+-- видеоскрипт для сайта https://yandex.ru (20/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
--- открывает подобные ссылки:
+-- ## открывает подобные ссылки ##
 -- https://yandex.ru/portal/video?from=videohub&stream_id=4ec8f2d80cb564848e37d63ae22976d6
 -- https://ott-widget.kinopoisk.ru/kinopoisk.json?episode=&season=&from=kp&isMobile=0&kpId=943876
 -- https://ott-widget.kinopoisk.ru/kinopoisk.json?episode=&season=&from=kp&isMobile=0&kpId=336434
@@ -29,7 +29,7 @@
 	end
 	if not inAdr:match('^$yndex')
 		and not inAdr:match('&kinopoisk')
-		and not inAdr:match('&fromScr=true')
+		and not inAdr:match('PARAMS=psevdotv')
 	then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = logo, TypeBackColor = 0, UseLogo = 1, Once = 1})
 	end
@@ -74,6 +74,7 @@
 	 return index
 	end
 	local function yndxAdr(url)
+		url = url:gsub('$yndex', ''):gsub('$OPT.-$', '')
 		local rc, answer = m_simpleTV.Http.Request(session, {url = url .. '?from=fb&vsid=0'})
 			if rc ~= 200 then return end
 		local t, i = {}, 1
@@ -355,16 +356,16 @@
 		title = title or 'Yandex'
 		t1[1].Name = title
 		t1[1].Address = inAdr
-		if not inAdr:match('&fromScr=true') then
+		if not inAdr:match('PARAMS=psevdotv') then
 			t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qlty_videoYndx()'}
 			t1.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 			m_simpleTV.OSD.ShowSelect_UTF8('Yandex', 0, t1, 5000, 32 + 64 + 128)
 		end
 	end
-	local retAdr = yndxAdr(inAdr:gsub('$yndex', ''))
+	local retAdr = yndxAdr(inAdr)
 	m_simpleTV.Http.Close(session)
 		if not retAdr then return end
-	if inAdr:match('&fromScr=true') then
+	if inAdr:match('PARAMS=psevdotv') then
 		local t = m_simpleTV.Control.GetCurrentChannelInfo()
 		if t and t.MultiHeader and t.MultiName then
 			title = t.MultiHeader .. ': ' .. t.MultiName
@@ -375,7 +376,7 @@
 		m_simpleTV.Control.ChangeChannelLogo(logo, m_simpleTV.Control.ChannelID)
 	end
 	m_simpleTV.OSD.ShowMessageT({text = title, showTime = 1000 * 5, id = 'channelName'})
-	if inAdr:match('&fromScr=true') then
+	if inAdr:match('PARAMS=psevdotv') then
 		retAdr = retAdr .. '$OPT:NO-SEEKABLE'
 	end
 	m_simpleTV.Control.CurrentAddress = retAdr
