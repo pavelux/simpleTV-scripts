@@ -26,7 +26,7 @@ local t = {
 ----------------------------------------------------------
 -- remove yourself
 ----------------------------------------------------------
-'luaScr/user/startup/_remove-ilegal-scripts.lua',
+'luaScr/user/startup/remove-ilegal-scripts.lua',
 ----------------------------------------------------------
 }
 local path = m_simpleTV.Common.GetMainPath(2)
