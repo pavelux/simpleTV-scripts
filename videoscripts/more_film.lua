@@ -1,13 +1,13 @@
--- видеоскрипт "Море фильмов" [псевдо тв] https://more.tv (6/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: more.tv
--- открывает ссылку:
+-- видеоскрипт "Море фильмов" [псевдо тв] https://more.tv (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: more.tv.lua
+-- ## открывает ссылку ##
 -- more_film
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
+		if not m_simpleTV.Control.CurrentAddress:match('^more_film') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
-		if not inAdr then return end
-		if not inAdr:match('^more_film') then return end
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, TypeBackColor = 0, PictFileName = '', UseLogo = 0, Once = 1})
 		if m_simpleTV.Control.ChannelID == 268435455 then
@@ -45,7 +45,8 @@
 		while t.data.projects[i] do
 			tab[i] = {}
 			tab[i].Id = i
-			tab[i].Address = string.format('https://more.tv%s?&isPlst=true&fromScr=true', t.data.projects[i].canonicalUrl)
+			tab[i].Address = 'https://more.tv' .. t.data.projects[i].canonicalUrl
+							.. '$OPT:INT-SCRIPT-PARAMS=psevdotv'
 			i = i + 1
 		end
 		if i == 1 then
