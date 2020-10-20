@@ -1,5 +1,5 @@
--- скрапер TVS для загрузки плейлиста "Yandex" https://tv.yandex.ru (28/8/20)
--- Copyright © 2017-2020 Nexterr
+-- скрапер TVS для загрузки плейлиста "Yandex" https://tv.yandex.ru (21/8/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: yandex.lua
 -- расширение дополнения httptimeshift: yandex-timesift_ext.lua
@@ -112,7 +112,7 @@ local filter = {
 	 return 2, 'UTF-8'
 	end
 	local function LoadFromSite(url)
-		local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36')
+		local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 			if not session then return end
 		m_simpleTV.Http.SetTimeout(session, 12000)
 		local rc, answer = m_simpleTV.Http.Request(session, {url = decode64('aHR0cHM6Ly95YW5kZXgucnUvcG9ydGFsL3R2c3RyZWFtX2pzb24vY2hhbm5lbHM/c3RyZWFtX29wdGlvbnM9aGlyZXMmbG9jYWxlPXJ1JmZyb209bW9yZGE')})
@@ -172,7 +172,7 @@ local filter = {
 										.. '" catchup-source="?start=${start}"'
 										.. ' catchup-record-source="?start=${start}&end=${end}"'
 					end
-					v.address = v.address:gsub('%?.-$', '')
+					v.address = v.address:gsub('^(.-/kal/[^/]+).-(/[^/]+%.%w+).-$', '%1%2')
 					t0[j] = v
 					j = j + 1
 				end
