@@ -7,6 +7,9 @@ local t = {
 -- outdate videoscripts
 ----------------------------------------------------------
 'luaScr/user/video/wink.rt.lua',
+'luaScr/user/video/google_yandex_link.lua',
+'luaScr/user/video/corntv.lua',
+'luaScr/user/video/strahtv.lua',
 ----------------------------------------------------------
 -- videoscripts
 ----------------------------------------------------------
