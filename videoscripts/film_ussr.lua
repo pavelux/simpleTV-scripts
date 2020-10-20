@@ -1,7 +1,9 @@
--- видеоскрипт "Фильмы СССР" [псевдо тв] http://www.ivi.ru (30/7/20)
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: iviru
--- открывает ссылку:
+-- видеоскрипт "Фильмы СССР" [псевдо тв] http://www.ivi.ru (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: iviru.lua
+-- ## открывает ссылку ##
 -- film_ussr
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^film_ussr') then return end
@@ -16,7 +18,7 @@
 	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then
 			showError('0')
 		 return
@@ -42,12 +44,12 @@
 				 break
 				end
 			local j = 1
-				while true do
-					if not t.result[j] then break end
+				while t.result[j] do
 					if t.result[j].kind == 1 and t.result[j].id then
 						tab[v] = {}
 						tab[v].Id = v
-						tab[v].Address = string.format('https://www.ivi.ru/watch/%s?&isPlst=true&fromScr=true', t.result[j].id)
+						tab[v].Address = 'https://www.ivi.ru/watch/' .. t.result[j].id
+										.. '$OPT:INT-SCRIPT-PARAMS=psevdotv'
 						v = v + 1
 					end
 					j = j + 1
