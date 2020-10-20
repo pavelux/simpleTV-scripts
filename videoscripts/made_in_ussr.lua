@@ -1,8 +1,9 @@
--- видеоскрипт "made in ussr" [псевдо тв] https://megogo.net (12/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: megogo
--- открывает ссылку:
+-- видеоскрипт "made in ussr" [псевдо тв] https://megogo.net (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: megogo.lua
+-- ## открывает ссылку ##
 -- made_in_ussr
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^made_in_ussr') then return end
@@ -34,7 +35,7 @@
 		for adr in answer:gmatch('#EXTINF:.-\n(.-)%c') do
 			tab[i] = {}
 			tab[i].Id = i
-			tab[i].Address = string.format('%s?&isPlst=true&fromScr=true', adr)
+			tab[i].Address = adr .. '$OPT:INT-SCRIPT-PARAMS=psevdotv'
 			i = i + 1
 		end
 		if i == 1 then
