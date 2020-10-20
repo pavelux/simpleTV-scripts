@@ -1,10 +1,11 @@
--- видеоскрипт для видеобазы "kodik" http://kodik.cc (18/4/20)
--- открывает подобные ссылки:
+-- видеоскрипт для видеобазы "kodik" http://kodik.cc (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
 -- http://kodik.info/serial/19183/acbb94d039454b7584f1f29fdd05ae23/720p
 -- https://hdrise.com/video/31756/445f20d7950d3df08f7574311e82521e/720p
 -- http://kodik.info/serial/13166/dc6c81648d5b5173461756cf1f2cd0e4/720p
-		if m_simpleTV.Control.ChangeAdress ~= 'No' then return end
-	local inAdr = m_simpleTV.Control.CurrentAdress
+		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
+	local inAdr = m_simpleTV.Control.CurrentAddress
 		if not inAdr then return end
 		if not inAdr:match('^https?://kodik%.')
 			and not inAdr:match('^https?://hdrise%.com')
@@ -19,14 +20,13 @@
 			m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 		end
 	end
-	local fromScr
-	if inAdr:match('&fromScr=true') then
-		fromScr = true
-		inAdr = inAdr:gsub('%?&isPlst=.-$', '')
+	local psevdotv
+	if inAdr:match('PARAMS=psevdotv') then
+		psevdotv = true
 	end
 	inAdr = inAdr:gsub('/$', '')
-	m_simpleTV.Control.ChangeAdress = 'Yes'
-	m_simpleTV.Control.CurrentAdress = ''
+	m_simpleTV.Control.ChangeAddress = 'Yes'
+	m_simpleTV.Control.CurrentAddress = ''
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3809.87 Safari/537.36')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 8000)
@@ -41,7 +41,7 @@
 	end
 	local title
 	local refer = 'http://the-cinema.fun/'
-	if m_simpleTV.User.kodik.Tabletitle and not fromScr then
+	if m_simpleTV.User.kodik.Tabletitle and not psevdotv then
 		local index = m_simpleTV.Control.GetMultiAddressIndex()
 		if index then
 			title = m_simpleTV.User.kodik.title .. ' - ' .. m_simpleTV.User.kodik.Tabletitle[index].Name
@@ -57,14 +57,14 @@
 			q.class = 'TEXT'
 			q.align = 0x0202
 			q.top = 0
-			q.color = ARGB(0xFF, 0xFF, 0xFF, 0xF0)
+			q.color = 0xFFFFFFF0
 			q.font_italic = 0
 			q.font_addheight = 6
 			q.padding = 20
 			q.textparam = 1 + 4
 			q.text = s
 			q.background = 0
-			q.backcolor0 = ARGB(0x90, 0, 0, 0)
+			q.backcolor0 = 0x90000000
 		m_simpleTV.OSD.AddElement(q)
 		if m_simpleTV.Common.WaitUserInput(5000) == 1 then
 			m_simpleTV.OSD.RemoveElement('K_INFO_TEXT')
@@ -145,7 +145,7 @@
 				adr = w:match('(http.+)')
 					if not qlty or not adr then break end
 				t[i] = {}
-				t[i].Adress = adr .. '$OPT:NO-STIMESHIFT'
+				t[i].Address = adr .. '$OPT:NO-STIMESHIFT'
 				t[i].qlty = qlty
 				i = i + 1
 			end
@@ -159,7 +159,7 @@
 					adr = adr:gsub('%.mp4.+', '.mp4') .. '$OPT:NO-STIMESHIFT'
 				end
 				t[i].qlty = qlty
-				t[i].Adress = adr:gsub('^//', 'http://'):gsub('manifest%.m3u8', 'index.m3u8')
+				t[i].Address = adr:gsub('^//', 'http://'):gsub('manifest%.m3u8', 'index.m3u8')
 				i = i + 1
 			end
 		end
@@ -194,18 +194,18 @@
 		m_simpleTV.User.kodik.Table = t
 		local index = GetMaxResolutionIndex(t)
 		m_simpleTV.User.kodik.Index = index
-	 return t[index].Adress
+	 return t[index].Address
 	end
 	function SavePlst_kodik()
 		if m_simpleTV.User.kodik.Tabletitle and m_simpleTV.User.kodik.title then
-			m_simpleTV.OSD.ShowMessageT({text = 'Сохранение плейлиста ...', color = ARGB(255, 155, 255, 255), showTime = 1000 * 30, id = 'channelName'})
+			m_simpleTV.OSD.ShowMessageT({text = 'Сохранение плейлиста ...', color = 0xff9bffff, showTime = 1000 * 30, id = 'channelName'})
 			local t = m_simpleTV.User.kodik.Tabletitle
 			local header = m_simpleTV.User.kodik.title
 			local adr, name
 			local m3ustr = '#EXTM3U $ExtFilter="Kodik" $BorpasFileFormat="1"\n'
 				for i = 1, #t do
 					name = t[i].Name
-					adr = t[i].Adress:gsub('%$kodiks', '')
+					adr = t[i].Address:gsub('%$kodiks', '')
 					local answer = GetAddress(adr)
 					adr = GetkodikAddress(answer)
 					m3ustr = m3ustr .. '#EXTINF:-1 group-title="' .. header .. '",' .. name .. '\n' .. adr:gsub('%$.+', '') .. '\n'
@@ -242,7 +242,7 @@
 			if ret == 1 then
 				m_simpleTV.User.kodik.Index = id
 				m_simpleTV.User.kodik.qlty = t[id].qlty
-				m_simpleTV.Control.SetNewAddress(t[id].Adress, m_simpleTV.Control.GetPosition())
+				m_simpleTV.Control.SetNewAddress(t[id].Address, m_simpleTV.Control.GetPosition())
 				m_simpleTV.Config.SetValue('Kodik_qlty', t[id].qlty)
 			end
 			if ret == 2 then
@@ -259,16 +259,16 @@
 		local retAdr = GetkodikAddress(answer)
 			if not retAdr then return end
 		local extOpt
-		if fromScr then
+		if psevdotv then
 			extOpt = '$OPT:NO-SEEKABLE'
 			m_simpleTV.OSD.ShowMessageT({text = title, showTime = 1000 * 5, id = 'channelName'})
 			m_simpleTV.Control.SetTitle(title)
 		else
 			extOpt = ''
-			m_simpleTV.OSD.ShowMessageT({text = title, color = ARGB(255, 155, 155, 255), showTime = 1000 * 5, id = 'channelName'})
+			m_simpleTV.OSD.ShowMessageT({text = title, color = 0xff9999ff, showTime = 1000 * 5, id = 'channelName'})
 			m_simpleTV.Control.CurrentTitle_UTF8 = title
 		end
-		m_simpleTV.Control.CurrentAdress = retAdr .. extOpt
+		m_simpleTV.Control.CurrentAddress = retAdr .. extOpt
 -- debug_in_file(retAdr .. '\n')
 	end
 		if inAdr:match('^%$kodik') then
@@ -287,26 +287,26 @@
 	m_simpleTV.User.kodik.isVideo = false
 	title = m_simpleTV.Control.CurrentTitle_UTF8 or 'kodik'
 	local transl = answer:match('%-translations%-box".-</div>')
-	if transl and not fromScr then
+	if transl and not psevdotv then
 		local t, i = {}, 1
 			for Adr, name in transl:gmatch('<option value="(.-)">(.-)<') do
 				t[i] = {}
 				t[i].Id = i
 				t[i].Name = name
-				t[i].Adress = Adr:gsub('^//', 'http://'):gsub('%?.+', '')
+				t[i].Address = Adr:gsub('^//', 'http://'):gsub('%?.+', '')
 				i = i + 1
 			end
 		if i > 2 then
 			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете перевод - ' .. title, 0, t, 5000, 1)
 			if not id then id = 1 end
-		 	inAdr = t[id].Adress
+		 	inAdr = t[id].Address
 		else
-			inAdr = t[1].Adress
+			inAdr = t[1].Address
 		end
 		rc, answer = m_simpleTV.Http.Request(session, {url = inAdr, headers = 'Referer: ' .. refer})
 			if rc ~= 200 then
 				m_simpleTV.Http.Close(session)
-				m_simpleTV.OSD.ShowMessageT({text = 'kodik ошибка[2]-' .. rc, color = ARGB(255, 155, 255, 155), showTime = 1000 * 5, id = 'channelName'})
+				m_simpleTV.OSD.ShowMessageT({text = 'kodik ошибка[2]-' .. rc, color = 0xff99ff99, showTime = 1000 * 5, id = 'channelName'})
 			 return
 			end
 	end
@@ -317,16 +317,16 @@
 				t[i] = {}
 				t[i].Id = i
 				t[i].Name = seas:match('"season%-(%d+)"') .. ' сезон'
-				t[i].Adress = seas:match('"season%-(%d+)"')
+				t[i].Address = seas:match('"season%-(%d+)"')
 				i = i + 1
 			end
 		if i > 2 then
 			local _, id = m_simpleTV.OSD.ShowSelect_UTF8('Выберете сезон ' .. title, 0, t, 5000, 1)
 			if not id then id = 1 end
-		 	seson = t[id].Adress
+		 	seson = t[id].Address
 			season_title = ' (' .. t[id].Name .. ')'
 		else
-			seson = t[1].Adress
+			seson = t[1].Address
 			local ses = t[1].Name:match('%d+') or '0'
 			if tonumber(ses) > 1 then
 				season_title = ' (' .. t[1].Name .. ')'
@@ -340,7 +340,7 @@
 				t[i] = {}
 				t[i].Id = i
 				t[i].Name = epis:match('value=.->(.-)<')
-				t[i].Adress = '$kodiks' .. (epis:match('value="(.-)"'))
+				t[i].Address = '$kodiks' .. (epis:match('value="(.-)"'))
 				i = i + 1
 			end
 		m_simpleTV.User.kodik.Tabletitle = t
@@ -357,7 +357,7 @@
 		if not id then
 			id = 1
 		end
-		inAdr = t[id].Adress
+		inAdr = t[id].Address
 		m_simpleTV.User.kodik.title = title
 		title = title .. ' - ' .. m_simpleTV.User.kodik.Tabletitle[1].Name
 	else
@@ -366,7 +366,7 @@
 				m_simpleTV.Http.Close(session)
 			 return
 			end
-		if fromScr then
+		if psevdotv then
 			local t = m_simpleTV.Control.GetCurrentChannelInfo()
 			if t
 				and t.MultiHeader
@@ -379,8 +379,8 @@
 		t1[1] = {}
 		t1[1].Id = 1
 		t1[1].Name = title
-		t1[1].Adress = inAdr
-		if not fromScr then
+		t1[1].Address = inAdr
+		if not psevdotv then
 			t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_kodik()'}
 			t1.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 			m_simpleTV.OSD.ShowSelect_UTF8('Kodik', 0, t1, 5000, 64 + 32 + 128)
