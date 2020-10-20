@@ -1,6 +1,6 @@
--- видеоскрипт для сайта https://more.tv (25/8/20)
--- Copyright © 2017-2020 Nexterr
--- открывает подобные ссылки:
+-- видеоскрипт для сайта https://more.tv (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
 -- https://more.tv/den_vyborov_2
 -- https://more.tv/otel_eleon
 -- https://more.tv/slava_bogu_ty_prishel/1_sezon/3_vypusk
@@ -12,11 +12,11 @@
 		then
 		 return
 		end
-	local logo = 'https://cnt-vrzh-itv02.svc.iptv.rt.ru/sdp/vod-p1571302078132.png'
+	local logo = 'https://raw.githubusercontent.com/Nexterr/simpleTV.img/master/moretv.png'
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 	if m_simpleTV.Control.MainMode == 0
 		and not inAdr:match('%$moretv')
-		and not inAdr:match('&fromScr=true')
+		and not inAdr:match('PARAMS=psevdotv')
 	then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, TypeBackColor = 0, PictFileName = logo, UseLogo = 1, Once = 1})
 	else
@@ -120,7 +120,7 @@
 		end
 	end
 	local url = inAdr:gsub('more%.tv/', 'more.tv/api/v3/web/PageData?url=/')
-	url = url:gsub('%?&isPlst=true.-$', '')
+	url = url:gsub('$OPT.-$', '')
 	url = url:gsub('^$moretv', '')
 	local rc, answer = m_simpleTV.Http.Request(session, {url = url})
 		if rc ~= 200 then
@@ -159,7 +159,7 @@
 		t[1].Id = 1
 		t[1].Name = title
 		t[1].Address = inAdr
-		if not inAdr:match('&fromScr=true') then
+		if not inAdr:match('PARAMS=psevdotv') then
 			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Qlty_more()'}
 			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 			m_simpleTV.OSD.ShowSelect_UTF8('more.tv', 0, t, 5000, 32 + 64 + 128)
@@ -274,7 +274,7 @@
 		end
 	local retAdr = answer:match('"hls_url":%s*"([^"]+)')
 	if not retAdr
-		and not inAdr:match('&fromScr=true')
+		and not inAdr:match('PARAMS=psevdotv')
 	then
 		retAdr = answer:match('"previews_hls":%s*%["(.-)"')
 			if not retAdr then return end
@@ -284,7 +284,7 @@
 	retAdr = moreAdr(retAdr)
 	m_simpleTV.Http.Close(session)
 		if not retAdr then return end
-	if inAdr:match('&fromScr=true') then
+	if inAdr:match('PARAMS=psevdotv') then
 		local t = m_simpleTV.Control.GetCurrentChannelInfo()
 		if t and t.MultiHeader then
 			title = t.MultiHeader .. ': ' .. title
