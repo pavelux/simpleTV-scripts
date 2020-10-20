@@ -3,7 +3,7 @@
 -- ## необходим ##
 -- скрапер TVS: psevdotv_pls.lua
 -- видоскрипт: videocdn.lua, kodik.lua, wink-vod.lua, megogo.lua
--- открывает ссылку:
+-- ## открывает ссылку ##
 -- jackie_chan
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
