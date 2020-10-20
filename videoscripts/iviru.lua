@@ -1,13 +1,14 @@
--- видеоскрипт для сайта http://www.ivi.ru (15/3/20)
--- открывает подобные ссылки:
+-- видеоскрипт для сайта http://www.ivi.ru (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
 -- https://www.ivi.ru/watch/svaty_4
 -- https://www.ivi.ru/watch/126896
 -- https://www.ivi.ru/kinopoisk=136465
 -- https://www.ivi.ru/watch/sklifosovskij_2
 -- https://www.ivi.ru/watch/eralash/season46
-------------------------------------------------------------------------------------------
+-- ##
 local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 - Высокое; 3 - Отличное; 4 - HD 720
-------------------------------------------------------------------------------------------
+-- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
 		if not inAdr then return end
@@ -18,6 +19,9 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
 	inAdr = inAdr:gsub('&kinopoisk', '')
+	local function showError(str)
+		m_simpleTV.OSD.ShowMessageT({text = 'ivi ошибка: ' .. str, showTime = 5000, color = 0xffff6600, id = 'channelName'})
+	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = ''
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (SmartHub; SMART-TV; U; Linux/SmartTV) AppleWebKit/531.2+ (KHTML, like Gecko) WebBrowser/1.0 SmartTV Safari/531.2+')
@@ -113,6 +117,7 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 	 return retAdr
 	end
 	local retAdr = inAdr
+	retAdr = retAdr:gsub('$OPT.-$', '')
 	local videoid = retAdr:match('/id=(%d+)')
 	local title
 	if not videoid then
@@ -123,13 +128,13 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 			local rc, answer = m_simpleTV.Http.Request(session, {url = retAdr})
 				if rc ~= 200 then
 					m_simpleTV.Http.Close(session)
-					m_simpleTV.OSD.ShowMessage_UTF8('ivi ошибка[1]-' .. rc, 255, 5)
+					showError('1')
 				 return
 				end
 			compilation = answer:match('data%-compilation="(%d+)"') or answer:match('data%-id="(%d+)"')
 				if not compilation then
 					m_simpleTV.Http.Close(session)
-					m_simpleTV.OSD.ShowMessage_UTF8('ivi ошибка[2]-' .. rc, 255, 5)
+					showError('2')
 				 return
 				end
 			title = answer:match('data%-title="(.-)"') or 'ivi'
@@ -167,7 +172,7 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 			local rc, answer = m_simpleTV.Http.Request(session, {url = 'https://api.ivi.ru/mobileapi/videofromcompilation/v5/?id=' .. compilation .. '&from=0&to=999&fields=id,title&app_version=870&season=' .. ses})
 				if rc ~= 200 then
 					m_simpleTV.Http.Close(session)
-					m_simpleTV.OSD.ShowMessage_UTF8('ivi ошибка[3]-' .. rc, 255, 5)
+					showError('3')
 				 return
 				end
 			local tab = json.decode(answer:gsub('(%[%])', '"nil"'))
@@ -197,7 +202,7 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 			t1[1].Id = 1
 			t1[1].Name = title
 			t1[1].Address = 'https://www.ivi.ru/id=' .. compilation
-			if not inAdr:match('&fromScr=true') then
+			if not inAdr:match('PARAMS=psevdotv') then
 				t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'GetMovieQuality()'}
 				t1.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 				m_simpleTV.OSD.ShowSelect_UTF8('ivi', 0, t1, 5000, 64+32+128)
@@ -211,7 +216,7 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 			m_simpleTV.Control.CurrentAddress = 'https://s3.ap-south-1.amazonaws.com/ttv-videos/InVideo___This_is_where_ypprender_1554571391885.mp4'
 		 return
 		end
-	if inAdr:match('&fromScr=true') then
+	if inAdr:match('PARAMS=psevdotv') then
 		local t = m_simpleTV.Control.GetCurrentChannelInfo()
 		if t and t.MultiHeader then
 			title = t.MultiHeader .. ': ' .. title
@@ -221,9 +226,9 @@ local qlty = 0 -- качество: 0 - максимал.; 1 - Низкое; 2 -
 		m_simpleTV.Control.CurrentTitle_UTF8 = title
 	end
 	m_simpleTV.OSD.ShowMessageT({text = title, showTime = 1000 * 5, id = 'channelName'})
-	if inAdr:match('&fromScr=true') then
+	if inAdr:match('PARAMS=psevdotv') then
 		retAdr = retAdr .. '$OPT:NO-SEEKABLE'
 	end
-	retAdr = retAdr .. '$OPT:POSITIONTOCONTINUE=0$OPT:NO-STIMESHIFT'
+	retAdr = retAdr .. '$OPT:POSITIONTOCONTINUE=0'
 	m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
