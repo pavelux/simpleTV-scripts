@@ -262,9 +262,8 @@ local hd_sd = 0
 		end
 		m_simpleTV.Control.CurrentAddress = retAdr
 	end
-	local function movie(answer, title)
-		local id = answer:match('"content_id":(%d+)')
-			if not id then return end
+	local function movie(answer, inAdr, title)
+		local id = inAdr:match('/media_items/(%d+)')
 		local t = {}
 		t[1] = {}
 		t[1].Id = 1
@@ -425,5 +424,5 @@ local hd_sd = 0
 	if season then
 		serias(answer, title)
 	else
-		play(movie(answer, title))
+		play(movie(answer, inAdr, title))
 	end
