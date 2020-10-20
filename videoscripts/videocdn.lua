@@ -1,6 +1,6 @@
--- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (11/10/20)
+-- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (20/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
--- открывает подобные ссылки:
+-- ## открывает подобные ссылки ##
 -- https://videocdn.so/fnXOUDB9nNSO?kp_id=5928
 -- https://videocdn.so/fnXOUDB9nNSO/tv-series/92
 -- https://32.tvmovies.in/fnXOUDB9nNSO/movie/22080
@@ -24,10 +24,9 @@ local proxy = ''
 			m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 		end
 	end
-	local fromScr
-	if inAdr:match('&fromScr=true') then
-		fromScr = true
-		inAdr = inAdr:gsub('%?&isPlst=.-$', '')
+	local psevdotv
+	if inAdr:match('PARAMS=psevdotv') then
+		psevdotv = true
 	end
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = ''
@@ -191,7 +190,7 @@ local proxy = ''
 		retAdr = GetQualityFromAddress(retAdr:gsub('^$videocdn', ''))
 			if not retAdr then return end
 		local extOpt
-		if fromScr then
+		if psevdotv then
 			extOpt = '$OPT:NO-SEEKABLE'
 			m_simpleTV.OSD.ShowMessageT({text = title, showTime = 1000 * 5, id = 'channelName'})
 			m_simpleTV.Control.SetTitle(title)
@@ -255,7 +254,7 @@ local proxy = ''
 	end
 	local transl
 	local tr = answer:match('<div class="translations".-</div>')
-	if tr and not fromScr then
+	if tr then
 		tr = tr:gsub('<template class="__cf_email__" data%-cfemail="%x+">%[email&#160;protected%]</template>', 'MUZOBOZ@')
 		local t, i = {}, 1
 		local selected, adr, name
@@ -274,10 +273,10 @@ local proxy = ''
 				end
 			end
 			if #t == 0 then return end
-			selected = selected or 0
+		selected = selected or 0
 		if #t > 1 then
 			local id
-			if not fromScr then
+			if not psevdotv then
 				if m_simpleTV.User.paramScriptForSkin_buttonOk then
 					t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 				end
@@ -382,7 +381,7 @@ local proxy = ''
 		title = title .. ' - ' .. m_simpleTV.User.Videocdn.Tabletitle[1].Name
 	else
 		inAdr = answer:gsub('\\/', '/')
-		if fromScr then
+		if psevdotv then
 			local t = m_simpleTV.Control.GetCurrentChannelInfo()
 			if t
 				and t.MultiHeader
@@ -396,7 +395,7 @@ local proxy = ''
 		t1[1].Id = 1
 		t1[1].Name = title
 		t1[1].Address = inAdr
-		if not fromScr then
+		if not psevdotv then
 			if m_simpleTV.User.paramScriptForSkin_buttonClose then
 				t1.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
 			else
