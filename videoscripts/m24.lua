@@ -1,8 +1,9 @@
--- видеоскрипт "m24" [псевдо тв] http://m24.do.am (6/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: youtube
--- открывает подобные ссылки:
+-- видеоскрипт "m24" [псевдо тв] http://m24.do.am (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: youtube.lua
+-- ## открывает подобные ссылки ##
 -- m24_mtv
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^m24_') then return end
@@ -86,7 +87,7 @@
 		while t.playlist[i] do
 			tab[i] = {}
 			tab[i].Id = i
-			tab[i].Address = t.playlist[i].file .. '?&isPlst=true&fromScr=true'
+			tab[i].Address = t.playlist[i].file .. '?&isPlst=true$OPT:INT-SCRIPT-PARAMS=psevdotv'
 			i = i + 1
 		end
 		if i == 1 then
