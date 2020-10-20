@@ -1,6 +1,6 @@
--- видеоскрипт для сайта https://ok.ru (29/9/20)
--- Copyright © 2017-2020 Nexterr
--- открывает подобные ссылки:
+-- видеоскрипт для сайта https://ok.ru (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
 -- http://ok.ru/videoembed/2636779838
 -- https://ok.ru/video/361515387611
 -- http://ok.ru/video/23276948199
@@ -145,9 +145,9 @@
 			retAdr = answer:match('originalUrl\\&quot;:\\&quot;(.-)\\&quot')
 			m_simpleTV.Http.Close(session)
 				if not retAdr then return end
-			if inAdr:match('&fromScr=true') then
+			if inAdr:match('PARAMS=psevdotv') then
 				retAdr = retAdr:gsub('%?.-$', '')
-				retAdr = retAdr .. '?&isPlst=true&fromScr=true'
+				retAdr = retAdr .. '?&isPlst=true$OPT:INT-SCRIPT-PARAMS=psevdotv'
 			end
 			m_simpleTV.Control.ChangeAddress = 'No'
 			m_simpleTV.Control.CurrentAddress = retAdr
@@ -169,7 +169,7 @@
 			local title = answer:match('title\\&quot;:\\&quot;(.-)\\&quot') or 'OK'
 			title = title:gsub('\\\\u0026', '&')
 			title = unescape_html(title)
-			if inAdr:match('&fromScr=true') then
+			if inAdr:match('PARAMS=psevdotv') then
 				local t = m_simpleTV.Control.GetCurrentChannelInfo()
 				if t and t.MultiHeader then
 					title = t.MultiHeader .. ': ' .. title
