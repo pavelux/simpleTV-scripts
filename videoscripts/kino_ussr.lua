@@ -1,8 +1,9 @@
--- видеоскрипт "Кино СССР" [псевдо тв] https://yandex.ru (6/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: yandex
--- открывает ссылку:
+-- видеоскрипт "Кино СССР" [псевдо тв] https://yandex.ru (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: yandex-vod.lua
+-- ## открывает ссылку ##
 -- kino_ussr
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
@@ -44,12 +45,11 @@
 		 return
 		end
 	local tab, i = {}, 1
-		while true do
-				if not t.set[i] then break end
+		while t.set[i] do
 			tab[i] = {}
 			tab[i].Id = i
 			tab[i].Name = t.set[i].title
-			tab[i].Address = string.format('%s?&isPlst=true&fromScr=true', t.set[i].content_url:gsub('%?.-$', ''))
+			tab[i].Address = t.set[i].content_url:gsub('%?.-$', '') .. '$OPT:INT-SCRIPT-PARAMS=psevdotv'
 			i = i + 1
 		end
 		if i == 1 then
