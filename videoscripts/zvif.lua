@@ -1,7 +1,9 @@
--- видеоскрипт "zvif" [псевдо тв] https://zvif.ucoz.com (26/3/20)
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: ok
--- открывает ссылку:
+-- видеоскрипт "zvif" [псевдо тв] https://zvif.ucoz.com (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: ok.lua
+-- ## открывает ссылку ##
 -- zvif
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^zvif') then return end
@@ -13,7 +15,7 @@
 		end
 	end
 	local function showError(str)
-		m_simpleTV.OSD.ShowMessageT({text = 'zvif ошибка: ' .. str, showTime = 5000, color = ARGB(255, 255, 0, 0), id = 'channelName'})
+		m_simpleTV.OSD.ShowMessageT({text = 'zvif ошибка: ' .. str, showTime = 5000, color = 0xffff1000, id = 'channelName'})
 	end
 	function removeDuplicates(tbl)
 		local timestamps, newTable = {}, {}
@@ -51,7 +53,7 @@
 		while t.playlist[i] do
 			tab[i] = {}
 			tab[i].Id = i
-			tab[i].Address = t.playlist[i].file .. '?&isPlst=true&fromScr=true'
+			tab[i].Address = t.playlist[i].file .. '?&isPlst=true$OPT:INT-SCRIPT-PARAMS=psevdotv'
 			i = i + 1
 		end
 		if i == 1 then
