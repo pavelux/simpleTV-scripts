@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (20/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (21/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
@@ -64,6 +64,22 @@ local hd_sd = 0
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
+	local function buttons(t)
+		if m_simpleTV.User.paramScriptForSkin_buttonClose then
+			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
+		else
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOk then
+			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
+		end
+		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
+			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
+		else
+			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
+		end
+	 return t
+	end
 	local function wink_vod_Index(t)
 		local lastQuality = tonumber(m_simpleTV.Config.GetValue('wink_vod_qlty') or 100000000)
 		local index = #t
@@ -207,7 +223,7 @@ local hd_sd = 0
 				t[i].Id = i
 				t[i].Name = tab.items[i].name
 				t[i].Address = 'wink_vod_' .. tab.items[i].id
-				t[i].InfoPanelShowTime = 8000
+				t[i].InfoPanelShowTime = 10000
 				t[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab.items[i].screenshots
 				t[i].InfoPanelTitle = tab.items[i].short_description
 				i = i + 1
@@ -216,19 +232,7 @@ local hd_sd = 0
 				showError('1.1')
 			 return
 			end
-		if m_simpleTV.User.paramScriptForSkin_buttonClose then
-			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-		else
-			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-		end
-		if m_simpleTV.User.paramScriptForSkin_buttonOk then
-			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
-		end
-		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
-			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
-		else
-			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
-		end
+		t = buttons(t)
 		t.ExtParams = {}
 		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
 		t.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_wink_vod'
@@ -272,23 +276,11 @@ local hd_sd = 0
 		t[1].InfoPanelShowTime = 8000
 		t[1].InfoPanelLogo = answer:match('"thumbnailUrl":"([^"]+)')
 		t[1].InfoPanelTitle = answer:match('"description":"([^"]+)')
-		if m_simpleTV.User.paramScriptForSkin_buttonClose then
-			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-		else
-			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-		end
-		if m_simpleTV.User.paramScriptForSkin_buttonOk then
-			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
-		end
-		if m_simpleTV.User.paramScriptForSkin_buttonOptions then
-			t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
-		else
-			t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
-		end
+		t = buttons(t)
 		t.ExtParams = {}
 		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
 		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
-		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 8000, 32 + 64 + 128)
 	 return id
 	end
 	local function play(retAdr)
@@ -334,20 +326,8 @@ local hd_sd = 0
 		t[1].Name = m_simpleTV.Control.CurrentTitle_UTF8 or 'Wink'
 		t[1].Address = inAdr
 		if not psevdotv then
-			if m_simpleTV.User.paramScriptForSkin_buttonClose then
-				t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-			else
-				t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-			end
-			if m_simpleTV.User.paramScriptForSkin_buttonOk then
-				t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
-			end
-			if m_simpleTV.User.paramScriptForSkin_buttonOptions then
-				t.ExtButton0 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOptions, ButtonScript = 'qltySelect_wink_vod()'}
-			else
-				t.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qltySelect_wink_vod()'}
-			end
-			m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 5000, 32 + 64 + 128)
+			t = buttons(t)
+			m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 8000, 32 + 64 + 128)
 		end
 		local retAdr = qltyFromUrl(t[1].Address)
 		m_simpleTV.Http.Close(session)
@@ -363,15 +343,9 @@ local hd_sd = 0
 		local t = m_simpleTV.User.wink_vod.qlty_tab
 			if not t then return end
 		local index = wink_vod_Index(t)
-		if m_simpleTV.User.paramScriptForSkin_buttonOk then
-			t.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
-		end
-		if m_simpleTV.User.paramScriptForSkin_buttonClose then
-			t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-		else
-			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
-		end
-		local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 1 + 4 + 2)
+		t = buttons(t)
+		t.ExtButton0 = nil
+		local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 8000, 1 + 4 + 2)
 		if ret == 1 then
 			m_simpleTV.Control.SetNewAddressT({address = t[id].Address, position = m_simpleTV.Control.GetPosition()})
 			m_simpleTV.Config.SetValue('wink_vod_qlty', t[id].qlty)
