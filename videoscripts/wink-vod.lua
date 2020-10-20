@@ -22,23 +22,22 @@ local hd_sd = 0
 	local logo = 'https://wink.rt.ru/assets/fa4f2bd16b18b08e947d77d6b65e397e.svg'
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
-	local fromScr
+	local psevdotv
 	if not (inAdr:match('&kinopoisk')
-		or inAdr:match('&fromScr=true'))
+		or inAdr:match('PARAMS=psevdotv'))
 	then
 		if m_simpleTV.Control.MainMode == 0 then
 			m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = logo, TypeBackColor = 0, UseLogo = 1, Once = 1})
 		end
 	else
 		inAdr = inAdr:gsub('&kinopoisk', '')
-		if inAdr:match('&fromScr=true') then
-			fromScr = true
-			inAdr = inAdr:gsub('%?&isPlst=.-$', '')
+		if inAdr:match('PARAMS=psevdotv') then
+			psevdotv = true
 		end
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
 	local extOpt = '$OPT:NO-STIMESHIFT'
-	if fromScr then
+	if psevdotv then
 		extOpt = extOpt .. '$OPT:NO-SEEKABLE'
 	end
 	require 'json'
@@ -317,7 +316,7 @@ local hd_sd = 0
 		inAdr = inAdr:gsub('%$OPT:.+', '')
 		inAdr = inAdr:gsub('bw%d+/', '')
 		inAdr = inAdr:gsub('%?.-$', '')
-		if fromScr then
+		if psevdotv then
 			local title
 			local t = m_simpleTV.Control.GetCurrentChannelInfo()
 			if t
@@ -335,7 +334,7 @@ local hd_sd = 0
 		t[1].Id = 1
 		t[1].Name = m_simpleTV.Control.CurrentTitle_UTF8 or 'Wink'
 		t[1].Address = inAdr
-		if not inAdr:match('&fromScr=true') then
+		if not psevdotv then
 			if m_simpleTV.User.paramScriptForSkin_buttonClose then
 				t.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(36, 0)'}
 			else
