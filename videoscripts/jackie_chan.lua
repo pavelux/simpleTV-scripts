@@ -1,7 +1,8 @@
--- видеоскрипт "Джеки Чан ТВ" [псевдо тв] (6/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: videocdn, kodik, wink-vod, megogo
+-- видеоскрипт "Джеки Чан ТВ" [псевдо тв] (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: videocdn.lua, kodik.lua, wink-vod.lua, megogo.lua
 -- открывает ссылку:
 -- jackie_chan
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
@@ -40,7 +41,7 @@
 			if adr and title then
 				tab[i] = {}
 				tab[i].Id = i
-				tab[i].Address = string.format('%s?&isPlst=true&fromScr=true', adr)
+				tab[i].Address = adr .. '$OPT:INT-SCRIPT-PARAMS=psevdotv'
 				tab[i].Name = title
 				i = i + 1
 			end
