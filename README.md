@@ -31,6 +31,6 @@
 - дополнение [_**videotracks**_](http://iptv.gen12.net/bugtracker/view.php?id=1704)
 - "[_**портал**_](http://iptv.gen12.net/bugtracker/view.php?id=1596)" _медиаресурсов_
 
-для удаления, можно использовать скрипт [**remove-ilegal-scripts**](https://github.com/Nexterr/simpleTV/blob/master/addons/_remove-ilegal-scripts.zip)
+для удаления, можно использовать скрипт [**remove-ilegal-scripts**](https://github.com/Nexterr/simpleTV/tree/master/addons/remove-ilegal-scripts)
 
 -------------
