@@ -1,5 +1,6 @@
--- видеоскрипт для сайта http://megogo.net (22/5/20)
--- открывает подобные ссылки:
+-- видеоскрипт для сайта http://megogo.net (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
 -- https://megogo.net/ru/view/2290531-den-vyborov.html
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
@@ -133,7 +134,7 @@
 		local epi = answer:match('"episodes-count"') or answer:match('<li class="filter2i') or answer:match('<ul class="nav seasons%-list">')
 		local nameepi
 		if epi then
-				if inAdr:match('&fromScr=true') then return end
+				if inAdr:match('PARAMS=psevdotv') then return end
 			local t, i = {}, 1
 			for w in answer:gmatch('<li class="nav%-item(.-)</li>') do
 				local Adr = w:match('href="(.-)"')
@@ -163,7 +164,7 @@
 		local ser = answer:match('<div class="season')
 		retAdr = inAdr:match('/(%d+)') or inAdr:match('video_id=(%d+)') or ''
 		if ser then
-				if inAdr:match('&fromScr=true') then return end
+				if inAdr:match('PARAMS=psevdotv') then return end
 			ser = answer:match('.+(<div class="season.-data%-episode=.+)')
 			if not nameepi then
 				nameepi = ''
@@ -204,7 +205,7 @@
 			t1[1].Id = 1
 			t1[1].Name = title
 			t1[1].Address = retAdr
-			if not (inAdr:match('video_id=') or inAdr:match('&fromScr=true')) then
+			if not (inAdr:match('video_id=') or inAdr:match('PARAMS=psevdotv')) then
 				t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'Quality_Megogo()'}
 				t1.ExtButton1 = {ButtonEnable = true, ButtonName = '❌', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 				m_simpleTV.OSD.ShowSelect_UTF8('Megogo', 0, t1, 5000, 64+32+128)
@@ -220,7 +221,7 @@
 	retAdr = GetMegogoAddress(retAdr)
 	m_simpleTV.Http.Close(session)
 		if not retAdr then return end
-	if inAdr:match('&fromScr=true') then
+	if inAdr:match('PARAMS=psevdotv') then
 		local t = m_simpleTV.Control.GetCurrentChannelInfo()
 		if t and t.MultiHeader then
 			title = t.MultiHeader .. ': ' .. title
