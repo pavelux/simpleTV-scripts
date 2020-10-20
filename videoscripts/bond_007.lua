@@ -1,8 +1,9 @@
--- видеоскрипт "Бонд 007" [псевдо тв] https://wink.rt.ru (6/9/20)
--- Copyright © 2017-2020 Nexterr
--- необходим скрапер TVS: psevdotv_pls
--- необходимы скрипты: wink-vod
--- открывает ссылку:
+-- видеоскрипт "Бонд 007" [псевдо тв] https://wink.rt.ru (20/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- скрапер TVS: psevdotv_pls.lua
+-- видоскрипт: wink-vod.lua
+-- ## открывает ссылку ##
 -- bond_007
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^[$]*bond_007') then return end
@@ -39,7 +40,7 @@
 			if adr and title then
 				tab[i] = {}
 				tab[i].Id = i
-				tab[i].Address = string.format('%s?&isPlst=true&fromScr=true', adr)
+				tab[i].Address = adr .. '$OPT:INT-SCRIPT-PARAMS=psevdotv'
 				tab[i].Name = title
 				i = i + 1
 			end
