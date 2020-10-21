@@ -1,5 +1,5 @@
--- расширение дополнения httptimeshift - impulsTV (28/8/20)
--- Copyright © 2017-2020 Nexterr
+-- расширение дополнения httptimeshift - impulsTV (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 	function httpTimeshift_impulstv(eventType, eventParams)
 		if eventType == 'StartProcessing' then
 			if not eventParams.params
