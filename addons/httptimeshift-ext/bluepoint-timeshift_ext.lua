@@ -1,5 +1,5 @@
--- расширение дополнения httptimeshift - bluepoint (27/8/20)
--- Copyright © 2017-2020 Nexterr
+-- расширение дополнения httptimeshift - bluepoint (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 	function httpTimeshift_bluepoint(eventType, eventParams)
 		if eventType == 'StartProcessing' then
 			if not eventParams.params
