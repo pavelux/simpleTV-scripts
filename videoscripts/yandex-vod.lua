@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://yandex.ru (20/10/20)
+-- видеоскрипт для сайта https://yandex.ru (21/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://yandex.ru/portal/video?from=videohub&stream_id=4ec8f2d80cb564848e37d63ae22976d6
@@ -23,7 +23,7 @@
 		if m_simpleTV.Control.CurrentAddress:match('PARAMS=yandex_vod') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
-	local logo = 'https://www.softportal.com/scr/24598/icon128.png'
+	local logo = 'https://raw.githubusercontent.com/Nexterr/simpleTV.img/master/yandex-vod.png'
 	if inAdr:match('^$yndex') or not inAdr:match('&kinopoisk') then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
@@ -348,13 +348,15 @@
 			end
 		inAdr = plst .. inAdr
 	end
+	if title then
+		title = m_simpleTV.Common.fromPercentEncoding(title)
+	end
 	if inAdr:match('strm%.yandex%.ru') and not inAdr:match('$yndex') then
 		m_simpleTV.User.videoYndx.isVideo = true
 		local t1 = {}
 		t1[1] = {}
 		t1[1].Id = 1
-		title = title or 'Yandex'
-		t1[1].Name = title
+		t1[1].Name = title or m_simpleTV.Control.CurrentTitle_UTF8 or 'Yandex'
 		t1[1].Address = inAdr
 		if not inAdr:match('PARAMS=psevdotv') then
 			t1.ExtButton0 = {ButtonEnable = true, ButtonName = '⚙', ButtonScript = 'qlty_videoYndx()'}
