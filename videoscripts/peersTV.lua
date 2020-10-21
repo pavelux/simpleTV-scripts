@@ -7,8 +7,8 @@
 -- http://hls.peers.tv/streaming/rentv/126/vh1w/playlist.m3u8
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://[%w%-]+%.peers%.tv/.+') then return end
-	local inAdr = m_simpleTV.Control.CurrentAddress
 		if m_simpleTV.Control.CurrentAddress:match('PARAMS=peers_tv') then return end
+	local inAdr = m_simpleTV.Control.CurrentAddress
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
