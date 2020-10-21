@@ -1,5 +1,5 @@
--- расширение дополнения httptimeshift - title (28/8/20)
--- Copyright © 2017-2020 Nexterr
+-- расширение дополнения httptimeshift - title (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 	function httpTimeshift_title(eventType, eventParams)
 		if eventType == 'StartProcessing' then
 			if not eventParams.params
