@@ -1,4 +1,4 @@
--- remove ilegal scripts (20/10/20)
+-- remove ilegal scripts (21/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
 require 'ex'
@@ -22,6 +22,7 @@ local t = {
 -- httptimeshift extensions
 ----------------------------------------------------------
 'luaScr/user/httptimeshift/extensions/ext_zabava.lua',
+'luaScr/user/httptimeshift/extensions/ext_peerstv.lua',
 ----------------------------------------------------------
 -- load on startup
 ----------------------------------------------------------
@@ -29,7 +30,7 @@ local t = {
 ----------------------------------------------------------
 -- remove yourself
 ----------------------------------------------------------
-'luaScr/user/startup/remove-ilegal-scripts.lua',
+'luaScr/user/startup/remove-ilegal-scripts.lua', -- not delete
 ----------------------------------------------------------
 }
 local path = m_simpleTV.Common.GetMainPath(2)
