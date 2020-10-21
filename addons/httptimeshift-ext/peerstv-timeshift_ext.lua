@@ -1,5 +1,5 @@
 -- расширение дополнения httptimeshift - peersTV (21/10/20)
--- Copyright © 2017-2020 Nexterr
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 	function httpTimeshift_peerstv(eventType, eventParams)
 		if eventType == 'StartProcessing' then
 			if not eventParams.params
