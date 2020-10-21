@@ -7,11 +7,7 @@
 			then
 			 return
 			end
-			if not (eventParams.params.address:match('strm%.yandex%.ru/ka')
-				and eventParams.params.rawM3UString:match('catchup'))
-			then
-			 return
-			end
+			if not eventParams.params.address:match('strm%.yandex%.ru/.-PARAMS=yandex_tv') then return end
 			if eventParams.queryType == 'Start' then
 				if eventParams.params.offset > 0 then
 					local endY = os.time() - 200
