@@ -140,7 +140,7 @@ local filter = {
 				t[i].ya_plus = tab.set[i].ya_plus
 				t[i].hidden = tab.set[i].hidden or ''
 				if arhiv == 0 then
-					t[i].catchup_age = tab.set[i].catchup_age
+					t[i].catchup_age = tab.set[i].catchup_age or 0
 				else
 					t[i].catchup_age = 3600 * 24 * arhiv
 				end
@@ -160,7 +160,7 @@ local filter = {
 				end
 				i = i + 1
 			end
-			if i == 1 then return end
+			if #t == 0 then return end
 		local t0, j = {}, 1
 			for _, v in pairs(t) do
 				if not (v.status == true
@@ -172,15 +172,12 @@ local filter = {
 					or v.address:match('/non__fake/')
 					or v.address:match('/kal/weather_')
 					or v.address:match('/ya_chan_tv'))
+					and v.address:match('^https?:')
 				then
-					if v.catchup_age
-						and v.catchup_age > 0
-					then
-						v.RawM3UString = 'catchup="append" catchup-minutes="' .. (v.catchup_age / 60)
+					v.RawM3UString = 'catchup="append" catchup-minutes="' .. (v.catchup_age / 60)
 										.. '" catchup-source="?start=${start}"'
 										.. ' catchup-record-source="?start=${start}&end=${end}"'
-					end
-					v.address = v.address:gsub('^(.-/kal/[^/]+).-(/[^/]+%.%w+).-$', '%1%2')
+					v.address = v.address:gsub('^([^:]+://[^/]+/[^/]+/[^/]+).-(/[^/]+%.%w+).-$', '%1%2')
 					t0[j] = v
 					j = j + 1
 				end
