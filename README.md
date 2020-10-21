@@ -25,7 +25,7 @@
 ---------------------------------------------
 **Удалить несовместимые и неактуальные скрипты**
 
-использовать [**remove-ilegal-scripts**](https://github.com/Nexterr/simpleTV/tree/master/addons/remove-ilegal-scripts)
+- использовать [**remove-ilegal-scripts**](https://github.com/Nexterr/simpleTV/tree/master/addons/remove-ilegal-scripts)
 
 ---------------------------------------------
 **В некоторых скриптах возможно указать**
