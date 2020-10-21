@@ -1,5 +1,5 @@
--- расширение дополнения httptimeshift - tvoetv (12/9/20)
--- Copyright © 2017-2020 Nexterr
+-- расширение дополнения httptimeshift - tvoetv (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 	function httpTimeshift_tvoetv(eventType, eventParams)
 		if eventType == 'StartProcessing' then
 			if not eventParams.params
