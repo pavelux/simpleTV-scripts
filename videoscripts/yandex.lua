@@ -1,5 +1,5 @@
--- видеоскрипт для плейлиста "Yandex" https://yandex.ru (28/8/20)
--- Copyright © 2017-2020 Nexterr
+-- видеоскрипт для плейлиста "Yandex" https://yandex.ru (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- скрапер TVS: yandex_pls.lua
 -- расширение дополнения httptimeshift: yandex-timesift_ext.lua
@@ -9,21 +9,19 @@
 -- https://strm.yandex.ru/kal/ohotnik/ohotnik0_169_480p.json/index-v1-a1.m3u8
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('https?://strm%.yandex%.ru/k') then return end
+		if m_simpleTV.Control.CurrentAddress:match('PARAMS=yandex_tv') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 8000)
-	local extOpt = ''
-	if m_simpleTV.Common.GetVlcVersion() > 3000 then
-		extOpt = extOpt .. '$OPT:no-gnutls-system-trust'
-	end
+	local extOpt = '$OPT:INT-SCRIPT-PARAMS=yandex_tv$OPT:no-gnutls-system-trust'
 	local url = inAdr:gsub('_%d+_%d+p%.json.-$', '.m3u8')
-	url = url:gsub('%$OPT:.+', '')
+	url = url:gsub('%$OPT:.-$', '')
 	url = url:gsub('%?.-$', '')
 	local rc, answer = m_simpleTV.Http.Request(session, {url = url})
 	m_simpleTV.Http.Close(session)
@@ -48,7 +46,7 @@
 				i = i + 1
 			end
 		end
-		if i == 1 then
+		if #t == 0 then
 			m_simpleTV.Control.CurrentAddress = url .. extOpt
 		 return
 		end
