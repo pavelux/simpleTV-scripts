@@ -1,5 +1,5 @@
--- видеоскрипт для плейлиста "PeersTV" http://peers.tv (17/9/20)
--- Copyright © 2017-2020 Nexterr
+-- видеоскрипт для плейлиста "PeersTV" http://peers.tv (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- скрапер TVS: peersTV_pls.lua
 -- расширение дополнения httptimeshift: peerstv-timeshift_ext.lua
@@ -8,7 +8,7 @@
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://[%w%-]+%.peers%.tv/.+') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
-		if inAdr:match('token=') then return end
+		if m_simpleTV.Control.CurrentAddress:match('PARAMS=peers_tv') then return end
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
@@ -16,10 +16,11 @@
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local userAgent = 'Dalvik/2.1.0 (Linux; U; Android 8.0.1;)'
 	local ref = 'https://peers.tv/'
-	local extopt = '$OPT:adaptive-logic=highest'
+	local extopt = '$OPT:adaptive-logic=highest$OPT:demux=adaptive,any$OPT:adaptive-use-access'
 				.. '$OPT:http-user-agent=' .. userAgent
 				.. '$OPT:http-referrer=' .. ref
 				.. '$OPT:no-ts-cc-check'
+				.. '$OPT:INT-SCRIPT-PARAMS=peers_tv'
 	if not m_simpleTV.User then
 		m_simpleTV.User = {}
 	end
