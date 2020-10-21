@@ -1,5 +1,5 @@
--- расширение дополнения httptimeshift - edem (28/8/20)
--- Copyright © 2017-2020 Nexterr
+-- расширение дополнения httptimeshift - edem (21/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 	function httpTimeshift_edem(eventType, eventParams)
 		if eventType == 'StartProcessing' then
 			if not eventParams.params
