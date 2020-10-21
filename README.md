@@ -17,8 +17,8 @@
 ###### кодировка UTF-8 without BOM
 ---------------------------------------------
 **Установка**
- - видеоскрипты в папку :file_folder:  _..\luaScr\user\video_
- - скраперы TVSources в папку :file_folder: _..\luaScr\user\TVSources\AutoSetup_
+ - видеоскрипты в :file_folder:  _..\luaScr\user\video_
+ - скраперы TVSources в :file_folder: _..\luaScr\user\TVSources\AutoSetup_
  - дополнения распаковывать в соответствующие папки
 ---------------------------------------------
 **Удалить несовместимые и неактуальные скрипты**
