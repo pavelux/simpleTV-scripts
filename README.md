@@ -35,7 +35,7 @@
  - различные параметры
 ---------------------------------------------
 [Issues]: https://github.com/Nexterr/simpleTV/issues "Issues"
-[Forks]: https://github.com/Nexterr/simpleTV/network "Forks"
+[Forks]: https://github.com/Nexterr/simpleTV/network/members "Forks"
 [Stars]: https://github.com/Nexterr/simpleTV/stargazers "Stars"
 [YouTube]: https://github.com/Nexterr/simpleTV.youtube "script YouTube"
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
