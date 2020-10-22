@@ -34,19 +34,18 @@
  - прокси/зеркало
  - различные параметры
 ---------------------------------------------
-
 [Issues]: https://github.com/Nexterr/simpleTV/issues "Issues"
 [Forks]: https://github.com/Nexterr/simpleTV/issues "Forks"
 [Stars]: https://github.com/Nexterr/simpleTV/stargazers "Stars"
 [YouTube]: https://github.com/Nexterr/simpleTV.youtube "script YouTube"
-[simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV IPTV player API"
+[simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
 [License]: https://opensource.org/licenses/GPL-3.0 "License GPL 3.0"
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV.svg?style=flat-square "Forks"
 [badge-stars]: https://img.shields.io/github/stars/Nexterr/simpleTV.svg?style=flat-square "Stars"
-[badge-youtube]: https://img.shields.io/badge/script-YouTube-red?style=flat-square "YouTube"
-[badge-simpletvapi]: https://img.shields.io/badge/simpleTV%20IPTV%20player-API-blue?style=flat-square "simpleTV API"
-[badge-lua]: https://img.shields.io/badge/Lua-5.1-blue?style=flat-square "lua"
-[badge-license]: https://img.shields.io/badge/License-GPL%203.0-maroon?style=flat-square "License"
+[badge-youtube]: https://img.shields.io/badge/script-YouTube-red?style=flat-square "script YouTube"
+[badge-simpletvapi]: https://img.shields.io/badge/simpleTV-API-blue?style=flat-square "simpleTV API"
+[badge-lua]: https://img.shields.io/badge/Lua-5.1-blue?style=flat-square "Lua 5.1"
+[badge-license]: https://img.shields.io/badge/License-GPL%203.0-maroon?style=flat-square "License GPL 3.0"
