@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (21/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (22/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
@@ -267,7 +267,7 @@ local hd_sd = 0
 		m_simpleTV.Control.CurrentAddress = retAdr
 	end
 	local function movie(answer, inAdr, title)
-		local id = inAdr:match('/media_items/(%d+)')
+		local id = inAdr:match('%d+')
 		local t = {}
 		t[1] = {}
 		t[1].Id = 1
