@@ -1,11 +1,11 @@
-[![Open issues][badge-issues]][Issues]
+[![Issues][badge-issues]][Issues]
 [![Forks][badge-forks]][Forks]
 [![Stars][badge-stars]][Stars]
 
 [![script YouTube][badge-youtube]][YouTube]
 [![simpleTV IPTV player API][badge-simpletvapi]][simpleTV API]
-[![Lua 5.1][badge-lua]][Lua]
-[![License GPL 3.0][badge-license]][License]
+[![Lua][badge-lua]][Lua]
+[![License][badge-license]][License]
 
 <div class="table sectionedit1">
 <table class="inline" style="height: 107px;" width="586">
@@ -35,7 +35,7 @@
  - различные параметры
 ---------------------------------------------
 [Issues]: https://github.com/Nexterr/simpleTV/issues "Issues"
-[Forks]: https://github.com/Nexterr/simpleTV/issues "Forks"
+[Forks]: https://github.com/Nexterr/simpleTV/network "Forks"
 [Stars]: https://github.com/Nexterr/simpleTV/stargazers "Stars"
 [YouTube]: https://github.com/Nexterr/simpleTV.youtube "script YouTube"
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
@@ -46,6 +46,6 @@
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV.svg?style=flat-square "Forks"
 [badge-stars]: https://img.shields.io/github/stars/Nexterr/simpleTV.svg?style=flat-square "Stars"
 [badge-youtube]: https://img.shields.io/badge/script-YouTube-red?style=flat-square "script YouTube"
-[badge-simpletvapi]: https://img.shields.io/badge/simpleTV-API-blue?style=flat-square "simpleTV API"
+[badge-simpletvapi]: https://img.shields.io/badge/simpleTV-Lua%20API-blue?style=flat-square "simpleTV Lua API"
 [badge-lua]: https://img.shields.io/badge/Lua-5.1-blue?style=flat-square "Lua 5.1"
 [badge-license]: https://img.shields.io/badge/License-GPL%203.0-maroon?style=flat-square "License GPL 3.0"
