@@ -1,4 +1,4 @@
--- скрапер TVS для загрузки плейлиста "Yandex" https://tv.yandex.ru (21/8/20)
+-- скрапер TVS для загрузки плейлиста "Yandex" https://tv.yandex.ru (23/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: yandex.lua
