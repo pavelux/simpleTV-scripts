@@ -1,4 +1,4 @@
--- remove ilegal scripts (21/10/20)
+-- remove ilegal scripts (23/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
 require 'ex'
@@ -28,14 +28,17 @@ local t = {
 ----------------------------------------------------------
 'luaScr/user/startup/videotracks.lua',
 ----------------------------------------------------------
--- remove yourself
-----------------------------------------------------------
-'luaScr/user/startup/remove-ilegal-scripts.lua', -- not delete
-----------------------------------------------------------
 }
+local restart
 local path = m_simpleTV.Common.GetMainPath(2)
 for i = 1, #t do
  local del = path .. t[i]
- os.remove(del)
+ local ok, err = os.remove(del)
+ if ok then
+  restart = true
+-- debug_in_file(del .. '\n', path .. 'deleted_scripts.txt')
+ end
 end
-m_simpleTV.Common.Restart()
+if restart == true then
+ m_simpleTV.Common.Restart()
+end
