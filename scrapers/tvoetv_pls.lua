@@ -1,15 +1,21 @@
--- скрапер TVS для загрузки плейлиста "ТВОЄ ТВ" https://tvoetv.in.ua (11/9/20)
--- Copyright © 2017-2020 Nexterr
--- логин, ключ доступа установить в 'Password Manager', для id - tvoetv
+-- скрапер TVS для загрузки плейлиста "ТВОЄ ТВ" https://tvoetv.in.ua (23/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## авторизация ##
+-- логин, ключ доступа установить в дополнении 'Password Manager', для id - tvoetv
+-- ## необходим ##
+-- расширение дополнения httptimeshift: tvoetv-timeshift_ext.lua
 -- ## кеш (сек.) ##
-local cacheT = 3
+local cacheT = 0
+-- 0 - по умолчанию
 -- ## группы ##
-local no_group = 1
+local no_group = 0
 -- 0 - да
 -- 1 - нет
 -- ## переименовать каналы ##
 local filter = {
-	{'', ''},
+	{'FOX', 'Fox'},
+	{'KidZone HD', 'KidZone+ HD'},
+	{'Наука', 'Наука UA'},
 	}
 -- ##
 	module('tvoetv_pls', package.seeall)
