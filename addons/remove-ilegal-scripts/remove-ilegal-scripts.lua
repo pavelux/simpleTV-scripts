@@ -36,7 +36,7 @@ for i = 1, #t do
  local ok, err = os.remove(del)
  if ok then
   restart = true
--- debug_in_file(del .. '\n', path .. 'deleted_scripts.txt')
+debug_in_file(os.date ('%c') .. ' ' .. del .. '\n', path .. 'deleted_scripts.txt')
  end
 end
 if restart == true then
