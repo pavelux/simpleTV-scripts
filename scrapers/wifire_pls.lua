@@ -1,8 +1,10 @@
--- скрапер TVS для загрузки плейлиста "wifire" https://wifire.tv (22/5/20)
--- необходим видоскрипт: wifire
--- ## Переименовать каналы ##
+-- скрапер TVS для загрузки плейлиста "wifire" https://wifire.tv (23/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- видоскрипт: wifire.lua
+-- ## переименовать каналы ##
 local filter = {
-	{'', ''},
+	{'5 канал', 'Пятый канал'},
 	}
 -- ##
 	module('wifire_pls', package.seeall)
