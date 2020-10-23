@@ -1,9 +1,10 @@
--- скрапер TVS для загрузки плейлиста "moreTV" https://more.tv (14/10/20)
+-- скрапер TVS для загрузки плейлиста "moreTV" https://more.tv (23/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: mediavitrina.lua
 -- ## переименовать каналы ##
 local filter = {
+	{'5 канал', 'Пятый канал'},
 	{'Animal Planet', 'Animal Planet HD'},
 	{'Cartoon Network', 'Cartoon Network HD'},
 	{'Discovery Science', 'Discovery Science HD'},
