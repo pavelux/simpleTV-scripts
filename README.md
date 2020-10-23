@@ -34,18 +34,18 @@
  - прокси/зеркало
  - различные параметры
 ---------------------------------------------
-[Issues]: https://github.com/Nexterr/simpleTV/issues "Issues"
-[Forks]: https://github.com/Nexterr/simpleTV/network/members "Forks"
-[Stars]: https://github.com/Nexterr/simpleTV/stargazers "Stars"
-[YouTube]: https://github.com/Nexterr/simpleTV.youtube "script YouTube"
+[Issues]: https://github.com/Nexterr/simpleTV-scripts/issues "Issues"
+[Forks]: https://github.com/Nexterr/simpleTV-scripts/network/members "Forks"
+[Stars]: https://github.com/Nexterr/simpleTV-scripts/stargazers "Stars"
+[YouTube]: https://github.com/Nexterr/simpleTV-youtube "script YouTube"
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
 [License]: https://github.com/Nexterr/simpleTV/blob/master/LICENSE "License GPL 3.0"
 [remove]: https://github.com/Nexterr/simpleTV/tree/master/addons/remove-ilegal-scripts "remove ilegal scripts"
 
-[badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV.svg?style=flat-square "Open issues"
-[badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV.svg?style=flat-square "Forks"
-[badge-stars]: https://img.shields.io/github/stars/Nexterr/simpleTV.svg?style=flat-square "Stars"
+[badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
+[badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
+[badge-stars]: https://img.shields.io/github/stars/Nexterr/simpleTV-scripts.svg?style=flat-square "Stars"
 [badge-youtube]: https://img.shields.io/badge/script-YouTube-red?style=flat-square "script YouTube"
 [badge-simpletvapi]: https://img.shields.io/badge/simpleTV-Lua%20API-blue?style=flat-square "simpleTV Lua API"
 [badge-lua]: https://img.shields.io/badge/Lua-5.1-blue?style=flat-square "Lua 5.1"
