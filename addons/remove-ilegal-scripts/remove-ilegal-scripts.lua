@@ -6,6 +6,7 @@ local t = {
 ----------------------------------------------------------
 -- outdate videoscripts
 ----------------------------------------------------------
+'luaScr/user/video/earthtv.lua',
 'luaScr/user/video/youtube.lua',
 'luaScr/user/video/wink.rt.lua',
 'luaScr/user/video/google_yandex_link.lua',
