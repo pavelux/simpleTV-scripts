@@ -1,4 +1,4 @@
--- remove ilegal scripts (23/10/20)
+-- remove ilegal scripts (24/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
 require 'ex'
@@ -6,6 +6,7 @@ local t = {
 ----------------------------------------------------------
 -- outdate videoscripts
 ----------------------------------------------------------
+'luaScr/user/video/youtube.lua',
 'luaScr/user/video/wink.rt.lua',
 'luaScr/user/video/google_yandex_link.lua',
 'luaScr/user/video/corntv.lua',
