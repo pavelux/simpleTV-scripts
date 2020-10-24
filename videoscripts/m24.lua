@@ -1,8 +1,8 @@
--- видеоскрипт "m24" [псевдо тв] http://m24.do.am (20/10/20)
+-- видеоскрипт "m24" [псевдо тв] http://m24.do.am (23/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- скрапер TVS: psevdotv_pls.lua
--- видоскрипт: youtube.lua
+-- видоскрипт: YT.lua
 -- ## открывает подобные ссылки ##
 -- m24_mtv
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
