@@ -1,4 +1,4 @@
--- видеоскрипт для открытия плейлистов с диска (11/10/20)
+-- видеоскрипт для открытия плейлистов с диска (23/10/20)
 -- необходимы скрипты: youtube
 -- открывает файлы с расширением m3u, m3u8, pls, dpl, asx, xspf, xml, kpl, zpl, aimppl4, mpcpl, Enigma2
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
@@ -389,20 +389,20 @@
 						m_simpleTV.Control.ExecuteAction(37)
 						m_simpleTV.Control.ChangeAddress = 'No'
 						m_simpleTV.Control.CurrentAddress = 'https://www.youtube.com/channel/' .. m_simpleTV.User.YT.chId .. '&restart'
-						dofile(m_simpleTV.MainScriptDir .. 'user\\video\\youtube.lua')
+						dofile(m_simpleTV.MainScriptDir .. 'user\\video\\video.lua')
 					]]}
 			else
 				t0.ExtButton1 = {ButtonEnable = true, ButtonName = '📋', ButtonScript = [[
 						m_simpleTV.Control.ExecuteAction(37)
 						m_simpleTV.Control.ChangeAddress = 'No'
 						m_simpleTV.Control.CurrentAddress = 'https://www.youtube.com/channel/' .. m_simpleTV.User.YT.chId .. '&restart'
-						dofile(m_simpleTV.MainScriptDir .. 'user\\video\\youtube.lua')
+						dofile(m_simpleTV.MainScriptDir .. 'user\\video\\video.lua')
 					]]}
 			end
 			m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t0, 10000)
 			m_simpleTV.Control.ChangeAddress = 'No'
 			m_simpleTV.Control.CurrentAddress = t0[1].Address
-			dofile(m_simpleTV.MainScriptDir .. 'user\\video\\youtube.lua')
+			dofile(m_simpleTV.MainScriptDir .. 'user\\video\\video.lua')
 		 return
 		end
 	for r = 1, #t do
