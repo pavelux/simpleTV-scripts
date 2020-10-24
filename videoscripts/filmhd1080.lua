@@ -1,6 +1,6 @@
--- видеоскрипт для сайта http://filmhd1080.club (7/10/20)
+-- видеоскрипт для сайта http://filmhd1080.club (23/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
--- необходимы скрипты: hdvb.lua, collaps.lua, videocdn.lua, youtube.lua
+-- необходимы скрипты: hdvb.lua, collaps.lua, videocdn.lua, YT.lua
 -- открывает подобные ссылки:
 -- http://u.filmhd1080.xyz/13719-nochnoj-porte-2020-smotret.html
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
