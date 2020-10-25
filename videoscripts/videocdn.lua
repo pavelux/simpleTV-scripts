@@ -1,4 +1,4 @@
--- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (23/10/20)
+-- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (25/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://videocdn.so/fnXOUDB9nNSO?kp_id=5928
@@ -397,7 +397,7 @@ local proxy = ''
 		t1[1].Address = inAdr
 		if not psevdotv then
 			if m_simpleTV.User.paramScriptForSkin_buttonClose then
-				t1.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
+				t1.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose, ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 			else
 				t1.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
 			end
