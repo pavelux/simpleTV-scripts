@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (25/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (26/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
@@ -52,7 +52,7 @@ local tname = {
 		 return
 		end
 	require 'json'
-	local htmlEntities = require 'htmlEntities'
+	htmlEntities = require 'htmlEntities'
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 3, Once = 1})
