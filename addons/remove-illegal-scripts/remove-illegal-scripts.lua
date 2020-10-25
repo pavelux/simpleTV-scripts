@@ -1,6 +1,9 @@
--- remove illegal scripts (25/10/20)
+-- remove illegal scripts (26/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
+local enable = true
+----------------------------------------------------------
+if not enable then return end
 require 'ex'
 local t = {
 ----------------------------------------------------------
