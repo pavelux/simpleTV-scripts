@@ -1,13 +1,13 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (20/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (25/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
 -- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua, ustore.lua
 -- ## открывает подобные ссылки ##
--- https://www.kinopoisk.ru/film/336434
+-- https://www.kinopoisk.ru/film/5928
 -- https://www.kinopoisk.ru/level/1/film/46225/sr/1/
 -- https://www.kinopoisk.ru/level/1/film/942397/sr/1/
--- https://www.kinopoisk.ru/film/5928
+-- https://www.kinopoisk.ru/film/336434
 -- https://www.kinopoisk.ru/film/4-mushketera-sharlo-1973-60498/sr/1/
 -- https://www.kinopoisk.ru/images/film_big/946897.jpg
 -- https://www.kinopoisk.ru/film/535341/watch/?from_block=Фильмы%20из%20Топ-250&
@@ -18,7 +18,7 @@
 local filmixsite = 'https://filmix.co'
 -- 'https://filmix.life' (пример)
 -- ## домен для hdvb ##
-local hdtv_domen = 'http://vb17112tiffanyhayward.pw'
+local hdtv_domen = 'https://vb17120ayeshajenkins.pw'
 -- 'http://vb17112tiffanyhayward.pw' (пример)
 -- ## прокси для Seasonvar ##
 local proxy = ''
@@ -325,7 +325,7 @@ local tname = {
 			answer = answer:match('"iframe_url":"([^"]+)')
 				if not answer then return end
 		elseif url:match(hdtv_domen) then
-			rc, answer = m_simpleTV.Http.Request((sessionHdvb or session), {url = url})
+			rc, answer = m_simpleTV.Http.Request(session, {url = url})
 				if rc ~= 200 then return end
 			answer = answer:match('"iframe_url":"([^"]+)')
 				if not answer then return end
