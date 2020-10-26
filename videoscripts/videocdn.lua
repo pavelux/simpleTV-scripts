@@ -1,8 +1,8 @@
--- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (25/10/20)
+-- видеоскрипт для видеобазы "videocdn" https://videocdn.tv (27/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
--- https://videocdn.so/fnXOUDB9nNSO?kp_id=5928
--- https://videocdn.so/fnXOUDB9nNSO/tv-series/92
+-- https://32.svetacdn.in/fnXOUDB9nNSO?kp_id=5928
+-- https://32.tvmovies.in/fnXOUDB9nNSO/tv-series/92
 -- https://32.tvmovies.in/fnXOUDB9nNSO/movie/22080
 -- ## прокси ##
 local proxy = ''
@@ -238,7 +238,7 @@ local proxy = ''
 	inAdr = inAdr:gsub('&kinopoisk', ''):gsub('%?block=%w+', '')
 	m_simpleTV.User.Videocdn.Tabletitle = nil
 	if proxy ~= '' then
-		inAdr = inAdr:gsub('^https?://[^/]+', 'https://videocdn.so')
+		inAdr = inAdr:gsub('^https?://[^/]+', 'https://32.svetacdn.in')
 	end
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 	m_simpleTV.Http.Close(session)
