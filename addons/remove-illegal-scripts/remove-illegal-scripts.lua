@@ -1,4 +1,4 @@
--- remove illegal scripts (26/10/20)
+-- remove illegal scripts (27/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
 local enable = true
@@ -33,22 +33,32 @@ local t = {
 ----------------------------------------------------------
 'luaScr/user/startup/videotracks.lua',
 ----------------------------------------------------------
--- remove yourself
-----------------------------------------------------------
--- 'luaScr/user/startup/remove-illegal-scripts.lua',
-----------------------------------------------------------
 }
-local restart
-local mainPath = m_simpleTV.Common.GetMainPath(2)
-local date = os.date('%c')
-for i = 1, #t do
- local path = mainPath .. t[i]
- local ok, err = os.remove(path)
- if ok then
-  restart = true
-  debug_in_file(string.format('%s %s\n', date, path), string.format('%sremoved illegal scripts.txt', mainPath))
+local function mess(mainPath, debugPath)
+ debugPath = debugPath:gsub('/', '\\')
+ local messTxt = string.format('Несовместимые и неактуальных скрипты удалены!\nсм. подробности в %s\nУдалить remove-illegal-scripts.lua?', debugPath)
+ local ret =  m_simpleTV.Interface.MessageBox(messTxt, 'SimpleTV', 0x31)
+ if ret == 1 then
+  local path = string.format('%sluaScr/user/startup/remove-illegal-scripts.lua', mainPath)
+  os.remove(path)
  end
-end
-if restart == true then
  m_simpleTV.Common.Restart()
 end
+local function removing()
+ local finder
+ local mainPath = m_simpleTV.Common.GetMainPath(2)
+ local date = os.date('%c')
+ local debugPath = string.format('%sdeleted scripts.txt', mainPath)
+ for i = 1, #t do
+  local path = string.format('%s%s', mainPath, t[i])
+  local ok, err = os.remove(path)
+  if ok then
+   finder = true
+   debug_in_file(string.format('%s %s\n', date, path), debugPath)
+  end
+ end
+ if finder == true then
+  mess(mainPath, debugPath)
+ end
+end
+removing()
