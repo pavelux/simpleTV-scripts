@@ -37,7 +37,7 @@ local t = {
 local function mess(mainPath, debugPath)
  debugPath = debugPath:gsub('/', '\\')
  local messTxt = string.format('Несовместимые и неактуальных скрипты удалены!\nсм. подробности в %s\nУдалить remove-illegal-scripts.lua?', debugPath)
- local ret =  m_simpleTV.Interface.MessageBox(messTxt, 'SimpleTV', 0x31)
+ local ret =  m_simpleTV.Interface.MessageBox(messTxt, 'SimpleTV', 0x34)
  if ret == 1 then
   local path = string.format('%sluaScr/user/startup/remove-illegal-scripts.lua', mainPath)
   os.remove(path)
