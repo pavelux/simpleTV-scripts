@@ -1,4 +1,4 @@
--- расширение дополнения httptimeshift - wink (11/10/20)
+-- расширение дополнения httptimeshift: "wink" (26/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr
 	function httpTimeshift_wink(eventType, eventParams)
 		if eventType == 'StartProcessing' then
@@ -8,7 +8,8 @@
 			 return
 			end
 			if not (eventParams.params.address:match('rt%.ru/hls/CH_')
-				or eventParams.params.address:match('ngenix%.net[:%d]*/hls/CH_'))
+				or eventParams.params.address:match('ngenix%.net[:%d]*/hls/CH_')
+				or eventParams.params.address:match('ngenix%.net/mdrm/CH_'))
 			then
 			 return
 			end
@@ -25,7 +26,7 @@
 			 return true
 			end
 			if eventParams.queryType == 'GetRecordAddress' then
-				eventParams.params.address = eventParams.params.address:gsub('%?utcstart=(%d+)', '')
+				eventParams.params.address = eventParams.params.address:gsub('%?.-$', '')
 				eventParams.params.rawM3UString = 'catchup="append" catchup-days="3" catchup-record-source="?utcstart=${start}&utcend=${end}"'
 			 return true
 			end
