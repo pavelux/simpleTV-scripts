@@ -1,12 +1,17 @@
--- видеоскрипт для плейлиста "wink" https://wink.rt.ru (19/10/20)
+-- видеоскрипт для плейлиста "wink" https://wink.rt.ru (26/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
--- в архиве переключение качества сбрасывает на прямой эфир
+-- в архиве не переключает качество
 -- ## необходим ##
--- расширение дополнения httptimeshift - wink
+-- расширение дополнения httptimeshift: wink-timeshift_ext.lua
+-- скрапер TVS: wink_pls.lua
 -- ## открывает подобные ссылки ##
 -- https://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHTVHD/variant.m3u8
 -- http://hlsstr03.svc.iptv.rt.ru/hls/CH_TNTHD/variant.m3u8
 -- http://rt-vlg-samara-htlive-lb.cdn.ngenix.net/hls/CH_R03_OTT_VLG_SAMARA_M1/variant.m3u8
+-- http://s91412.cdn.ngenix.net/mdrm/CH_UFCHD_HLS/bw5000000/variant.m3u8
+-- http://a787201472-s91412.cdn.ngenix.net/mdrm/CH_UFCHD_HLS/bw5000000/manifest.mpd
+-- http://s91412.cdn.ngenix.net/mdrm/CH_UFCHD_HLS/bw5000000/variant.m3u8
+-- http://hlsstr03.svc.iptv.rt.ru/hls/CH_TNTHD/variant.m3u8?offset=-14400
 -- ## юзер агент ##
 local userAgent = 'Mozilla/5.0 (SMART-TV; Linux; Tizen 4.0.0.2) AppleWebkit/605.1.15 (KHTML, like Gecko) SamsungBrowser/9.2 TV Safari/605.1.15'
 -- ## Пртокол ##
@@ -21,16 +26,17 @@ local proxy = ''
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('rt%.ru/hls/CH_')
 			and not m_simpleTV.Control.CurrentAddress:match('ngenix%.net[:%d]*/hls/CH_')
+			and not m_simpleTV.Control.CurrentAddress:match('ngenix%.net/mdrm/CH_')
 		then
 		 return
 		end
 		if m_simpleTV.Control.CurrentAddress:match('PARAMS=wink_tv') then return end
-	local inAdr = m_simpleTV.Control.CurrentAddress
-	m_simpleTV.Control.ChangeAddress = 'Yes'
-	m_simpleTV.Control.CurrentAddress = 'error'
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
+	local inAdr = m_simpleTV.Control.CurrentAddress
+	m_simpleTV.Control.ChangeAddress = 'Yes'
+	m_simpleTV.Control.CurrentAddress = 'error'
 	if http == 0 then
 		inAdr = inAdr:gsub('^http://', 'https://')
 	else
@@ -44,6 +50,39 @@ local proxy = ''
 	local session = m_simpleTV.Http.New(userAgent, proxy, false)
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 8000)
+	local function hls(answer, host, extOpt)
+		local t, i = {}, 1
+			for w in answer:gmatch('EXT%-X%-STREAM%-INF(.-\n.-)\n') do
+				local adr = w:match('\n(.+)')
+				local name = w:match('BANDWIDTH=(%d+)')
+				if adr and name then
+					name = tonumber(name)
+					adr = adr:gsub('/playlist%.', '/variant.')
+					adr = adr:gsub('https?://.-/', host)
+					adr = adr:gsub('%?.-$', '')
+					t[i] = {}
+					t[i].Id = name
+					t[i].Name = (name / 1000) .. ' кбит/с'
+					t[i].Address = adr .. extOpt
+					i = i + 1
+				end
+			end
+	 return t
+	end
+	local function mpd(answer, inAdr, extOpt)
+		local t, i = {}, 1
+			for bandwidth in answer:gmatch('id="(bw%d+/)video"') do
+				local name = bandwidth:match('%d+')
+				name = tonumber(name)
+				bandwidth = inAdr:gsub('manifest.mpd', bandwidth .. 'manifest.mpd')
+				t[i] = {}
+				t[i].Id = name
+				t[i].Name = (name / 1000) .. ' кбит/с'
+				t[i].Address = bandwidth .. extOpt
+				i = i + 1
+			end
+	 return t
+	end
 	local offset = inAdr:match('offset=%-(%d+)')
 	inAdr = inAdr:gsub('$OPT:.+', '')
 	inAdr = inAdr:gsub('bw%d+/', '')
@@ -51,24 +90,12 @@ local proxy = ''
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then return end
-	answer = answer .. '\n'
-	local t, i = {}, 1
-	local name, adr
-		for w in answer:gmatch('EXT%-X%-STREAM%-INF(.-\n.-)\n') do
-			adr = w:match('\n(.+)')
-			name = w:match('BANDWIDTH=(%d+)')
-				if not adr or not name then break end
-			name = tonumber(name)
-			adr = adr:gsub('/playlist%.', '/variant.')
-			adr = adr:gsub('https?://.-/', host)
-			adr = adr:gsub('%?.-$', '')
-			t[i] = {}
-			t[i].Id = name
-			t[i].Name = (name / 1000) .. ' кбит/с'
-			t[i].Address = adr .. extOpt
-			i = i + 1
-		end
-		if i == 1 then
+	if answer:match('EXT%-X%-STREAM%-INF') then
+		t = hls(answer, host, extOpt)
+	else
+		t = mpd(answer, inAdr, extOpt)
+	end
+		if t == 0 then
 			m_simpleTV.Control.CurrentAddress = inAdr .. extOpt
 		 return
 		end
