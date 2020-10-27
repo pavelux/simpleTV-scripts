@@ -5,6 +5,8 @@ local enable = true
 ----------------------------------------------------------
 if not enable then return end
 require 'ex'
+----------------------------------------------------------
+local function tabRemoving()
 local t = {
 ----------------------------------------------------------
 -- outdate videoscripts
@@ -34,19 +36,21 @@ local t = {
 'luaScr/user/startup/videotracks.lua',
 ----------------------------------------------------------
 }
+return t
+end
 local function mess(mainPath, debugPath)
  debugPath = debugPath:gsub('/', '\\')
  local messTxt
  if m_simpleTV.Interface.GetLanguage() == 'ru' then
-  messTxt = 'Несовместимые и неактуальных скрипты удалены\nсм. подробности в %s\nУдалить "remove-illegal-scripts.lua"?'
+  messTxt = 'Несовместимые и неактуальных скрипты удалены\nсм. подробности в %s\nУдалить этот скрипт?'
  else
-  messTxt = 'Incompatible and outdated scripts removed\nlog in %s\nRemove "remove-illegal-scripts.lua"?'
+  messTxt = 'Incompatible and outdated scripts removed\nlog in %s\nRemove the script?'
  end
  messTxt = string.format(messTxt, debugPath)
- local ret =  m_simpleTV.Interface.MessageBox(messTxt, 'SimpleTV', 0x34)
- if ret == 1 then
-  local path = string.format('%sluaScr/user/startup/remove-illegal-scripts.lua', mainPath)
-  os.remove(path)
+ local ret =  m_simpleTV.Interface.MessageBox(messTxt, 'Nexterr (remove illegal scripts)', 0x34)
+ if ret == 6 then
+  local script = string.format('%sluaScr/user/startup/remove-illegal-scripts.lua', mainPath)
+  os.remove(script)
  end
  m_simpleTV.Common.Restart()
 end
@@ -54,7 +58,8 @@ local function removing()
  local finder
  local mainPath = m_simpleTV.Common.GetMainPath(2)
  local date = os.date('%c')
- local debugPath = string.format('%sdeleted scripts.txt', mainPath)
+ local debugPath = string.format('%sdeleted scripts.log', mainPath)
+ local t = tabRemoving()
  for i = 1, #t do
   local path = string.format('%s%s', mainPath, t[i])
   local ok, err = os.remove(path)
