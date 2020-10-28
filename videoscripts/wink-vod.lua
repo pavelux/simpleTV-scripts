@@ -24,7 +24,8 @@ local hd_sd = 0
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 	local psevdotv
 	if not (inAdr:match('&kinopoisk')
-		or inAdr:match('PARAMS=psevdotv'))
+		or inAdr:match('PARAMS=psevdotv')
+		or inAdr:match('^wink_vod'))
 	then
 		if m_simpleTV.Control.MainMode == 0 then
 			m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = logo, TypeBackColor = 0, UseLogo = 1, Once = 1})
@@ -53,7 +54,8 @@ local hd_sd = 0
 	local function showError(str)
 		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
-		if not (inAdr:match('/media_items/(%d+)')
+	local Id = inAdr:match('/media_items/(%d+)')
+		if not (Id
 			or inAdr:match('^wink_vod')
 			or inAdr:match('iptv%.rt%.ru')
 			or inAdr:match('ngenix%.net'))
@@ -166,7 +168,7 @@ local hd_sd = 0
 		answer = answer:gsub('\n+', ''):gsub('%s+', '')
 	 return getAdr(answer, 'CONTENT</type><ifn>([^<]+)') or getAdr(answer, 'PREVIEW</type><ifn>([^<]+)')
 	end
-	local function session_id()
+	local function session_id(apiHost)
 		local alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_'
 		local t = {}
 		local math_random = math.random
@@ -178,28 +180,24 @@ local hd_sd = 0
 			end
 		local headers = 'Content-Type: application/json;charset=utf-8'
 		local body = '{"fingerprint":"'.. table.concat(t) .. '"}'
-		local adr = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/session_tokens'
-		local rc, answer = m_simpleTV.Http.Request(session, {url = adr, method = 'post', body = body, headers = headers})
+		local url = apiHost .. 'session_tokens'
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url, method = 'post', body = body, headers = headers})
 			if rc ~= 200 then return end
 		local s = answer:match('"session_id":"([^"]+)')
 			if not s then return end
 	 return s
 	end
 	local function play(retAdr)
-		retAdr = retAdr:match('%d+')
-			if not retAdr then
-				showError('2')
-			 return
-			end
+		retAdr = retAdr:gsub('wink_vod_', '')
 		retAdr = getUrl(retAdr)
 			if not retAdr then
-				showError('3')
+				showError('4')
 			 return
 			end
 		retAdr = qltyFromUrl(retAdr)
 		m_simpleTV.Http.Close(session)
 			if not retAdr then
-				showError('4')
+				showError('5')
 			 return
 			end
 		m_simpleTV.Control.CurrentAddress = retAdr
@@ -240,18 +238,14 @@ local hd_sd = 0
 		m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
 	end
-	local function serias(answer, seasonId, title)
-		local s = session_id()
-			if not s then return end
-		local headers = 'session_id: ' .. s
-		local url = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/seasons?series_id=' .. seasonId
+	local function serias(Id, title, headers, apiHost, logoHost, poster)
+		local url = apiHost .. 'seasons?series_id=' .. Id
 		local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
 			if rc ~= 200 then
 				showError('1.1')
 			 return
 			end
-		answer = answer:gsub(':%s*%[%]', ':""')
-		answer = answer:gsub('%[%]', ' ')
+		answer = answer:gsub('%[%]', '""')
 		local tab0 = json.decode(answer)
 			if not tab0 or not tab0.items[1] then
 				showError('1.2')
@@ -264,8 +258,12 @@ local hd_sd = 0
 				t0[i].Name = tab0.items[i].name
 				t0[i].Address = tab0.items[i].id
 				t0[i].InfoPanelShowTime = 10000
-				t0[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab0.items[i].logo
 				t0[i].InfoPanelTitle = tab0.items[i].short_description
+				if tab0.items[i].logo == '' then
+					t0[i].InfoPanelLogo = poster
+				else
+					t0[i].InfoPanelLogo = logoHost .. tab0.items[i].logo
+				end
 				i = i + 1
 			end
 			if #t0 == 0 then
@@ -275,18 +273,17 @@ local hd_sd = 0
 		if #t0 > 1 then
 			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t0, 5000, 1 + 2)
 			id = id or 1
-			seasonId = t0[id].Address
+			Id = t0[id].Address
 		else
-			seasonId = t0[1].Address
+			Id = t0[1].Address
 		end
-		url = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/episodes?with_media_position=true&season_id=' .. seasonId
+		url = apiHost .. 'episodes?season_id=' .. Id
 		rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
 			if rc ~= 200 then
 				showError('1.4')
 			 return
 			end
-		answer = answer:gsub(':%s*%[%]', ':""')
-		answer = answer:gsub('%[%]', ' ')
+		answer = answer:gsub('%[%]', '""')
 		local tab = json.decode(answer)
 			if not tab or not tab.items[1] then
 				showError('1.5')
@@ -299,7 +296,7 @@ local hd_sd = 0
 				t[i].Name = tab.items[i].name
 				t[i].Address = 'wink_vod_' .. tab.items[i].id
 				t[i].InfoPanelShowTime = 10000
-				t[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab.items[i].screenshots
+				t[i].InfoPanelLogo = logoHost .. tab.items[i].screenshots
 				t[i].InfoPanelTitle = tab.items[i].short_description
 				i = i + 1
 			end
@@ -338,18 +335,21 @@ local hd_sd = 0
 		m_simpleTV.User.wink_vod.DelayedAddress = retAdr
 		if #t > 1 then
 			retAdr = 'wait'
+		else
+			if #t0 > 1 then
+				m_simpleTV.Control.ExecuteAction(36, 0)
+			end
 		end
 		m_simpleTV.Control.CurrentAddress = retAdr
 	end
-	local function movie(answer, Id, title)
+	local function movie(Id, title, desc, poster)
 		local t = {}
 		t[1] = {}
 		t[1].Id = 1
 		t[1].Name = title
-		t[1].Address = id
 		t[1].InfoPanelShowTime = 8000
-		t[1].InfoPanelLogo = answer:match('"thumbnailUrl":"([^"]+)')
-		t[1].InfoPanelTitle = answer:match('"description":"([^"]+)')
+		t[1].InfoPanelLogo = poster
+		t[1].InfoPanelTitle = desc
 		t = buttons(t)
 		t.ExtParams = {}
 		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
@@ -376,6 +376,7 @@ local hd_sd = 0
 		else
 			m_simpleTV.User.wink_vod.DelayedAddress = nil
 		end
+		m_simpleTV.Control.ExecuteAction(37, 0)
 	end
 	function OnMultiAddressCancel_wink_vod(Object)
 		if m_simpleTV.User.wink_vod.DelayedAddress then
@@ -397,26 +398,42 @@ local hd_sd = 0
 			playUrl(inAdr)
 		 return
 		end
-	local Id = inAdr:match('%d+')
-	inAdr = 'https://wink.rt.ru/media_items/' .. Id
-	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
-		if rc ~= 200 then
-			m_simpleTV.Http.Close(session)
+	local apiHost = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/'
+	local logoHost = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100'
+	local session_id = session_id(apiHost)
+		if not session_id then
 			showError('1')
 		 return
 		end
-	local title = answer:match('"TVSeries","name":"([^"]+)')
-			or answer:match('"Movie","name":"([^"]+)')
-			or 'Wink'
+	local headers = 'session_id: ' .. session_id
+	local url = apiHost .. 'media_items/' .. Id
+	local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
+		if rc ~= 200 then
+			m_simpleTV.Http.Close(session)
+			showError('2')
+		 return
+		end
+	answer = answer:gsub('%[%]', '""')
+	local tab = json.decode(answer)
+		if not tab
+			or not tab.type
+			or not tab.id
+			or not tab.name
+		then
+			showError('3')
+		 return
+		end
+	Id = tostring(tab.id)
+	local title = tab.name
+	local desc = tab.short_description
+	local poster = logoHost .. tab.logo
 	m_simpleTV.Control.CurrentTitle_UTF8 = title
-	local poster = answer:match('"thumbnailUrl":"([^"]+)') or logo
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
 	end
-	local season = answer:match('"season_id"')
-	if season then
-		serias(answer, Id, title)
+	if tab.type == 'film' then
+		movie(Id, title, desc, poster)
 	else
-		movie(answer, Id, title)
+		serias(Id, title, headers, apiHost, logoHost, poster)
 	end
