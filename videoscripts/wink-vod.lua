@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (22/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (28/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
@@ -185,104 +185,6 @@ local hd_sd = 0
 			if not s then return end
 	 return s
 	end
-	local function serias(answer, title)
-		local s = session_id()
-			if not s then return end
-		local t0, i = {}, 1
-		local seasonId, name
-			for w in answer:gmatch('<label.-</label>') do
-				seasonId = w:match('for="([^"]+)')
-				name = w:match('<span class.->([^<]+)')
-				if seasonId and name then
-					t0[i] = {}
-					t0[i].Id = i
-					t0[i].Name = name
-					t0[i].Address = seasonId
-					i = i + 1
-				end
-			end
-			if #t0 == 0 then return end
-		if #t0 > 1 then
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t0, 5000, 1 + 2)
-			id = id or 1
-			seasonId = t0[id].Address
-		else
-			seasonId = t0[1].Address
-		end
-		local headers = 'session_id: ' .. s
-		local url = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/episodes?with_media_position=true&season_id=' .. seasonId
-		local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
-			if rc ~= 200 then return end
-		answer = answer:gsub(':%s*%[%]', ':""')
-		answer = answer:gsub('%[%]', ' ')
-		local tab = json.decode(answer)
-			if not tab or not tab.items[1] then return end
-		local t, i = {}, 1
-			while tab.items[i] do
-				t[i] = {}
-				t[i].Id = i
-				t[i].Name = tab.items[i].name
-				t[i].Address = 'wink_vod_' .. tab.items[i].id
-				t[i].InfoPanelShowTime = 10000
-				t[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab.items[i].screenshots
-				t[i].InfoPanelTitle = tab.items[i].short_description
-				i = i + 1
-			end
-			if #t == 0 then
-				showError('1.1')
-			 return
-			end
-		t = buttons(t)
-		t.ExtParams = {}
-		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
-		t.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_wink_vod'
-		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
-		local pl
-		if #t > 1 then
-			pl = 0
-		else
-			pl = 32
-		end
-		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 10000, 2 + pl)
-		local retAdr = t[1].Address:match('%d+')
-			if not retAdr then
-				showError('1.2')
-			 return
-			end
-		retAdr = getUrl(retAdr)
-			if not retAdr then
-				showError('1.3')
-			 return
-			end
-		retAdr = qltyFromUrl(retAdr)
-		m_simpleTV.Http.Close(session)
-			if not retAdr then
-				showError('1.4')
-			 return
-			end
-		m_simpleTV.User.wink_vod.DelayedAddress = retAdr
-		if #t > 1 then
-			retAdr = 'wait'
-		end
-		m_simpleTV.Control.CurrentAddress = retAdr
-	end
-	local function movie(answer, inAdr, title)
-		local id = inAdr:match('%d+')
-		local t = {}
-		t[1] = {}
-		t[1].Id = 1
-		t[1].Name = title
-		t[1].Address = id
-		t[1].InfoPanelShowTime = 8000
-		t[1].InfoPanelLogo = answer:match('"thumbnailUrl":"([^"]+)')
-		t[1].InfoPanelTitle = answer:match('"description":"([^"]+)')
-		t = buttons(t)
-		t.ExtParams = {}
-		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
-		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
-		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 8000, 32 + 64 + 128)
-	 return id
-	end
 	local function play(retAdr)
 		retAdr = retAdr:match('%d+')
 			if not retAdr then
@@ -338,6 +240,123 @@ local hd_sd = 0
 		m_simpleTV.Control.CurrentAddress = retAdr
 -- debug_in_file(retAdr .. '\n')
 	end
+	local function serias(answer, seasonId, title)
+		local s = session_id()
+			if not s then return end
+		local headers = 'session_id: ' .. s
+		local url = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/seasons?series_id=' .. seasonId
+		local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
+			if rc ~= 200 then
+				showError('1.1')
+			 return
+			end
+		answer = answer:gsub(':%s*%[%]', ':""')
+		answer = answer:gsub('%[%]', ' ')
+		local tab0 = json.decode(answer)
+			if not tab0 or not tab0.items[1] then
+				showError('1.2')
+			 return
+			end
+		local t0, i = {}, 1
+			while tab0.items[i] do
+				t0[i] = {}
+				t0[i].Id = i
+				t0[i].Name = tab0.items[i].name
+				t0[i].Address = tab0.items[i].id
+				t0[i].InfoPanelShowTime = 10000
+				t0[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab0.items[i].logo
+				t0[i].InfoPanelTitle = tab0.items[i].short_description
+				i = i + 1
+			end
+			if #t0 == 0 then
+				showError('1.3')
+			 return
+			end
+		if #t0 > 1 then
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title, 0, t0, 5000, 1 + 2)
+			id = id or 1
+			seasonId = t0[id].Address
+		else
+			seasonId = t0[1].Address
+		end
+		url = 'https://cnt-orel-itv02.svc.iptv.rt.ru/api/v2/portal/episodes?with_media_position=true&season_id=' .. seasonId
+		rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
+			if rc ~= 200 then
+				showError('1.4')
+			 return
+			end
+		answer = answer:gsub(':%s*%[%]', ':""')
+		answer = answer:gsub('%[%]', ' ')
+		local tab = json.decode(answer)
+			if not tab or not tab.items[1] then
+				showError('1.5')
+			 return
+			end
+		local t, i = {}, 1
+			while tab.items[i] do
+				t[i] = {}
+				t[i].Id = i
+				t[i].Name = tab.items[i].name
+				t[i].Address = 'wink_vod_' .. tab.items[i].id
+				t[i].InfoPanelShowTime = 10000
+				t[i].InfoPanelLogo = 'https://s26037.cdn.ngenix.net/imo/transform/profile=channelposter176x100' .. tab.items[i].screenshots
+				t[i].InfoPanelTitle = tab.items[i].short_description
+				i = i + 1
+			end
+			if #t == 0 then
+				showError('1.6')
+			 return
+			end
+		t = buttons(t)
+		t.ExtParams = {}
+		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
+		t.ExtParams.LuaOnOkFunName = 'OnMultiAddressOk_wink_vod'
+		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
+		local pl
+		if #t > 1 then
+			pl = 0
+		else
+			pl = 32
+		end
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 10000, 2 + pl)
+		local retAdr = t[1].Address:match('%d+')
+			if not retAdr then
+				showError('1.7')
+			 return
+			end
+		retAdr = getUrl(retAdr)
+			if not retAdr then
+				showError('1.8')
+			 return
+			end
+		retAdr = qltyFromUrl(retAdr)
+		m_simpleTV.Http.Close(session)
+			if not retAdr then
+				showError('1.9')
+			 return
+			end
+		m_simpleTV.User.wink_vod.DelayedAddress = retAdr
+		if #t > 1 then
+			retAdr = 'wait'
+		end
+		m_simpleTV.Control.CurrentAddress = retAdr
+	end
+	local function movie(answer, Id, title)
+		local t = {}
+		t[1] = {}
+		t[1].Id = 1
+		t[1].Name = title
+		t[1].Address = id
+		t[1].InfoPanelShowTime = 8000
+		t[1].InfoPanelLogo = answer:match('"thumbnailUrl":"([^"]+)')
+		t[1].InfoPanelTitle = answer:match('"description":"([^"]+)')
+		t = buttons(t)
+		t.ExtParams = {}
+		t.ExtParams.LuaOnCancelFunName = 'OnMultiAddressCancel_wink_vod'
+		t.ExtParams.LuaOnTimeoutFunName = 'OnMultiAddressCancel_wink_vod'
+		m_simpleTV.OSD.ShowSelect_UTF8('Wink', 0, t, 8000, 32 + 64 + 128)
+		play(Id)
+	end
 	function qltySelect_wink_vod()
 		m_simpleTV.Control.ExecuteAction(36, 0)
 		local t = m_simpleTV.User.wink_vod.qlty_tab
@@ -378,7 +397,8 @@ local hd_sd = 0
 			playUrl(inAdr)
 		 return
 		end
-	inAdr = inAdr:gsub('^(.-/%d+).-$', '%1')
+	local Id = inAdr:match('%d+')
+	inAdr = 'https://wink.rt.ru/media_items/' .. Id
 	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
 		if rc ~= 200 then
 			m_simpleTV.Http.Close(session)
@@ -396,7 +416,7 @@ local hd_sd = 0
 	end
 	local season = answer:match('"season_id"')
 	if season then
-		serias(answer, title)
+		serias(answer, Id, title)
 	else
-		play(movie(answer, inAdr, title))
+		movie(answer, Id, title)
 	end
