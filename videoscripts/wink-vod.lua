@@ -234,7 +234,7 @@ local hd_sd = 0
 		local retAdr = qltyFromUrl(t[1].Address)
 		m_simpleTV.Http.Close(session)
 			if not retAdr then
-				showError('1.1')
+				showError('0')
 			 return
 			end
 		m_simpleTV.Control.CurrentAddress = retAdr
