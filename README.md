@@ -46,7 +46,7 @@
 [License]: https://github.com/Nexterr/simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
 [remove]: https://github.com/Nexterr/simpleTV-scripts/tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
 [TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon TVSources"
-[PM]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon Password Manager"
+[PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "addon Password Manager"
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
