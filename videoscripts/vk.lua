@@ -1,6 +1,8 @@
--- видеоскрипт для сайта http://vk.com (24/12/19)
--- необходимы скрипты: youtube ...
--- открывает подобные ссылки:
+-- видеоскрипт для сайта http://vk.com (29/10/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## необходим ##
+-- видоскрипт: YT.lua, vimeo.lua ...
+-- ## открывает подобные ссылки ##
 -- https://vk.com/video-33598391_456239036
 -- https://vk.com/video2797862_166856999?list=e957bb0f2a63f9c911
 -- http://vkontakte.ru/video-208344_73667683
@@ -8,20 +10,21 @@
 -- https://vk.com/video.php?act=s&oid=-21693490&id=159155218
 -- https://vk.com/video_ext.php?oid=-24136539&id=456239830&hash=34e326ffb9cbb93e
 -- https://vk.com/videos-53997646?section=album_49667766&z=video-53997646_456239913%2Fclub53997646%2Fpl_-53997646_49667766
-		if m_simpleTV.Control.ChangeAdress ~= 'No' then return end
-		if not m_simpleTV.Control.CurrentAdress:match('^https?://vk%.com/.+')
-			and not m_simpleTV.Control.CurrentAdress:match('^https?://vkontakte%.ru/.+')
+-- https://vk.com/video537396248_456239159
+		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
+		if not m_simpleTV.Control.CurrentAddress:match('^https?://vk%.com/.+')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://vkontakte%.ru/.+')
 		then
 		 return
 		end
-	local inAdr = m_simpleTV.Control.CurrentAdress
-	m_simpleTV.Control.ChangeAdress = 'Yes'
-	m_simpleTV.Control.CurrentAdress = ''
+	local inAdr = m_simpleTV.Control.CurrentAddress
+	m_simpleTV.Control.ChangeAddress = 'Yes'
+	m_simpleTV.Control.CurrentAddress = ''
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Interface.SetBackground({BackColor = 0, TypeBackColor = 0, PictFileName = 'https://smajlik.ru/wp-content/uploads/2017/12/3.png', UseLogo = 1, Once = 1})
 	end
 	local function showError(str)
-		m_simpleTV.OSD.ShowMessageT({text = 'vk ошибка: ' .. str, showTime = 1000 * 5, color = ARGB(255, 255, 0, 0), id = 'vk'})
+		m_simpleTV.OSD.ShowMessageT({text = 'vk ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff1000, id = 'vk'})
 	end
 	inAdr = inAdr:gsub('vkontakte%.ru', 'vk%.com')
 	inAdr = inAdr:gsub('&id=', '_')
@@ -30,7 +33,7 @@
 			showError('1')
 		 return
 		end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3809.87 Safari/537.36')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:83.0) Gecko/20100101 Firefox/83.0')
 		if not session then
 			showError('2')
 		 return
@@ -73,12 +76,14 @@
 		title = addTitle .. ' - ' .. title
 	end
 		if tab.response.items[1].files.flv_320 then
-			m_simpleTV.Control.CurrentAdress = tab.response.items[1].files.flv_320
+			m_simpleTV.Control.CurrentAddress = tab.response.items[1].files.flv_320
 		 return
 		end
-		if tab.response.items[1].files.external and not tab.response.items[1].files.live then
-			m_simpleTV.Control.ChangeAdress = 'No'
-			m_simpleTV.Control.CurrentAdress = tab.response.items[1].files.external
+		if tab.response.items[1].files.external
+			and not (tab.response.items[1].files.live or tab.response.items[1].files.hls)
+		then
+			m_simpleTV.Control.ChangeAddress = 'No'
+			m_simpleTV.Control.CurrentAddress = tab.response.items[1].files.external
 			dofile(m_simpleTV.MainScriptDir .. "user\\video\\video.lua")
 		 return
 		end
