@@ -24,7 +24,7 @@
 ---------------------------------------------
 **Установка**
  - видеоскрипты в :file_folder:  _..\luaScr\user\video_
- - скраперы TVSources в :file_folder: _..\luaScr\user\TVSources\AutoSetup_
+ - скраперы [TVSources][TVSources] в :file_folder: _..\luaScr\user\TVSources\AutoSetup_
  - дополнения распаковывать в соответствующие папки
 ---------------------------------------------
 **Удалить несовместимые и неактуальные скрипты**
@@ -42,6 +42,8 @@
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
 [License]: https://github.com/Nexterr/simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
 [remove]: https://github.com/Nexterr/simpleTV-scripts/tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
+[TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "TVSources addon"
+
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
