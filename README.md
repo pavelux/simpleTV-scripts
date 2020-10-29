@@ -3,6 +3,9 @@
 [![Stars][badge-stars]][Stars]
 
 [![script YT][badge-yt]][YT]
+[![addon TVSources][badge-tvsources]][TVSources]
+[![addon PM][badge-pm]][PM]
+
 [![simpleTV IPTV player API][badge-simpletvapi]][simpleTV API]
 [![Lua][badge-lua]][Lua]
 [![License][badge-license]][License]
@@ -42,8 +45,8 @@
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
 [License]: https://github.com/Nexterr/simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
 [remove]: https://github.com/Nexterr/simpleTV-scripts/tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
-[TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "TVSources addon"
-
+[TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon TVSources"
+[PM]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon Password Manager"
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
@@ -52,3 +55,6 @@
 [badge-simpletvapi]: https://img.shields.io/badge/simpleTV-Lua%20API-blue?style=flat-square "simpleTV Lua API"
 [badge-lua]: https://img.shields.io/badge/Lua-5.1-blue?style=flat-square "Lua 5.1"
 [badge-license]: https://img.shields.io/badge/License-GPL%203.0-maroon?style=flat-square "License GPL 3.0"
+[badge-tvsources]: https://img.shields.io/badge/addon-TVSources-red?style=flat-square "addon TVSources"
+[badge-pm]: https://img.shields.io/badge/addon-Password%20Manager-red?style=flat-square "addon Password Manager"
+
