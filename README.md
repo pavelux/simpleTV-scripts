@@ -1,3 +1,5 @@
+**[EN][EN]**
+
 [![Issues][badge-issues]][Issues]
 [![Forks][badge-forks]][Forks]
 [![Stars][badge-stars]][Stars]
@@ -51,6 +53,7 @@
 [PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "addon Password Manager"
 [simpleTV homepage]: http://iptv.gen12.net "simpleTV homepage"
 [simpleTV bugtracker]: http://iptv.gen12.net/bugtracker "simpleTV bugtracker"
+[EN]: https://github.com/Nexterr/simpleTV-scripts/blob/master/README-EN.md "english"
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
