@@ -65,5 +65,5 @@
 [badge-tvsources]: https://img.shields.io/badge/%D0%B4%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-TVSources-%2300008b?style=flat-square "дополнение TVSources"
 [badge-pm]: https://img.shields.io/badge/%D0%B4%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-Password%20Manager-%2300008b?style=flat-square "дополнение Password Manager"
 [badge-simpletvhomepage]: https://img.shields.io/badge/simpleTV-homepage-maroon?style=flat-square "домашняя страница"
-[badge-simpletvbugtracker]: https://img.shields.io/badge/simpleTV-bugtracker-maroon?style=flat-square "багтреекр"
+[badge-simpletvbugtracker]: https://img.shields.io/badge/simpleTV-bugtracker-maroon?style=flat-square "багтрекер"
 
