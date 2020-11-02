@@ -43,19 +43,19 @@
  - proxy / mirror
  - various parameters
 ---------------------------------------------
-[Issues]: https://github.com/Nexterr/simpleTV-scripts/issues "Issues"
-[Forks]: https://github.com/Nexterr/simpleTV-scripts/network/members "Forks"
-[Stars]: https://github.com/Nexterr/simpleTV-scripts/stargazers "Stars"
-[YT]: https://github.com/Nexterr/simpleTV-script-YT "script YT"
+[Issues]: ../../../simpleTV-scripts/issues "Issues"
+[Forks]: ../../../simpleTV-scripts/network/members "Forks"
+[Stars]: ../../../simpleTV-scripts/stargazers "Stars"
+[YT]: ../../../simpleTV-script-YT "script YT"
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
-[License]: https://github.com/Nexterr/simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
-[remove]: https://github.com/Nexterr/simpleTV-scripts/tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
+[License]: ../../../simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
+[remove]: ../../../simpleTV-scripts/tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
 [TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon TVSources"
 [PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "addon Password Manager"
 [simpleTV homepage]: http://iptv.gen12.net "simpleTV homepage"
 [simpleTV bugtracker]: http://iptv.gen12.net/bugtracker "simpleTV bugtracker"
-[RU]: https://github.com/Nexterr/simpleTV-scripts "русский"
+[RU]: ../../../simpleTV-scripts "русский"
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
