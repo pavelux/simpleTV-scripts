@@ -1,4 +1,6 @@
- ###### **[:ru: RU][RU]**
+<p align="right">
+<a title="русский" href="https://github.com/Nexterr/simpleTV-scripts"><img src="https://raw.githubusercontent.com/Nexterr/simpleTV-images/master/ru.png" alt="русский" width="32" height="16" /> </a><a title="русский" href="https://github.com/Nexterr/simpleTV-scripts">RU</a>
+</p>
 
 [![Issues][badge-issues]][Issues]
 [![Forks][badge-forks]][Forks]
