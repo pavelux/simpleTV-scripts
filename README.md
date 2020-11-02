@@ -1,5 +1,5 @@
 <p align="right">
- <a title="english" href="/README-EN.md"><img src="../../../simpleTV-images/blob/master/gb.png?raw=true" alt="english" /> </a><strong><sup><sub>EN</sub></sup></strong>
+ <a title="english" href="./README-EN.md"><img src="../../../simpleTV-images/blob/master/gb.png?raw=true" alt="english" /> </a><strong><sup><sub>EN</sub></sup></strong>
 </p>
 
 [![Issues][badge-issues]][Issues]
@@ -50,7 +50,7 @@
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
 [License]: ../../blob/master/LICENSE "License GPL 3.0"
-[remove]: ../../../simpleTV-scripts/tree/master/addons/remove-illegal-scripts "удалить несовместимые и неактуальные скрипты"
+[remove]: ../../tree/master/addons/remove-illegal-scripts "удалить несовместимые и неактуальные скрипты"
 [TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "дополнение TVSources"
 [PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "дополнение Password Manager"
 [simpleTV homepage]: http://iptv.gen12.net "домашняя страница"
