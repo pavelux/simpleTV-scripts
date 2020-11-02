@@ -1,5 +1,5 @@
 <p align="right">
- <a title="русский" href="https://github.com/Nexterr/simpleTV-scripts"><img src="https://raw.githubusercontent.com/Nexterr/simpleTV-images/master/ru.png" alt="русский" /> </a><strong ><sup><sub>RU</sub></sup></strong>
+ <a title="русский" href="../../../simpleTV-scripts"><img src="https://raw.githubusercontent.com/Nexterr/simpleTV-images/master/ru.png" alt="русский" /> </a><strong ><sup><sub>RU</sub></sup></strong>
 </p>
 
 [![Issues][badge-issues]][Issues]
