@@ -1,5 +1,5 @@
 <p align="right">
- <a title="русский" href="../../../simpleTV-scripts"><img src="https://raw.githubusercontent.com/Nexterr/simpleTV-images/master/ru.png" alt="русский" /> </a><strong ><sup><sub>RU</sub></sup></strong>
+ <a title="русский" href="../../"><img src="../../../simpleTV-images/blob/master/ru.png?raw=true" alt="русский" /> </a><strong ><sup><sub>RU</sub></sup></strong>
 </p>
 
 [![Issues][badge-issues]][Issues]
@@ -43,19 +43,19 @@
  - proxy / mirror
  - various parameters
 ---------------------------------------------
-[Issues]: ../../../simpleTV-scripts/issues "Issues"
-[Forks]: ../../../simpleTV-scripts/network/members "Forks"
-[Stars]: ../../../simpleTV-scripts/stargazers "Stars"
+[Issues]: ../../issues "Issues"
+[Forks]: ../../network/members "Forks"
+[Stars]: ../../stargazers "Stars"
 [YT]: ../../../simpleTV-script-YT "script YT"
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
-[License]: ../../../simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
-[remove]: ../../../simpleTV-scripts/tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
+[License]: ../../blob/master/LICENSE "License GPL 3.0"
+[remove]: ../../tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
 [TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon TVSources"
 [PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "addon Password Manager"
 [simpleTV homepage]: http://iptv.gen12.net "simpleTV homepage"
 [simpleTV bugtracker]: http://iptv.gen12.net/bugtracker "simpleTV bugtracker"
-[RU]: ../../../simpleTV-scripts "русский"
+[RU]: ../../ "русский"
 
 [badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
 [badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
