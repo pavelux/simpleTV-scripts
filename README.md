@@ -4,7 +4,7 @@
 [![Forks][badge-forks]][Forks]
 [![Stars][badge-stars]][Stars]
 
-[![script YT][badge-yt]][Скрипт YT]
+[![script YT][badge-yt]][YT]
 [![addon TVSources][badge-tvsources]][TVSources]
 [![addon PM][badge-pm]][PM]
 
