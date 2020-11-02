@@ -1,4 +1,4 @@
-###### **[:ru: русский][RU]**
+###### **[:ru: RU][RU]**
 
 ### removal of incompatible and outdated scripts
 
