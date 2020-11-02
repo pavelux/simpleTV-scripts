@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (26/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (27/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
@@ -357,13 +357,15 @@ local tname = {
 			if m_simpleTV.User.paramScriptForSkin_buttonPrev then
 				rtab.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPrev}
 			else
-				tab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+				rtab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
 			end
 			if m_simpleTV.User.paramScriptForSkin_buttonOk then
 				rtab.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 			end
-			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на портале Wink', 0, rtab, 10000, 1)
-				if ret == 3 then return -1 end
+			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на портале Wink', 0, rtab, 10000, 1 + 2)
+				if ret == 3 then
+				 return -1
+				end
 			id = id or 1
 			retAdr = rtab[id].Address
 		elseif url:match('kodikapi%.com') then
@@ -384,13 +386,15 @@ local tname = {
 			if m_simpleTV.User.paramScriptForSkin_buttonPrev then
 				f.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPrev}
 			else
-				tab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+				f.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
 			end
 			if m_simpleTV.User.paramScriptForSkin_buttonOk then
 				f.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 			end
-			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Filmix', 0, f, 10000, 1)
-				if ret == 3 then return -1 end
+			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Filmix', 0, f, 10000, 1 + 2)
+				if ret == 3 then
+				 return -1
+				end
 			id = id or 1
 			retAdr = f[id].Address
 		elseif url:match('seasonvar%.ru') then
@@ -400,10 +404,12 @@ local tname = {
 			if m_simpleTV.User.paramScriptForSkin_buttonPrev then
 				svar.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonPrev}
 			else
-				tab.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
+				svar.ExtButton1 = {ButtonEnable = true, ButtonName = '🢀'}
 			end
-			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Seasonvar', 0, svar, 10000, 1)
-				if ret == 3 then return -1 end
+			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('Найдено на Seasonvar', 0, svar, 10000, 1 + 2)
+				if ret == 3 then
+				 return -1
+				end
 			id = id or 1
 			retAdr = svar[id].Address
 		elseif url:match('apicollaps%.cc') then
@@ -542,20 +548,22 @@ local tname = {
 		if m_simpleTV.User.paramScriptForSkin_buttonClose then
 			rett.ExtButton1 = {ButtonEnable = true, ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonClose}
 		else
-			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕'}
+			rett.ExtButton1 = {ButtonEnable = true, ButtonName = '✕'}
 		end
 		if m_simpleTV.User.paramScriptForSkin_buttonOk then
 			rett.OkButton = {ButtonImageCx = 30, ButtonImageCy= 30, ButtonImage = m_simpleTV.User.paramScriptForSkin_buttonOk}
 		end
 		m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
 		local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('🎞 ' .. title .. getReting(), 0, rett, 8000, 1 + 2)
-		if ret == 3 then
-			retAdr = 0
-		 return
+			if ret == 3 then
+				retAdr = 0
+			 return
 			end
-		if not id then id = 1 end
+		id = id or 1
 		retAdr = getAdr(rett[id].answer, rett[id].Address)
-		if retAdr == -1 then selectmenu() end
+		if retAdr == -1 then
+			selectmenu()
+		end
 	end
 	getlogo()
 	getRkinopoisk()
