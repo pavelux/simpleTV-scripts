@@ -1,4 +1,4 @@
- ###### **[:uk: english][EN]**
+ ###### **[:uk: [eng]][EN]**
 
 [![Issues][badge-issues]][Issues]
 [![Forks][badge-forks]][Forks]
