@@ -1,5 +1,5 @@
 <p align="right">
- <a title="english" href="/README-EN.md"><img src="https://raw.githubusercontent.com/Nexterr/simpleTV-images/master/gb.png" alt="english" /> </a><strong><sup><sub>EN</sub></sup></strong>
+ <a title="english" href="/README-EN.md"><img src="../../../simpleTV-images/blob/master/gb.png?raw=true" alt="english" /> </a><strong><sup><sub>EN</sub></sup></strong>
 </p>
 
 [![Issues][badge-issues]][Issues]
@@ -43,13 +43,13 @@
  - прокси/зеркало
  - различные параметры
 ---------------------------------------------
-[Issues]: ../../../simpleTV-scripts/issues "Issues"
-[Forks]: ../../../simpleTV-scripts/network/members "Forks"
-[Stars]: ../../../simpleTV-scripts/stargazers "Stars"
+[Issues]: ../../issues "Issues"
+[Forks]: ../../network/members "Forks"
+[Stars]: ../../stargazers "Stars"
 [YT]: ../../../simpleTV-script-YT "скрипт YT"
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
-[License]: ../../../simpleTV-scripts/blob/master/LICENSE "License GPL 3.0"
+[License]: ../../blob/master/LICENSE "License GPL 3.0"
 [remove]: ../../../simpleTV-scripts/tree/master/addons/remove-illegal-scripts "удалить несовместимые и неактуальные скрипты"
 [TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "дополнение TVSources"
 [PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "дополнение Password Manager"
