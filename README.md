@@ -57,9 +57,9 @@
 [simpleTV bugtracker]: http://iptv.gen12.net/bugtracker "багтрекер"
 [EN]: ./README-EN.md "english"
 
-[badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts.svg?style=flat-square "Open issues"
-[badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts.svg?style=flat-square "Forks"
-[badge-stars]: https://img.shields.io/github/stars/Nexterr/simpleTV-scripts.svg?style=flat-square "Stars"
+[badge-issues]: https://img.shields.io/github/issues/Nexterr/simpleTV-scripts?color=%232b2b2b "Open issues"
+[badge-forks]: https://img.shields.io/github/forks/Nexterr/simpleTV-scripts?color=%232b2b2b "Forks"
+[badge-stars]: https://img.shields.io/github/stars/Nexterr/simpleTV-scripts?color=%232b2b2b "Stars"
 [badge-yt]: https://img.shields.io/badge/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-YT-%232b2b2b?style=flat-square "скрипт YT"
 [badge-simpletvapi]: https://img.shields.io/badge/simpleTV-Lua%20API-%232b2b2b?style=flat-square "simpleTV Lua API"
 [badge-lua]: https://img.shields.io/badge/Lua-5.1-%232b2b2b?style=flat-square "Lua 5.1"
