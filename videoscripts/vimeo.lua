@@ -1,11 +1,12 @@
--- видеоскрипт для сайта https://vimeo.com (6/9/20)
--- Copyright © 2017-2020 Nexterr
--- открывает подобные ссылки:
+-- видеоскрипт для сайта https://vimeo.com (2/11/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- ## открывает подобные ссылки ##
 -- https://vimeo.com/channels/musicvideoland/368152561
 -- https://vimeo.com/channels/staffpicks/204150149?autoplay=1
 -- https://vimeo.com/156942975
 -- https://vimeo.com/2196013
 -- https://player.vimeo.com/video/344303837?wmode=transparent$OPT:http-referrer=https://www.clubbingtv.com/video/play/4194/live-dj-set-with-dan-lo/
+-- https://vimeo.com/27945056
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://[%a%.]*vimeo%.com/.+') then return end
 	local urlAdr = m_simpleTV.Control.CurrentAddress
@@ -115,6 +116,9 @@
 			showError('5 - ' .. rc)
 		 return
 		end
+	answer = answer:gsub('\\', '\\\\')
+	answer = answer:gsub('\\"', '\\\\"')
+	answer = answer:gsub('\\/', '/')
 	answer = answer:gsub(':%s*%[%]', ':""')
 	answer = answer:gsub('%[%]', ' ')
 	require 'json'
@@ -135,6 +139,8 @@
 			title = addTitle
 		else
 			if m_simpleTV.Control.MainMode == 0 then
+				title = unescape3(title)
+				answer = answer:gsub('\\"', '"')
 				m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
 				local thumbs
 				if tab.video.thumbs and tab.video.thumbs.base then
