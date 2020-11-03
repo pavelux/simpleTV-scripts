@@ -19,9 +19,9 @@
 <table width="100%">
   <tr>
     <td>
-      <a href="http://iptv.gen12.net/">
+      <a href="http://iptv.gen12.net">
         <img src="https://raw.githubusercontent.com/Nexterr/simpleTV-images/master/logo_f2.png" 
-             title="домашняя страница" alt="simpleTV homepage"   width="70"/>
+            title="домашняя страница" alt="simpleTV homepage" width="70"/>
       </a>
     </td>
     <td>
@@ -29,7 +29,6 @@
     <p align="center">0.5.0 b12.7.5 (x32/x64 vlc 3.0.11)</p>
   </tr>
 </table>
-</p>
 
 ###### кодировка UTF-8 without BOM
 ---------------------------------------------
