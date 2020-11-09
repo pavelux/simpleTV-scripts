@@ -1,4 +1,4 @@
--- видеоскрипт для видеобазы "Ustore" https://ustore.bz (12/10/20)
+-- видеоскрипт для видеобазы "Ustore" https://ustore.bz (9/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- decoding by wafee, http://iptv.gen12.net/bugtracker/view.php?id=1610#c33160
 -- открывает подобные ссылки:
@@ -40,7 +40,8 @@
 	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:81.0) Gecko/20100101 Firefox/81.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
-	local headers = 'Referer: https://4h0y.gitlab.io/'
+	inAdr = inAdr:gsub('&kinopoisk', '')
+	local headers = 'Referer: ' .. inAdr
 	local function ustoreDecode(data)
 		local js = m_simpleTV.User.ustore.js
 		data = jsdecode.DoDecode('qp.decodeUrl32("' .. data .. '")', false, js, 0)
@@ -140,7 +141,6 @@
 		 return
 		end
 	m_simpleTV.User.ustore.titleTab = nil
-	inAdr = inAdr:gsub('&kinopoisk', '')
 	local hash, id = inAdr:match('/(%x+)/(%x+)')
 		if not hash or not id then
 			showError('3')
