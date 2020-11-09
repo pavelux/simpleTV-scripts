@@ -1,8 +1,8 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (27/10/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (9/10/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы скрипты ##
 -- wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
--- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua, ustore.lua
+-- zonamobi.lua, iviru.lua, videocdn.lua, hdvb.lua, collaps.lua, ustore.lua, cdnmovies.lua
 -- ## открывает подобные ссылки ##
 -- https://www.kinopoisk.ru/film/5928
 -- https://www.kinopoisk.ru/level/1/film/46225/sr/1/
@@ -40,6 +40,7 @@ local tname = {
 	'Hdvb',
 	'Seasonvar',
 	'ZonaMobi',
+	-- 'CDN Movies', -- gnutls 3.6.14
 	}
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
@@ -109,6 +110,11 @@ local tname = {
 			rc, answer = m_simpleTV.Http.Request(session, {url = url})
 				if rc ~= 200 then return end
 			answer = answer:match('"iframe_src":"([^"]+)')
+				if not answer then return end
+		elseif url:match('cdnmovies%.net') then
+			rc, answer = m_simpleTV.Http.Request(session, {url = url})
+				if rc ~= 200 then return end
+			answer = answer:match('"iframe":"([^"]+)')
 				if not answer then return end
 		elseif url:match('iptv%.rt%.ru') then
 				local function fingerprint()
@@ -341,6 +347,8 @@ local tname = {
 			retAdr = answer
 		elseif url:match('ustore%.bz') then
 			retAdr = answer
+		elseif url:match('cdnmovies%.net') then
+			retAdr = answer
 		elseif url:match('iptv%.rt%.ru') then
 			local hash, rtab = {}, {}
 			local u
@@ -464,6 +472,8 @@ local tname = {
 				turl[i] = {adr = decode64('aHR0cHM6Ly92aWRlb2Nkbi50di9hcGkvc2hvcnQ/YXBpX3Rva2VuPW9TN1d6dk5meGU0SzhPY3NQanBBSVU2WHUwMVNpMGZtJmtpbm9wb2lza19pZD0') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'Collaps' then
 				turl[i] = {adr = decode64('aHR0cHM6Ly9hcGljb2xsYXBzLmNjL2xpc3Q/dG9rZW49MjI2ZmQzMjRmYzUwZjlmNDQ3ZTlhNTExN2ViZDgwZDYma2lub3BvaXNrX2lkPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
+			elseif tname[i] == 'CDN Movies' then
+				turl[i] = {adr = decode64('aHR0cHM6Ly9jZG5tb3ZpZXMubmV0L2FwaS9tb3ZpZXM/dG9rZW49ZTJiY2MwOTVhMzA1NDc5MjNmYjIwODQ0YmRmNWZjNTQma2lub3BvaXNrPQ') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			elseif tname[i] == 'Hdvb' then
 				turl[i] = {adr = hdtv_domen .. decode64('L2FwaS92aWRlb3MuanNvbj90b2tlbj1jOTk2NmI5NDdkYTJmM2MyOWIzMGMwZTBkY2NhNmNmNCZpZF9rcD0') .. kpid, tTitle = 'Большая база фильмов и сериалов', tLogo = logo_k}
 			end
