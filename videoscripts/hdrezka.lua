@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://rezka.ag (5/9/20)
+-- видеоскрипт для сайта https://rezka.ag (11/11/20)
 -- Copyright © 2017-2020 Nexterr
 -- открывает подобные ссылки:
 -- https://rezka.ag/films/comedy/31810-horoshie-malchiki-2019.html
@@ -15,6 +15,7 @@ local proxy = ''
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://rezka%.ag/.+')
 			and not m_simpleTV.Control.CurrentAddress:match('^https?://%a+hdrezka%.com/.+')
 			and not m_simpleTV.Control.CurrentAddress:match('^https?://hdrezka%-ag%.com/.+')
+			and not m_simpleTV.Control.CurrentAddress:match('^https?://hdrezka%..+')
 			and not m_simpleTV.Control.CurrentAddress:match('^%$rezka')
 		then
 		 return
