@@ -1,10 +1,8 @@
--- видеоскрипт для сайта https://tvzvezda.ru (10/8/18)
+-- видеоскрипт для сайта https://tvzvezda.ru (11/11/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- необходимы скрипты: youtube
 -- открывает подобные ссылки:
 -- https://tvzvezda.ru/schedule/filmsonline/content/201712191710-rv1c.htm/
------------------------------------------------------------------------------------------
-local demux = 1 -- демуксер: 0 - не менять; 1 - использовать avcodec
------------------------------------------------------------------------------------------
 		if m_simpleTV.Control.ChangeAdress ~= 'No' then return end
 	local inAdr = m_simpleTV.Control.CurrentAdress
 		if not inAdr then return end
@@ -27,7 +25,6 @@ local demux = 1 -- демуксер: 0 - не менять; 1 - использо
 			dofile(m_simpleTV.MainScriptDir .. 'user\\video\\video.lua')
 		 return
 		end
-	if demux ~= 0 then retAdr = retAdr .. '$OPT:demux=avcodec' end
 	retAdr = retAdr .. '$OPT:NO-STIMESHIFT'
 	m_simpleTV.Control.CurrentAdress = retAdr
 -- debug_in_file(retAdr .. '\n')
