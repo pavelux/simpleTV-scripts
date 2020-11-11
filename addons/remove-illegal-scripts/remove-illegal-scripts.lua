@@ -1,4 +1,4 @@
--- remove illegal scripts (6/11/20)
+-- remove illegal scripts (12/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
 local enable = true
@@ -25,6 +25,12 @@ local t = {
 'luaScr/user/video/hevc-club_portal.lua',
 'luaScr/user/video/lostfilm_portal.lua',
 'luaScr/user/video/wink_TV_portal.lua',
+'luaScr/user/video/hdrezka.download_720p.lua',
+'luaScr/user/video/hdrezka.download_1080p.lua',
+'luaScr/user/video/hdrezka_720p.lua',
+'luaScr/user/video/hdrezka_1080p.lua',
+'luaScr/user/video/hevc-club_720p.lua',
+'luaScr/user/video/hevc-club_1080p.lua',
 ----------------------------------------------------------
 -- httptimeshift extensions
 ----------------------------------------------------------
@@ -34,6 +40,7 @@ local t = {
 -- load on startup
 ----------------------------------------------------------
 'luaScr/user/startup/videotracks.lua',
+'luaScr/user/startup/epgSearchRezka.lua',
 ----------------------------------------------------------
 }
 return t
