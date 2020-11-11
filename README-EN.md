@@ -38,7 +38,7 @@
  - unpack the add-ons into the appropriate folders
 ---------------------------------------------
 **Remove incompatible and outdated scripts**
-- use **[remove-illegal-scripts][remove]**
+- use **[Trash Cleaner][remove]**
 ---------------------------------------------
 **In some scripts it is possible to specify**
  - proxy / mirror
@@ -51,7 +51,7 @@
 [simpleTV API]: http://iptv.gen12.net/dokuwiki/doku.php?id=mantis:simpletv:api "simpleTV API"
 [Lua]: https://www.lua.org/manual/5.1 "Lua 5.1"
 [License]: ../../blob/master/LICENSE "License GPL 3.0"
-[remove]: ../../tree/master/addons/remove-illegal-scripts "remove ilegal scripts"
+[remove]: ../../tree/master/addons/TrashCleaner "removal of incompatible and outdated scripts"
 [TVSources]: http://iptv.gen12.net/bugtracker/view.php?id=1614 "addon TVSources"
 [PM]: http://iptv.gen12.net/bugtracker/view.php?id=1485 "addon Password Manager"
 [simpleTV homepage]: http://iptv.gen12.net "simpleTV homepage"
