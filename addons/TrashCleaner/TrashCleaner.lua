@@ -1,4 +1,4 @@
--- Trash Cleaner (12/11/20)
+-- Trash Cleaner (11/11/20)
 -- removal of incompatible and outdated scripts
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 ----------------------------------------------------------
@@ -39,7 +39,6 @@ local t = {
 'luaScr/user/video/hdbaza.lua',
 'luaScr/user/video/hdgo.lua',
 'luaScr/user/video/hdkinoteatr.lua',
-'luaScr/user/video/hochu.lua',
 'luaScr/user/video/itop_gear.lua',
 'luaScr/user/video/itv_uz.lua',
 'luaScr/user/video/kaskad.lua',
@@ -48,6 +47,7 @@ local t = {
 'luaScr/user/video/matchtv_online.lua',
 'luaScr/user/video/moonwalk.lua',
 'luaScr/user/video/ntk.kz.lua',
+'luaScr/user/video/onlinetv.one',
 'luaScr/user/video/ontvtime.lua',
 'luaScr/user/video/paromtv.lua',
 'luaScr/user/video/planeta_online.lua',
