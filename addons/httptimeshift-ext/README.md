@@ -15,7 +15,7 @@
 - telecola
 - yandex
 - peersTV
-- Смотрёшка
+- смотрёшка
 - tvoetv
 - wink
 - edem
