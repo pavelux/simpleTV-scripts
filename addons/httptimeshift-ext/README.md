@@ -1,7 +1,11 @@
+<p align="right">
+ <a title="english" href="./README-EN.md"><img src="../../../../../simpleTV-images/blob/master/gb.png?raw=true" alt="english" /> </a><strong ><sup><sub>EN</sub></sup></strong>
+</p>
+
 ### расширения дополнения httptimeshift
-- поместить в :file_folder: _..\luaScr\user\httptimeshift\extensions_
+- поместить в папку .\luaScr\user\httptimeshift\extensions_
 ----------------------------------------------------------------
-###### _в настройках дополнения не включать режим совместимости_ :warning:
+###### _в настройках дополнения не включать режим совместимости_
 ----------------------------------------------------------------
 **для источников**
 - bluepoint
@@ -14,8 +18,6 @@
 - Смотрёшка
 - tvoetv
 - wink
----------------------------------------------------------------- 
-**плейлистов с "tvg-rec"**
 - edem
-- cbilling.biz
+- cbilling
 ----------------------------------------------------------------
