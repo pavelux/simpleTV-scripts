@@ -1,6 +1,6 @@
 -- Trash Cleaner (11/11/20)
--- removal of incompatible and outdated scripts
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- removal of incompatible and outdated scripts
 ----------------------------------------------------------
 local enable = true
 ----------------------------------------------------------
