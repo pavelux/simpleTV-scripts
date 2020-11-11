@@ -9,15 +9,15 @@
 ----------------------------------------------------------------
 **для источников**
 - bluepoint
+- cbilling
+- edem
 - impulsTV
 - limeHD
 - megogoTV
-- telecola
-- yandex
 - peersTV
-- смотрёшка
+- telecola
 - tvoetv
 - wink
-- edem
-- cbilling
+- yandex
+- смотрёшка
 ----------------------------------------------------------------
