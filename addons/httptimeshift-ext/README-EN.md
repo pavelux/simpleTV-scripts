@@ -1,0 +1,23 @@
+<p align="right">
+ <a title="русский" href="../../../../tree/master/addons/httptimeshift-ext"><img src="../../../../../simpleTV-images/blob/master/ru.png?raw=true" alt="русский" /> </a><strong ><sup><sub>RU</sub></sup></strong>
+</p>
+
+### httptimeshift addon extensions
+- put in the ..\luaScr\user\httptimeshift\extensions
+----------------------------------------------------------------
+###### _do not enable compatibility mode in add-on settings_
+----------------------------------------------------------------
+**for sources**
+- bluepoint
+- impulsTV
+- limeHD
+- megogoTV
+- telecola
+- yandex
+- peersTV
+- смотрёшка
+- tvoetv
+- wink
+- edem
+- cbilling
+----------------------------------------------------------------
