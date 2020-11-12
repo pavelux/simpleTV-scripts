@@ -2,6 +2,7 @@
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
+-- https://wink.rt.ru/media_items/95585083
 -- https://wink.rt.ru/media_items/101227940/104587171/104587517
 -- https://zabava-htvod.cdn.ngenix.net/hls/hd_1997_Zvezdnyy_desant__q0w0_ar6e6_film/variant.m3u8
 -- http://vod-ott.svc.iptv.rt.ru/hls/sd_2017_Istorii_prizrakov__q0w2_film/variant.m3u8
@@ -436,10 +437,7 @@ local hd_sd = 0
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
 	end
-	if episode then
-		tab.type = 'film'
-	end
-	if tab.type == 'film' then
+	if tab.type == 'film' or episode then
 		movie(Id, title, desc, poster)
 	else
 		serias(Id, title, headers, apiHost, logoHost, poster)
