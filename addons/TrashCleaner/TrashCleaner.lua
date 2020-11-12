@@ -1,4 +1,4 @@
--- Trash Cleaner (11/11/20)
+-- Trash Cleaner (12/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 ----------------------------------------------------------
@@ -12,10 +12,10 @@ local t = {
 ----------------------------------------------------------
 -- #################### outdated ####################
 ----------------------------------------------------------
-'luaScr/user/video/google_drive.lua',
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
+'luaScr/user/video/911tv.lua',
 'luaScr/user/video/Google_Yandex_link.lua',
 'luaScr/user/video/ITV 2.0kp.lua',
 'luaScr/user/video/YandexTV.lua',
@@ -30,31 +30,44 @@ local t = {
 'luaScr/user/video/bnt-bg.lua',
 'luaScr/user/video/cin-24.lua',
 'luaScr/user/video/cinemahd.lua',
+'luaScr/user/video/cloud_mailru_file.lua',
 'luaScr/user/video/cybergame.lua',
+'luaScr/user/video/dancetelevision.lua',
 'luaScr/user/video/earthtv.lua',
+'luaScr/user/video/eporner.lua',
+'luaScr/user/video/eporner_pages.lua',
 'luaScr/user/video/euronews.lua',
 'luaScr/user/video/ex_fs_net.lua',
 'luaScr/user/video/facebook.lua',
 'luaScr/user/video/gidonline.lua',
+'luaScr/user/video/google_drive.lua',
 'luaScr/user/video/google_yandex_link.lua',
 'luaScr/user/video/hdbaza.lua',
 'luaScr/user/video/hdgo.lua',
 'luaScr/user/video/hdkinoteatr.lua',
+'luaScr/user/video/iptvmaster.lua',
 'luaScr/user/video/itop_gear.lua',
+'luaScr/user/video/itv_rt.lua',
 'luaScr/user/video/itv_uz.lua',
 'luaScr/user/video/kaskad.lua',
 'luaScr/user/video/katushka.lua',
+'luaScr/user/video/kino_france.lua',
+'luaScr/user/video/kinogid.lua',
 'luaScr/user/video/kinoxa.lua',
 'luaScr/user/video/matchtv_online.lua',
+'luaScr/user/video/microimp.lua',
 'luaScr/user/video/moonwalk.lua',
 'luaScr/user/video/ntk.kz.lua',
-'luaScr/user/video/onlinetv.one',
+'luaScr/user/video/onlinetv.one.lua',
 'luaScr/user/video/ontvtime.lua',
 'luaScr/user/video/paromtv.lua',
 'luaScr/user/video/planeta_online.lua',
 'luaScr/user/video/poisk_!youtube.lua',
+'luaScr/user/video/rutube.lua',
 'luaScr/user/video/seirsanduk.lua',
 'luaScr/user/video/sendspacecom.lua',
+'luaScr/user/video/smarttvnews.lua',
+'luaScr/user/video/sport-24tv.lua',
 'luaScr/user/video/sportbox.ws.lua',
 'luaScr/user/video/standarttv.lua',
 'luaScr/user/video/staroevideo.lua',
@@ -62,13 +75,16 @@ local t = {
 'luaScr/user/video/streamaway.lua',
 'luaScr/user/video/supertennis.lua',
 'luaScr/user/video/telego.lua',
+'luaScr/user/video/the_cinema.lua',
 'luaScr/user/video/topchantv.lua',
 'luaScr/user/video/uafilmtv.lua',
+'luaScr/user/video/uakino.lua',
 'luaScr/user/video/ussr.lua',
 'luaScr/user/video/videomore.lua',
 'luaScr/user/video/wink.rt.lua',
 'luaScr/user/video/xittv.lua',
 'luaScr/user/video/youtube.lua',
+'luaScr/user/video/zala.lua',
 -- 'luaScr/user/video/corntv.lua',
 ----------------------------------------------------------
 -- #################### incompatible ####################
@@ -88,6 +104,7 @@ local t = {
 'luaScr/user/video/lostfilm_portal.lua',
 'luaScr/user/video/tv_plus.lua',
 'luaScr/user/video/wink_TV_portal.lua',
+'luaScr/user/video/ytb.lua',
 ----------------------------------------------------------
 -- httptimeshift extensions
 ----------------------------------------------------------
