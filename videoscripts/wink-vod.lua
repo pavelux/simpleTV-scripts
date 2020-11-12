@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (12/11/20)
+-- видеоскрипт для сайта https://wink.rt.ru (14/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
@@ -53,7 +53,7 @@ local hd_sd = 0
 	m_simpleTV.Control.ChangeAddress = 'Yes'
 	m_simpleTV.Control.CurrentAddress = 'error'
 	local function showError(str)
-		m_simpleTV.OSD.ShowMessageT({text = 'wink.rt ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
+		m_simpleTV.OSD.ShowMessageT({text = 'wink-vod ошибка: ' .. str, showTime = 1000 * 5, color = 0xffff6600, id = 'channelName'})
 	end
 	local Id = inAdr:match('/media_items/(%d+)')
 		if not (Id
@@ -61,10 +61,10 @@ local hd_sd = 0
 			or inAdr:match('iptv%.rt%.ru')
 			or inAdr:match('ngenix%.net'))
 		then
-			showError('эти ссылки не открываются')
+			showError('некорректная ссылка')
 		 return
 		end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:82.0) Gecko/20100101 Firefox/82.0')
+	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:83.0) Gecko/20100101 Firefox/83.0')
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
 	local function buttons(t)
@@ -426,6 +426,13 @@ local hd_sd = 0
 			or not tab.name
 		then
 			showError('3')
+		 return
+		end
+		if tab.genres
+			and tab.genres[1]
+			and tab.genres[1].default_category_id == 23
+		then
+			showError('аудиокниги не доступны')
 		 return
 		end
 	Id = tostring(tab.id)
