@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://wink.rt.ru (28/10/20)
+-- видеоскрипт для сайта https://wink.rt.ru (12/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## открывает подобные ссылки ##
 -- https://wink.rt.ru/media_items/80307404
@@ -406,6 +406,10 @@ local hd_sd = 0
 		 return
 		end
 	local headers = 'session_id: ' .. session_id
+	local episode = inAdr:match('/%d+/%d+/(%d+)')
+	if episode then
+		Id = episode
+	end
 	local url = apiHost .. 'media_items/' .. Id
 	local rc, answer = m_simpleTV.Http.Request(session, {url = url, headers = headers})
 		if rc ~= 200 then
@@ -431,6 +435,9 @@ local hd_sd = 0
 	if m_simpleTV.Control.MainMode == 0 then
 		m_simpleTV.Control.ChangeChannelLogo(poster, m_simpleTV.Control.ChannelID)
 		m_simpleTV.Control.ChangeChannelName(title, m_simpleTV.Control.ChannelID, false)
+	end
+	if episode then
+		tab.type = 'film'
 	end
 	if tab.type == 'film' then
 		movie(Id, title, desc, poster)
