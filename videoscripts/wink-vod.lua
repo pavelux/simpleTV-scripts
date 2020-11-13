@@ -7,7 +7,7 @@
 -- https://zabava-htvod.cdn.ngenix.net/hls/hd_1997_Zvezdnyy_desant__q0w0_ar6e6_film/variant.m3u8
 -- http://vod-ott.svc.iptv.rt.ru/hls/sd_2017_Istorii_prizrakov__q0w2_film/variant.m3u8
 -- ## предпочитать HD/SD ##
-local hd_sd = 0
+local hd_sd = 1
 -- 0 - HD
 -- 1 - SD
 -- ##
@@ -192,7 +192,7 @@ local hd_sd = 0
 		retAdr = retAdr:gsub('wink_vod_', '')
 		retAdr = getUrl(retAdr)
 			if not retAdr then
-				showError('4')
+				showError('не доступно')
 			 return
 			end
 		retAdr = qltyFromUrl(retAdr)
