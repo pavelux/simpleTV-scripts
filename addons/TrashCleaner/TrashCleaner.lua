@@ -12,6 +12,7 @@ local t = {
 ----------------------------------------------------------
 -- #################### outdated ####################
 ----------------------------------------------------------
+'luaScr/user/httptimeshift/extensions/wink-timeshift_ext.lua',
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
