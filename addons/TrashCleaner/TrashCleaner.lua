@@ -12,7 +12,6 @@ local t = {
 ----------------------------------------------------------
 -- #################### outdated ####################
 ----------------------------------------------------------
-'luaScr/user/video/faaftv.lua',
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
@@ -41,6 +40,7 @@ local t = {
 'luaScr/user/video/eporner_pages.lua',
 'luaScr/user/video/euronews.lua',
 'luaScr/user/video/ex_fs_net.lua',
+'luaScr/user/video/faaftv.lua',
 'luaScr/user/video/facebook.lua',
 'luaScr/user/video/gidonline.lua',
 'luaScr/user/video/google_drive.lua',
@@ -114,6 +114,7 @@ local t = {
 'luaScr/user/video/lostfilm_portal.lua',
 'luaScr/user/video/tv_plus.lua',
 'luaScr/user/video/wink_TV_portal.lua',
+'luaScr/user/video/wink_plus.lua',
 'luaScr/user/video/ytb.lua',
 ----------------------------------------------------------
 -- httptimeshift extensions
