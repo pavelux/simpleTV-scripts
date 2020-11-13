@@ -1,4 +1,4 @@
--- Trash Cleaner (12/11/20)
+-- Trash Cleaner (14/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 ----------------------------------------------------------
@@ -12,6 +12,7 @@ local t = {
 ----------------------------------------------------------
 -- #################### outdated ####################
 ----------------------------------------------------------
+'luaScr/user/video/faaftv.lua',
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
