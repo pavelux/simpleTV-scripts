@@ -38,7 +38,8 @@ local hd_sd = 0
 		end
 		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
 	end
-	local extOpt = '$OPT:NO-STIMESHIFT'
+	local userAgent = 'Mozilla/5.0 (Windows NT 10.0; rv:83.0) Gecko/20100101 Firefox/83.0'
+	local extOpt = '$OPT:NO-STIMESHIFT$OPT:http-user-agent=' .. userAgent
 	if psevdotv then
 		extOpt = extOpt .. '$OPT:NO-SEEKABLE'
 	end
@@ -64,7 +65,7 @@ local hd_sd = 0
 			showError('некорректная ссылка')
 		 return
 		end
-	local session = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; rv:83.0) Gecko/20100101 Firefox/83.0')
+	local session = m_simpleTV.Http.New(userAgent)
 		if not session then return end
 	m_simpleTV.Http.SetTimeout(session, 12000)
 	local function buttons(t)
