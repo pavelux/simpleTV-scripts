@@ -12,7 +12,6 @@ local t = {
 ----------------------------------------------------------
 -- #################### outdated ####################
 ----------------------------------------------------------
-'luaScr/user/video/megafon.lua',
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
@@ -60,6 +59,7 @@ local t = {
 'luaScr/user/video/kinoxa.lua',
 'luaScr/user/video/magnet.lua',
 'luaScr/user/video/matchtv_online.lua',
+'luaScr/user/video/megafon.lua',
 'luaScr/user/video/microimp.lua',
 'luaScr/user/video/moonwalk.lua',
 'luaScr/user/video/ntk.kz.lua',
@@ -87,6 +87,7 @@ local t = {
 'luaScr/user/video/uakino.lua',
 'luaScr/user/video/ussr.lua',
 'luaScr/user/video/videomore.lua',
+'luaScr/user/video/wink.lua',
 'luaScr/user/video/wink.rt.lua',
 'luaScr/user/video/xittv.lua',
 'luaScr/user/video/youtube.lua',
