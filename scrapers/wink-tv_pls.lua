@@ -2,7 +2,7 @@
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-tv.lua
--- расширение дополнения httptimeshift: wink=tv-timeshift_ext.lua
+-- расширение дополнения httptimeshift: wink-tv-timeshift_ext.lua
 -- ## переименовать каналы ##
 local filter = {
 	{'360 Подмосковье HD', '360 Подмосковье HD (Москва)'},
