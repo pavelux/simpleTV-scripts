@@ -2,7 +2,7 @@
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: wink-tv.lua
--- расширение дополнения httptimeshift: wink-tv-timeshift_ext.lua
+-- расширение дополнения httptimeshift: wink=tv-timeshift_ext.lua
 -- ## переименовать каналы ##
 local filter = {
 	{'360 Подмосковье HD', '360 Подмосковье HD (Москва)'},
@@ -53,23 +53,25 @@ local filter = {
 	function GetVersion()
 	 return 2, 'UTF-8'
 	end
-	local function Itv20GetTbl(w)
+	local function wink_tv(w)
 		local session = m_simpleTV.Http.New('Mozilla/5.0 (SmartHub; SMART-TV; U; Linux/SmartTV) AppleWebKit/531.2+ (KHTML, like Gecko) WebBrowser/1.0 SmartTV Safari/531.2+')
 			if not session then return end
 		require 'json'
 		m_simpleTV.Http.SetTimeout(session, 16000)
 		local t, i = {}, 1
-			local function getTbl(t, i, tab)
-				while tab.channels_list[i] do
-					t[i] = {}
-					t[i].name = tab.channels_list[i].bcname
-					t[i].address = tab.channels_list[i].smlOttURL
-					i = i + 1
-				end
-			 return t, i
+			local function getTbl(t, k, tab)
+				local j = 1
+					while tab.channels_list[j] do
+						t[k] = {}
+						t[k].name = tab.channels_list[j].bcname
+						t[k].address = tab.channels_list[j].smlOttURL
+						j = j + 1
+						k = k + 1
+					end
+			 return t, k
 			end
 			for c = 1, #w do
-				local rc, answer = m_simpleTV.Http.Request(session, {url = decode64(w[1])})
+				local rc, answer = m_simpleTV.Http.Request(session, {url = decode64(w[c])})
 				if rc == 200 then
 					answer = answer:gsub('%[%]', '""')
 					local tab = json.decode(answer)
@@ -127,7 +129,7 @@ local filter = {
 			if not TVSources_var.tmp.source[UpdateID] then return end
 		local Source = TVSources_var.tmp.source[UpdateID]
 		local w = {'aHR0cHM6Ly9mZS1tb3Muc3ZjLmlwdHYucnQucnUvQ2FjaGVDbGllbnRKc29uL2pzb24vQ2hhbm5lbFBhY2thZ2UvbGlzdF9jaGFubmVscz9jaGFubmVsUGFja2FnZUlkPTg0NDE1OTU3JmxvY2F0aW9uSWQ9NzAwMDAxJmZyb209MCZ0bz0yMTQ3NDgzNjQ3', 'aHR0cHM6Ly9mZS5zdmMuaXB0di5ydC5ydS9DYWNoZUNsaWVudEpzb24vanNvbi9DaGFubmVsUGFja2FnZS9saXN0X2NoYW5uZWxzP2NoYW5uZWxQYWNrYWdlSWQ9NjcwODM0OTUmbG9jYXRpb25JZD0xMDAwMDEmZnJvbT0wJnRvPTIxNDc0ODM2NDc'}
-		local t_pls = Itv20GetTbl(w, w1)
+		local t_pls = wink_tv(w)
 			if not t_pls then
 				m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' - ошибка загрузки плейлиста'
 											, color = 0xffff6600
