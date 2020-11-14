@@ -1,152 +1,140 @@
--- скрапер TVS для загрузки плейлиста "Wink TV" https://wink.rt.ru (14/11/20)
+-- видеоскрипт для плейлиста "Wink TV" https://wink.rt.ru (14/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- в архиве не переключает качество
 -- ## необходим ##
--- видоскрипт: wink-tv.lua
 -- расширение дополнения httptimeshift: wink=tv-timeshift_ext.lua
--- ## переименовать каналы ##
-local filter = {
-	{'360 Подмосковье HD', '360 Подмосковье HD (Москва)'},
-	{'5 канал', 'Пятый канал'},
-	{'BOLT', 'BOLT HD'},
-	{'CGTN Russian', 'CGTN Русский'},
-	{'MTV', 'MTV Russia'},
-	{'REN-TV HD', 'РЕН ТВ HD'},
-	{'REN-TV', 'РЕН ТВ'},
-	{'Sony Entertainment Television HD', 'SET HD'},
-	{'Star Cinema HD', 'Star Cinema HD (Россия)'},
-	{'Star Cinema', 'Star Cinema (Россия)'},
-	{'Star Family HD', 'Star Family HD (Россия)'},
-	{'Star Family', 'Star Family (Россия)'},
-	{'Время далекое и близкое', 'Время'},
-	{'Деда Мороза', 'Телеканал Деда Мороза'},
-	{'Доверие', 'Москва. Доверие (Москва)'},
-	{'КИНОУЖАС', 'Киноужас'},
-	{'МАТЧ ПРЕМЬЕР', 'Матч! Премьер HD'},
-	{'МАТЧ! ФУТБОЛ 1', 'Матч! Футбол 1 HD'},
-	{'МАТЧ! ФУТБОЛ 2', 'Матч! Футбол 2 HD'},
-	{'МАТЧ! ФУТБОЛ 3', 'Матч! Футбол 3 HD'},
-	{'О, кино!', 'О!КИНО'},
-	{'Общественное телевидение России', 'ОТР'},
-	{'ПОБЕДА', 'Победа HD'},
-	{'Россия-1 HD', 'Россия 1 HD'},
-	{'Русский экстрим', 'Russian Extreme'},
-	{'Телекомпания ПЯТНИЦА', 'Пятница'},
-	}
+-- скрапер TVS: wink-tv_pls.lua
+-- ## открывает подобные ссылки ##
+-- https://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHTVHD/variant.m3u8
+-- http://hlsstr03.svc.iptv.rt.ru/hls/CH_TNTHD/variant.m3u8
+-- http://rt-vlg-samara-htlive-lb.cdn.ngenix.net/hls/CH_R03_OTT_VLG_SAMARA_M1/variant.m3u8
+-- http://s91412.cdn.ngenix.net/mdrm/CH_UFCHD_HLS/bw5000000/variant.m3u8
+-- http://a787201472-s91412.cdn.ngenix.net/mdrm/CH_UFCHD_HLS/bw5000000/manifest.mpd
+-- http://s91412.cdn.ngenix.net/mdrm/CH_UFCHD_HLS/bw5000000/variant.m3u8
+-- http://hlsstr03.svc.iptv.rt.ru/hls/CH_TNTHD/variant.m3u8?offset=-14400
+-- ## юзер агент ##
+local userAgent = 'Mozilla/5.0 (SMART-TV; Linux; Tizen 4.0.0.2) AppleWebkit/605.1.15 (KHTML, like Gecko) SamsungBrowser/9.2 TV Safari/605.1.15'
+-- ## Пртокол ##
+local http = 0
+-- 0 - httpS
+-- 1 - http
+-- ## Прокси ##
+local proxy = ''
+-- '' - нет
+--'http://217.150.200.152:8081' - (пример)
 -- ##
-	module('wink-tv_pls', package.seeall)
-	local my_src_name = 'Wink TV'
-	local function ProcessFilterTableLocal(t)
-			if not type(t) == 'table' then return end
-		for i = 1, #t do
-			t[i].name = tvs_core.tvs_clear_double_space(t[i].name)
-			for _, ff in ipairs(filter) do
-				if (type(ff) == 'table' and t[i].name == ff[1]) then
-					t[i].name = ff[2]
+		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
+		if not m_simpleTV.Control.CurrentAddress:match('rt%.ru/hls/CH_')
+			and not m_simpleTV.Control.CurrentAddress:match('ngenix%.net[:%d]*/hls/CH_')
+			and not m_simpleTV.Control.CurrentAddress:match('ngenix%.net/mdrm/CH_')
+		then
+		 return
+		end
+		if m_simpleTV.Control.CurrentAddress:match('PARAMS=wink_tv') then return end
+	if m_simpleTV.Control.MainMode == 0 then
+		m_simpleTV.Interface.SetBackground({BackColor = 0, PictFileName = '', TypeBackColor = 0, UseLogo = 0, Once = 1})
+	end
+	local inAdr = m_simpleTV.Control.CurrentAddress
+	m_simpleTV.Control.ChangeAddress = 'Yes'
+	m_simpleTV.Control.CurrentAddress = 'error'
+	if http == 0 then
+		inAdr = inAdr:gsub('^http://', 'https://')
+	else
+		inAdr = inAdr:gsub('^https://', 'http://')
+	end
+	local host = inAdr:match('https?://.-/')
+	local extOpt = '$OPT:INT-SCRIPT-PARAMS=wink_tv$OPT:http-user-agent=' .. userAgent
+	if proxy ~= '' then
+		extOpt = extOpt .. '$OPT:http-proxy=' .. proxy
+	end
+	local session = m_simpleTV.Http.New(userAgent, proxy, false)
+		if not session then return end
+	m_simpleTV.Http.SetTimeout(session, 8000)
+	local function hls(answer, host, extOpt)
+		local t, i = {}, 1
+			for w in answer:gmatch('EXT%-X%-STREAM%-INF(.-\n.-)\n') do
+				local adr = w:match('\n(.+)')
+				local name = w:match('BANDWIDTH=(%d+)')
+				if adr and name then
+					name = tonumber(name)
+					adr = adr:gsub('/playlist%.', '/variant.')
+					adr = adr:gsub('https?://.-/', host)
+					adr = adr:gsub('%?.-$', '')
+					t[i] = {}
+					t[i].Id = name
+					t[i].Name = (name / 1000) .. ' кбит/с'
+					t[i].Address = adr .. extOpt
+					i = i + 1
 				end
 			end
-		end
 	 return t
 	end
-	function GetSettings()
-	 return {name = my_src_name, sortname = '', scraper = '', m3u = 'out_' .. my_src_name .. '.m3u', logo = '..\\Channel\\logo\\Icons\\wink.png', TypeSource = 1, TypeCoding = 1, DeleteM3U = 1, RefreshButton = 1, show_progress = 0, AutoBuild = 0, AutoBuildDay = {0, 0, 0, 0, 0, 0, 0}, LastStart = 0, TVS = {add = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, LogoTVG = 1}, STV = {add = 1, ExtFilter = 1, FilterCH = 1, FilterGR = 1, GetGroup = 1, HDGroup = 0, AutoSearch = 1, AutoNumber = 0, NumberM3U = 0, GetSettings = 0, NotDeleteCH = 0, TypeSkip = 1, TypeFind = 1, TypeMedia = 0, RemoveDupCH = 1}}
-	end
-	function GetVersion()
-	 return 2, 'UTF-8'
-	end
-	local function wink_tv(w)
-		local session = m_simpleTV.Http.New('Mozilla/5.0 (SmartHub; SMART-TV; U; Linux/SmartTV) AppleWebKit/531.2+ (KHTML, like Gecko) WebBrowser/1.0 SmartTV Safari/531.2+')
-			if not session then return end
-		require 'json'
-		m_simpleTV.Http.SetTimeout(session, 16000)
+	local function mpd(answer, inAdr, extOpt)
 		local t, i = {}, 1
-			local function getTbl(t, k, tab)
-				local j = 1
-					while tab.channels_list[j] do
-						t[k] = {}
-						t[k].name = tab.channels_list[j].bcname
-						t[k].address = tab.channels_list[j].smlOttURL
-						j = j + 1
-						k = k + 1
-					end
-			 return t, k
+			for bandwidth in answer:gmatch('id="(bw%d+/)video"') do
+				local name = bandwidth:match('%d+')
+				name = tonumber(name)
+				bandwidth = inAdr:gsub('manifest.mpd', bandwidth .. 'manifest.mpd')
+				t[i] = {}
+				t[i].Id = name
+				t[i].Name = (name / 1000) .. ' кбит/с'
+				t[i].Address = bandwidth .. extOpt
+				i = i + 1
 			end
-			for c = 1, #w do
-				local rc, answer = m_simpleTV.Http.Request(session, {url = decode64(w[c])})
-				if rc == 200 then
-					answer = answer:gsub('%[%]', '""')
-					local tab = json.decode(answer)
-					if tab and tab.channels_list then
-						t, i = getTbl(t, i, tab)
-					end
-				end
-			end
-		m_simpleTV.Http.Close(session)
-			if #t == 0 then return end
-		local hash, t1 = {}, {}
+	 return t
+	end
+	local offset = inAdr:match('offset=%-(%d+)')
+	inAdr = inAdr:gsub('$OPT:.+', '')
+	inAdr = inAdr:gsub('bw%d+/', '')
+	inAdr = inAdr:gsub('%?.-$', '')
+	local rc, answer = m_simpleTV.Http.Request(session, {url = inAdr})
+	m_simpleTV.Http.Close(session)
+		if rc ~= 200 then return end
+	if answer:match('EXT%-X%-STREAM%-INF') then
+		t = hls(answer, host, extOpt)
+	else
+		t = mpd(answer, inAdr, extOpt)
+	end
+		if t == 0 then
+			m_simpleTV.Control.CurrentAddress = inAdr .. extOpt
+		 return
+		end
+	table.sort(t, function(a, b) return a.Id < b.Id end)
+	local lastQuality = tonumber(m_simpleTV.Config.GetValue('wink_qlty') or 100000000)
+	local index = #t
+	if #t > 1 then
+		t[#t + 1] = {}
+		t[#t].Id = 100000000
+		t[#t].Name = '▫ всегда высокое'
+		t[#t].Address = t[#t - 1].Address
+		t[#t + 1] = {}
+		t[#t].Id = 500000000
+		t[#t].Name = '▫ адаптивное'
+		t[#t].Address = inAdr .. extOpt
+		index = #t
 			for i = 1, #t do
-				if not hash[t[i].address] then
-					t1[#t1 + 1] = t[i]
-					hash[t[i].address] = true
+				if t[i].Id >= lastQuality then
+					index = i
+				 break
 				end
 			end
-		local t0, j = {}, 1
-			for _, v in pairs(t1) do
-				if v.address:match('^http')
-					and v.address:match('/CH_')
-					and not (
-							v.address:match('TEST')
-							or v.address:match('_R%d+_')
-							or v.name:match('^Тест')
-							or v.name:match('^Test')
-							or v.name:match('Sberbank')
-							)
-				then
-					v.name = v.name:gsub('^Телеканал', '')
-					v.name = v.name:gsub(' SD', '')
-					v.name = v.name:gsub('«', '')
-					v.name = v.name:gsub('»', '')
-					v.name = v.name:gsub('"', '')
-					v.name = v.name:gsub(':%s', ' ')
-					v.name = v.name:gsub('^Канал', '')
-					v.name = v.name:gsub('%.%s*$', '')
-					if v.address:match('/CH_1TV/') then
-						v.name = 'Первый канал HD'
-					end
-					if v.address:match('/CH_1TVSD/') then
-						v.name = 'Первый канал'
-					end
-					t0[j] = v
-					t0[j].RawM3UString = 'catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}" catchup-record-source="?utcstart=${start}&utcend=${end}"'
-					j = j + 1
-				end
+		if index > 1 then
+			if t[index].Id > lastQuality then
+				index = index - 1
 			end
-			if #t0 == 0 then return end
-	 return t0
+		end
+		if m_simpleTV.Control.MainMode == 0 then
+			t.ExtButton1 = {ButtonEnable = true, ButtonName = '✕', ButtonScript = 'm_simpleTV.Control.ExecuteAction(37)'}
+			t.ExtParams = {LuaOnOkFunName = 'winkSaveQuality'}
+			m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 32 + 64 + 128)
+		end
 	end
-	function GetList(UpdateID, m3u_file)
-			if not UpdateID then return end
-			if not m3u_file then return end
-			if not TVSources_var.tmp.source[UpdateID] then return end
-		local Source = TVSources_var.tmp.source[UpdateID]
-		local w = {'aHR0cHM6Ly9mZS1tb3Muc3ZjLmlwdHYucnQucnUvQ2FjaGVDbGllbnRKc29uL2pzb24vQ2hhbm5lbFBhY2thZ2UvbGlzdF9jaGFubmVscz9jaGFubmVsUGFja2FnZUlkPTg0NDE1OTU3JmxvY2F0aW9uSWQ9NzAwMDAxJmZyb209MCZ0bz0yMTQ3NDgzNjQ3', 'aHR0cHM6Ly9mZS5zdmMuaXB0di5ydC5ydS9DYWNoZUNsaWVudEpzb24vanNvbi9DaGFubmVsUGFja2FnZS9saXN0X2NoYW5uZWxzP2NoYW5uZWxQYWNrYWdlSWQ9NjcwODM0OTUmbG9jYXRpb25JZD0xMDAwMDEmZnJvbT0wJnRvPTIxNDc0ODM2NDc'}
-		local t_pls = wink_tv(w)
-			if not t_pls then
-				m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' - ошибка загрузки плейлиста'
-											, color = 0xffff6600
-											, showTime = 1000 * 5
-											, id = 'channelName'})
-			 return
-			end
-		m_simpleTV.OSD.ShowMessageT({text = Source.name .. ' (' .. #t_pls .. ')'
-									, color = 0xff99ff99
-									, showTime = 1000 * 5
-									, id = 'channelName'})
-		t_pls = ProcessFilterTableLocal(t_pls)
-		local m3ustr = tvs_core.ProcessFilterTable(UpdateID, Source, t_pls)
-		local handle = io.open(m3u_file, 'w+')
-			if not handle then return end
-		handle:write(m3ustr)
-		handle:close()
-	 return 'ok'
+	if offset then
+		m_simpleTV.Control.SetNewAddressT({address = t[index].Address, timeshiftOffset = offset * 1000})
+	else
+		m_simpleTV.Control.CurrentAddress = t[index].Address
 	end
--- debug_in_file(#t_pls .. '\n')
+	function winkSaveQuality(obj, id)
+		m_simpleTV.Config.SetValue('wink_qlty', tostring(id))
+	end
+-- debug_in_file(m_simpleTV.Control.CurrentAddress .. '\n')
