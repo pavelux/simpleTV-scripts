@@ -104,6 +104,7 @@ local t = {
 ----------------------------------------------------------
 -- httptimeshift extensions (расширения дополнения httptimeshift)
 ----------------------------------------------------------
+'luaScr/user/httptimeshift/extensions/testEvent.lua',
 'luaScr/user/httptimeshift/extensions/wink-timeshift_ext.lua',
 ----------------------------------------------------------
 -- load on startup (загружаемые при запуске)
