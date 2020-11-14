@@ -1,6 +1,7 @@
 -- Trash Cleaner (14/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
+-- (удаление несовместимых и неактуальных скриптов)
 ----------------------------------------------------------
 local enable = true
 ----------------------------------------------------------
@@ -10,9 +11,10 @@ require 'ex'
 local function tabRemoving()
 local t = {
 ----------------------------------------------------------
--- #################### outdated ####################
+-- #################### outdated (устаревшие/неподдерживаемые)
 ----------------------------------------------------------
-'luaScr/user/httptimeshift/extensions/wink-timeshift_ext.lua',
+-- videoscripts (видеоскрипты)
+----------------------------------------------------------
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
@@ -100,9 +102,28 @@ local t = {
 'luaScr/user/video/zala.lua',
 -- 'luaScr/user/video/corntv.lua',
 ----------------------------------------------------------
--- #################### incompatible ####################
+-- httptimeshift extensions (расширения дополнения httptimeshift)
 ----------------------------------------------------------
--- videoscripts
+'luaScr/user/httptimeshift/extensions/wink-timeshift_ext.lua',
+----------------------------------------------------------
+-- load on startup (загружаемые при запуске)
+----------------------------------------------------------
+--
+----------------------------------------------------------
+-- scrapers TVS (скраперы TVSources)
+----------------------------------------------------------
+'luaScr/user/TVSources/scrapers/acelive_pls.lua',
+'luaScr/user/TVSources/scrapers/megafon_pls.lua',
+'luaScr/user/TVSources/scrapers/onlinetv_one_pls',
+'luaScr/user/TVSources/scrapers/seirsanduk_pls.lua',
+'luaScr/user/TVSources/scrapers/strahtv_pls.lua',
+'luaScr/user/TVSources/scrapers/streamaway_pls.lua',
+'luaScr/user/TVSources/scrapers/wink_pls.lua',
+'luaScr/user/TVSources/scrapers/xittv_pls.lua',
+----------------------------------------------------------
+-- #################### incompatible (несовместимые)
+----------------------------------------------------------
+-- videoscripts (видеоскрипты)
 ----------------------------------------------------------
 'luaScr/user/video/hdrezka.download_1080p.lua',
 'luaScr/user/video/hdrezka.download_720p.lua',
@@ -116,19 +137,28 @@ local t = {
 'luaScr/user/video/lostfilm_1080p_test.lua',
 'luaScr/user/video/lostfilm_portal.lua',
 'luaScr/user/video/tv_plus.lua',
+'luaScr/user/video/west_side_wink.lua',
 'luaScr/user/video/wink_TV_portal.lua',
 'luaScr/user/video/wink_plus.lua',
 'luaScr/user/video/ytb.lua',
 ----------------------------------------------------------
--- httptimeshift extensions
+-- httptimeshift extensions (расширения дополнения httptimeshift)
 ----------------------------------------------------------
 'luaScr/user/httptimeshift/extensions/ext_peerstv.lua',
 'luaScr/user/httptimeshift/extensions/ext_zabava.lua',
 ----------------------------------------------------------
--- load on startup
+-- load on startup (загружаемые при запуске)
 ----------------------------------------------------------
 'luaScr/user/startup/epgSearchRezka.lua',
 'luaScr/user/startup/videotracks.lua',
+----------------------------------------------------------
+-- scrapers TVS (скраперы TVSources)
+----------------------------------------------------------
+'luaScr/user/TVSources/scrapers/Z_ufc_pls.lua',
+'luaScr/user/TVSources/scrapers/filmix_WS_pls.lua',
+'luaScr/user/TVSources/scrapers/hevc-club_WS_pls.lua',
+'luaScr/user/TVSources/scrapers/wink_collection_pls.lua',
+'luaScr/user/TVSources/scrapers/wink_portal_pls.lua',
 ----------------------------------------------------------
 }
 return t
