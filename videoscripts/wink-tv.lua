@@ -2,7 +2,7 @@
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- в архиве не переключает качество
 -- ## необходим ##
--- расширение дополнения httptimeshift: wink=tv-timeshift_ext.lua
+-- расширение дополнения httptimeshift: wink-tv-timeshift_ext.lua
 -- скрапер TVS: wink-tv_pls.lua
 -- ## открывает подобные ссылки ##
 -- https://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHTVHD/variant.m3u8
