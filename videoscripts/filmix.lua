@@ -1,5 +1,5 @@
--- видеоскрипт для сайта https://filmix.co (1/9/20)
--- Copyright © 2017-2020 Nexterr
+-- видеоскрипт для сайта https://filmix.co (15/11/20)
+-- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- логин, пароль установить в 'Password Manager', для id - filmix
 -- необходим модуль: /core/playerjs.lua
 -- необходим AceStream
@@ -294,7 +294,8 @@ local zer = ''
 	end
 	m_simpleTV.User.filmix.title = title
 	m_simpleTV.Control.SetTitle(title)
-	local playerjs_url = host .. 'modules/playerjs/playerjs.js'
+	local playerjs_url = answer:match('(modules/playerjs/playerjs.js[^\'"]*)[^\'"]')
+	playerjs_url = host .. playerjs_url
 	local url = host .. 'api/movies/player_data'
 	local rc, answer0 = m_simpleTV.Http.Request(session, {url = url, method = 'post', headers = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-Requested-With: XMLHttpRequest\nReferer: ' .. inAdr, body = 'post_id=' .. id .. '&showfull=true' })
 		if rc ~= 200 then
@@ -302,6 +303,8 @@ local zer = ''
 			showError('9 - ' .. rc)
 		 return
 		end
+	m_simpleTV.Http.Request(session, {url = host .. 'api/notifications/get',
+	method = 'post', headers = 'X-Requested-With: XMLHttpRequest\nReferer: ' .. inAdr, body = 'page=1'})
 	local tr = answer0:match('"video"(.-)}')
 		if not tr then
 			m_simpleTV.Http.Close(session)
