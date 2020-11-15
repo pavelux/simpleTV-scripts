@@ -295,6 +295,10 @@ local zer = ''
 	m_simpleTV.User.filmix.title = title
 	m_simpleTV.Control.SetTitle(title)
 	local playerjs_url = answer:match('(modules/playerjs/playerjs%.js[^\'"]*)[^\'"]')
+		if not playerjs_url then
+			showError('playerjs not found')
+		 return
+		end
 	playerjs_url = host .. playerjs_url
 	local url = host .. 'api/movies/player_data'
 	local rc, answer0 = m_simpleTV.Http.Request(session, {url = url, method = 'post', headers = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-Requested-With: XMLHttpRequest\nReferer: ' .. inAdr, body = 'post_id=' .. id .. '&showfull=true' })
