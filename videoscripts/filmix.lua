@@ -240,8 +240,11 @@ local zer = ''
 		if #t > 0 then
 			local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('⚙ Качество', index - 1, t, 5000, 1 + 4 + 2)
 			if ret == 1 then
-				m_simpleTV.Control.SetNewAddress(t[id].Address, m_simpleTV.Control.GetPosition())
+				m_simpleTV.Control.SetNewAddressT({address = t[id].Address, position = m_simpleTV.Control.GetPosition()})
 				m_simpleTV.Config.SetValue('filmix_qlty', t[id].qlty)
+				if m_simpleTV.Control.GetState() == 0 then
+					m_simpleTV.Control.Restart()
+				end
 			end
 			if ret == 2 then
 				SavefilmixPlaylist()
