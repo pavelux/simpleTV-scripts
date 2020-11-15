@@ -1,4 +1,4 @@
--- Trash Cleaner (14/11/20)
+-- Trash Cleaner (15/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -182,6 +182,7 @@ local t = {
 ----------------------------------------------------------
 'luaScr/user/startup/epgSearchRezka.lua',
 'luaScr/user/startup/videotracks.lua',
+'luaScr/user/startup/west_side.lua',
 ----------------------------------------------------------
 -- scrapers TVS (скраперы TVSources)
 ----------------------------------------------------------
