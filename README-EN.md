@@ -33,8 +33,8 @@
 ###### UTF-8 encoding without BOM
 ---------------------------------------------
 **Installation**
- - video scripts in the _..\luaScr\user\video_
- - scrappers [TVSources][TVSources] to the _..\luaScr\user\TVSources\AutoSetup_
+ - video scripts in the _`..\luaScr\user\video`_
+ - scrappers [TVSources][TVSources] to the _`..\luaScr\user\TVSources\AutoSetup`_
  - unpack the add-ons into the appropriate folders
 ---------------------------------------------
 **Remove incompatible and outdated scripts**
