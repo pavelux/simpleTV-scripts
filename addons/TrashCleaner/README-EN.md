@@ -5,4 +5,4 @@
 ## Trash Cleaner
 #### removal of incompatible and outdated scripts
 
-- put **TrashCleaner.lua** in _..\luaScr\user\startup_
+- put **`TrashCleaner.lua`** in _`..\luaScr\user\startup`_
