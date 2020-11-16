@@ -3,7 +3,7 @@
 </p>
 
 ### httptimeshift addon extensions
-- put in the ..\luaScr\user\httptimeshift\extensions
+- put in _`..\luaScr\user\httptimeshift\extensions`_
 ----------------------------------------------------------------
 ###### _do not enable compatibility mode in add-on settings_
 ----------------------------------------------------------------
