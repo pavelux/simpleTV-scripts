@@ -34,7 +34,7 @@
 ---------------------------------------------
 **Installation**
  - video scripts in  _`..\luaScr\user\video`_
- - scrappers [TVSources][TVSources] in _`..\luaScr\user\TVSources\AutoSetup`_
+ - scrapers [TVSources][TVSources] in _`..\luaScr\user\TVSources\AutoSetup`_
  - unpack the add-ons into the appropriate folders
 ---------------------------------------------
 **Remove incompatible and outdated scripts**
