@@ -6,4 +6,4 @@
 
 #### удаление несовместимых и неактуальных скриптов
 
-- поместить **TrashCleaner.lua** в папку _..\luaScr\user\startup_
+- поместить **`TrashCleaner.lua`** в папку _..\luaScr\user\startup_
