@@ -38,7 +38,7 @@
  - unpack the add-ons into the appropriate folders
 ---------------------------------------------
 **Remove incompatible and outdated scripts**
-- use «**[Trash Cleaner][remove]**» addon
+- use «**[Trash Cleaner][remove]**» add-on
 ---------------------------------------------
 **In some scripts it is possible to specify**
  - proxy / mirror
