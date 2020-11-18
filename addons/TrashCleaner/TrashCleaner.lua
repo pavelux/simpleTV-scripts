@@ -193,9 +193,11 @@
 ----------------------------------------------------------
 -- #################### Folders (папки, включая файлы)
 ----------------------------------------------------------
+'luaScr/user/TorrentTV',
+'luaScr/user/testWestSide',
+'luaScr/user/video/x64',
 'luaScr/user/videotracks',
 'luaScr/user/westSide',
-'luaScr/user/testWestSide',
 ----------------------------------------------------------
 		}
 	 return t
