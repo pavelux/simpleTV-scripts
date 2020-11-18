@@ -217,7 +217,6 @@
 			os.remove(script)
 		end
 		m_simpleTV.Common.Restart()
-	return
 	end
 	local function delDir(path)
 		for file in lfs.dir(path) do
@@ -234,7 +233,6 @@
 	 return lfs.rmdir(path)
 	end
 	local function delete()
-		
 		local ok
 		local mainPath = m_simpleTV.Common.GetMainPath(2)
 		local debugPath = string.format('%strash.txt', mainPath)
