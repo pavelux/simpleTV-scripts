@@ -3,9 +3,9 @@
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
 ----------------------------------------------------------
--- Files (Файлы)
-----------------------------------------------------------
-	local function Files()
+	require 'ex'
+	require 'lfs'
+	local function deleteTab()
 		local t = {
 ----------------------------------------------------------
 -- #################### outdated (устаревшие/неподдерживаемые)
@@ -191,14 +191,7 @@
 'luaScr/user/TVSources/scrapers/wink_collection_pls.lua',
 'luaScr/user/TVSources/scrapers/wink_portal_pls.lua',
 ----------------------------------------------------------
-		}
-	 return t
-	end
-----------------------------------------------------------
--- Folders (Папки, включая файлы)
-----------------------------------------------------------
-	local function Folders()
-		local t = {
+-- #################### Folders (папки, включая файлы)
 ----------------------------------------------------------
 'luaScr/user/videotracks',
 'luaScr/user/westSide',
@@ -207,19 +200,13 @@
 		}
 	 return t
 	end
-----------------------------------------------------------
-	require 'ex'
-	require 'lfs'
-	local mainPath = m_simpleTV.Common.GetMainPath(2)
-	local date = os.date('%c')
-	local debugPath = string.format('%sTrash Cleaner.txt', mainPath)
-	local function dialog()
+	local function dialog(mainPath, debugPath)
 		debugPath = debugPath:gsub('/', '\\')
 		local messTxt
 		if m_simpleTV.Interface.GetLanguage() == 'ru' then
-			messTxt = 'Несовместимые и неактуальных скрипты удалены\nЛог в %s\nУдалить "Trash Cleaner" ?'
+			messTxt = 'Несовместимые и неактуальных скрипты удалены\nЛог в %s\nУдалить «Trash Cleaner»?'
 		else
-			messTxt = 'Incompatible and outdated scripts removed\nlLog in %s\nRemove "Trash Cleaner" ?'
+			messTxt = 'Incompatible and outdated scripts removed\nlLog in %s\nRemove «Trash Cleaner»?'
 		end
 		messTxt = string.format(messTxt, debugPath)
 		local ret = m_simpleTV.Interface.MessageBox(messTxt, 'Trash Cleaner - Nexterr', 0x34)
@@ -229,47 +216,46 @@
 		end
 		m_simpleTV.Common.Restart()
 	end
-	local function delFolders()
-			local function del(dir)
-					for file in lfs.dir(dir) do
-						local file_path = string.format('%s/%s', dir, file)
-						if file ~= '.' and file ~= '..' then
-							if lfs.attributes(file_path, 'mode') == 'file' then
-								os.remove(file_path)
-							elseif lfs.attributes(file_path, 'mode') == 'directory' then
-								del(file_path)
-							end
-						end
-					end
-			 return lfs.rmdir(dir)
-			end
-		local finder
-		local t = Folders()
-			for i = 1, #t do
-				local dir = string.format('%s%s', mainPath, t[i])
-				local ok = del(dir)
-				if ok then
-					debug_in_file(string.format('%s %s [Folder]\n', date, dir), debugPath)
-					finder = true
+	local function delDir(path)
+		for file in lfs.dir(path) do
+			local file_path = string.format('%s/%s', path, file)
+			if file ~= '.' and file ~= '..' then
+				local attrib = lfs.attributes(file_path, 'mode')
+				if attrib == 'file' then
+					os.remove(file_path)
+				elseif attrib == 'directory' then
+					delDir(file_path)
 				end
 			end
-	 return finder
+		end
+	 return lfs.rmdir(path)
 	end
-	local function delFiles()
-		local finder
-		local t = Files()
+	local function delete()
+		local ok
+		local mainPath = m_simpleTV.Common.GetMainPath(2)
+		local debugPath = string.format('%strash.txt', mainPath)
+		local t = deleteTab()
 			for i = 1, #t do
+				local err
 				local path = string.format('%s%s', mainPath, t[i])
-				local ok, err = os.remove(path)
-				if ok then
-					debug_in_file(string.format('%s %s\n', date, path), debugPath)
-					finder = true
+				local attrib = lfs.attributes(path, 'mode')
+				if attrib == 'file' then
+					err = os.remove(path)
+				elseif attrib == 'directory' then
+					err = delDir(path)
+				end
+				if err then
+					if not ok then
+						ok = err
+						local date = os.date('%c')
+						local rep = string.rep('–', 70)
+						debug_in_file(string.format('\n%s\n%s\n%s\n', rep, date, rep), debugPath)
+					end
+					debug_in_file(string.format('[%s] %s\n', attrib, path), debugPath)
 				end
 			end
-	 return finder
+		if ok then
+			dialog(mainPath, debugPath)
+		end
 	end
-	local removeFiles = delFiles()
-	local removeFolders = delFolders()
-	if removeFiles or removeFolders then
-		dialog()
-	end
+	delete()
