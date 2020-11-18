@@ -126,7 +126,7 @@
 'luaScr/user/TVSources/scrapers/iptvportal_pls.lua',
 'luaScr/user/TVSources/scrapers/itv_uz_pls.lua',
 'luaScr/user/TVSources/scrapers/megafon_pls.lua',
-'luaScr/user/TVSources/scrapers/onlinetv_one_pls',
+'luaScr/user/TVSources/scrapers/onlinetv_one_pls.lua',
 'luaScr/user/TVSources/scrapers/persik_pls.lua',
 'luaScr/user/TVSources/scrapers/persik_plus_pls.lua',
 'luaScr/user/TVSources/scrapers/planeta_online_pls.lua',
@@ -148,7 +148,7 @@
 'luaScr/user/TVSources/scrapers/wink_pls.lua',
 'luaScr/user/TVSources/scrapers/xittv_pls.lua',
 'luaScr/user/TVSources/scrapers/yandexTV_pls.lua',
--- 'luaScr/user/video/corntv_pls.lua',
+-- 'luaScr/user/TVSources/scrapers/corntv_pls.lua',
 ----------------------------------------------------------
 -- #################### incompatible (несовместимые)
 ----------------------------------------------------------
