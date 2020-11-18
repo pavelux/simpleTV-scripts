@@ -233,6 +233,7 @@
 	 return lfs.rmdir(path)
 	end
 	local function delete()
+		m_simpleTV.User = nil
 		local ok
 		local mainPath = m_simpleTV.Common.GetMainPath(2)
 		local debugPath = string.format('%strash.txt', mainPath)
