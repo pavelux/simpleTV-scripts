@@ -1,15 +1,12 @@
--- Trash Cleaner (15/11/20)
+-- Trash Cleaner (18/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
 ----------------------------------------------------------
-local enable = true
+-- Files (Файлы)
 ----------------------------------------------------------
-if not enable then return end
-require 'ex'
-----------------------------------------------------------
-local function tabRemoving()
-local t = {
+	local function Files()
+		local t = {
 ----------------------------------------------------------
 -- #################### outdated (устаревшие/неподдерживаемые)
 ----------------------------------------------------------
@@ -151,6 +148,7 @@ local t = {
 'luaScr/user/TVSources/scrapers/wink_pls.lua',
 'luaScr/user/TVSources/scrapers/xittv_pls.lua',
 'luaScr/user/TVSources/scrapers/yandexTV_pls.lua',
+-- 'luaScr/user/video/corntv_pls.lua',
 ----------------------------------------------------------
 -- #################### incompatible (несовместимые)
 ----------------------------------------------------------
@@ -193,41 +191,85 @@ local t = {
 'luaScr/user/TVSources/scrapers/wink_collection_pls.lua',
 'luaScr/user/TVSources/scrapers/wink_portal_pls.lua',
 ----------------------------------------------------------
-}
-return t
-end
-local function dialog(mainPath, debugPath)
- debugPath = debugPath:gsub('/', '\\')
- local messTxt
- if m_simpleTV.Interface.GetLanguage() == 'ru' then
-  messTxt = 'Несовместимые и неактуальных скрипты удалены\nЛог в %s\nУдалить "Trash Cleaner" ?'
- else
-  messTxt = 'Incompatible and outdated scripts removed\nlLog in %s\nRemove "Trash Cleaner" ?'
- end
- messTxt = string.format(messTxt, debugPath)
- local ret =  m_simpleTV.Interface.MessageBox(messTxt, 'Nexterr - Trash Cleaner', 0x34)
- if ret == 6 then
-  local script = string.format('%sluaScr/user/startup/TrashCleaner.lua', mainPath)
-  os.remove(script)
- end
- m_simpleTV.Common.Restart()
-end
-local function removing()
- local finder
- local mainPath = m_simpleTV.Common.GetMainPath(2)
- local date = os.date('%c')
- local debugPath = string.format('%sTrash Cleaner.txt', mainPath)
- local t = tabRemoving()
- for i = 1, #t do
-  local path = string.format('%s%s', mainPath, t[i])
-  local ok, err = os.remove(path)
-  if ok then
-   finder = true
-   debug_in_file(string.format('%s %s\n', date, path), debugPath)
-  end
- end
- if finder == true then
-  dialog(mainPath, debugPath)
- end
-end
-removing()
+		}
+	 return t
+	end
+----------------------------------------------------------
+-- Folders (Папки, включая файлы)
+----------------------------------------------------------
+	local function Folders()
+		local t = {
+----------------------------------------------------------
+'luaScr/user/videotracks',
+'luaScr/user/westSide',
+'luaScr/user/testWestSide',
+----------------------------------------------------------
+		}
+	 return t
+	end
+----------------------------------------------------------
+	require 'ex'
+	require 'lfs'
+	local mainPath = m_simpleTV.Common.GetMainPath(2)
+	local date = os.date('%c')
+	local debugPath = string.format('%sTrash Cleaner.txt', mainPath)
+	local function dialog()
+		debugPath = debugPath:gsub('/', '\\')
+		local messTxt
+		if m_simpleTV.Interface.GetLanguage() == 'ru' then
+			messTxt = 'Несовместимые и неактуальных скрипты удалены\nЛог в %s\nУдалить "Trash Cleaner" ?'
+		else
+			messTxt = 'Incompatible and outdated scripts removed\nlLog in %s\nRemove "Trash Cleaner" ?'
+		end
+		messTxt = string.format(messTxt, debugPath)
+		local ret = m_simpleTV.Interface.MessageBox(messTxt, 'Trash Cleaner - Nexterr', 0x34)
+		if ret == 6 then
+			local script = string.format('%sluaScr/user/startup/TrashCleaner.lua', mainPath)
+			os.remove(script)
+		end
+		m_simpleTV.Common.Restart()
+	end
+	local function delFolders()
+			local function del(dir)
+					for file in lfs.dir(dir) do
+						local file_path = string.format('%s/%s', dir, file)
+						if file ~= '.' and file ~= '..' then
+							if lfs.attributes(file_path, 'mode') == 'file' then
+								os.remove(file_path)
+							elseif lfs.attributes(file_path, 'mode') == 'directory' then
+								del(file_path)
+							end
+						end
+					end
+			 return lfs.rmdir(dir)
+			end
+		local finder
+		local t = Folders()
+			for i = 1, #t do
+				local dir = string.format('%s%s', mainPath, t[i])
+				local ok = del(dir)
+				if ok then
+					debug_in_file(string.format('%s %s [Folder]\n', date, dir), debugPath)
+					finder = true
+				end
+			end
+	 return finder
+	end
+	local function delFiles()
+		local finder
+		local t = Files()
+			for i = 1, #t do
+				local path = string.format('%s%s', mainPath, t[i])
+				local ok, err = os.remove(path)
+				if ok then
+					debug_in_file(string.format('%s %s\n', date, path), debugPath)
+					finder = true
+				end
+			end
+	 return finder
+	end
+	local removeFiles = delFiles()
+	local removeFolders = delFolders()
+	if removeFiles or removeFolders then
+		dialog()
+	end
