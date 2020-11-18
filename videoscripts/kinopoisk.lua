@@ -40,7 +40,7 @@ local tname = {
 	'Hdvb',
 	'Seasonvar',
 	'ZonaMobi',
-	'CDN Movies', -- gnutls 3.6.14
+	-- 'CDN Movies', -- gnutls 3.6.14
 	}
 -- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
