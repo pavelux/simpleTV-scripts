@@ -1,9 +1,8 @@
--- Trash Cleaner (18/11/20)
+-- Trash Cleaner (19/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
 ----------------------------------------------------------
-	require 'ex'
 	require 'lfs'
 	local function deleteTab()
 		local t = {
@@ -198,6 +197,14 @@
 'luaScr/user/video/x64',
 'luaScr/user/videotracks',
 'luaScr/user/westSide',
+'skin/skin1',
+'skin/skin2',
+'skin/west_side',
+----------------------------------------------------------
+-- #################### Garbidge (мусор)
+----------------------------------------------------------
+'luaScr/user/TVSources/m3u/out_PORTAL Wink TV.m3u',
+'luaScr/user/TVSources/m3u/out_Wink Media.m3u',
 ----------------------------------------------------------
 		}
 	 return t
@@ -233,7 +240,7 @@
 	 return lfs.rmdir(path)
 	end
 	local function delete()
-		local ok
+		local ok, skin
 		local mainPath = m_simpleTV.Common.GetMainPath(2)
 		local debugPath = string.format('%strash.txt', mainPath)
 		local t = deleteTab()
@@ -252,6 +259,10 @@
 						local date = os.date('%c')
 						local rep = string.rep('–', 70)
 						debug_in_file(string.format('\n%s\n%s\n%s\n', rep, date, rep), debugPath)
+					end
+					if not skin and t[i]:match('^skin/') then
+						skin = true
+						m_simpleTV.Config.SetValue('skin/path', './skin/base', 'simpleTVConfig')
 					end
 					debug_in_file(string.format('[%s] %s\n', attrib, path), debugPath)
 				end
