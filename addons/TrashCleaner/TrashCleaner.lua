@@ -205,6 +205,7 @@
 ----------------------------------------------------------
 'luaScr/user/TVSources/m3u/out_PORTAL Wink TV.m3u',
 'luaScr/user/TVSources/m3u/out_Wink Media.m3u',
+'luaScr/user/video/_SYNCAPP',
 ----------------------------------------------------------
 		}
 	 return t
