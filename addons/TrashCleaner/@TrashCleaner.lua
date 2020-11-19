@@ -106,6 +106,7 @@
 -- load on startup (загружаемые при запуске)
 ----------------------------------------------------------
 'luaScr/user/startup/torrenttv.lua',
+'luaScr/user/startup/TrashCleaner.lua',
 ----------------------------------------------------------
 -- scrapers TVS (скраперы TVSources)
 ----------------------------------------------------------
@@ -179,7 +180,6 @@
 ----------------------------------------------------------
 'luaScr/user/startup/epgSearchRezka.lua',
 'luaScr/user/startup/paramScriptForSkin-west_side.lua',
-'luaScr/user/startup/TrashCleaner.lua',
 'luaScr/user/startup/videotracks.lua',
 'luaScr/user/startup/west_side.lua',
 ----------------------------------------------------------
