@@ -1,4 +1,4 @@
--- видеоскрипт для поиска видео по видеобазе "Kodik", "Hdvb", "Videocdn", "zona" (9/10/20)
+-- видеоскрипт для поиска видео по видеобазе "Kodik", "Hdvb", "Videocdn", "zona" (19/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходим ##
 -- видоскрипт: kinopoisk.lua
@@ -293,7 +293,7 @@
 	end
 	res.ExtButton1 = {ButtonEnable = true, ButtonName = '✕'}
 	res.ExtParams = {FilterType = FilterType, AutoNumberFormat = AutoNumberFormat}
-	local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('🔎 поиск: ' .. retAdr, 0, res, 30000, 1 + 4 + 8)
+	local ret, id = m_simpleTV.OSD.ShowSelect_UTF8('🔎 поиск: ' .. retAdr, 0, res, 30000, 1 + 4 + 8 + 2)
 		if ret == 3 or not id then
 			m_simpleTV.Control.ExecuteAction(37)
 			m_simpleTV.Control.ExecuteAction(11)
