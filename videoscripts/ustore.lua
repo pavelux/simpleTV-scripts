@@ -1,4 +1,4 @@
--- видеоскрипт для видеобазы "Ustore" https://ustore.bz (9/11/20)
+-- видеоскрипт для видеобазы "Ustore" https://ustore.bz (20/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- decoding by wafee, http://iptv.gen12.net/bugtracker/view.php?id=1610#c33160
 -- открывает подобные ссылки:
@@ -215,6 +215,9 @@
 			end
 		if #t > 1 then
 			table.sort(t, function(a, b) return a.Id < b.Id end)
+				for u = 1, #t do
+					t[u].Id = u
+				end
 			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title .. ' - сезоны', 0, t, 5000, 1)
 			id = id or 1
 			inAdr = t[id].Address
@@ -238,9 +241,9 @@
 			 return
 			end
 		table.sort(t, function(a, b) return a.Id < b.Id end)
-		for i = 1, #t do
-			t[i].Id = i
-		end
+			for i = 1, #t do
+				t[i].Id = i
+			end
 		m_simpleTV.User.ustore.titleTab = t
 		local pl
 		if #t > 1 then
