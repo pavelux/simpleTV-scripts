@@ -218,7 +218,7 @@
 				for u = 1, #t do
 					t[u].Id = u
 				end
-			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title .. ' - сезоны', 0, t, 5000, 1)
+			local _, id = m_simpleTV.OSD.ShowSelect_UTF8(title .. ' - сезоны', 0, t, 5000, 1 + 2)
 			id = id or 1
 			inAdr = t[id].Address
 			season_title = ' (' .. t[id].Name .. ')'
