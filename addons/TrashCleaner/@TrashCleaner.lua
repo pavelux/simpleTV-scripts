@@ -1,4 +1,4 @@
--- Trash Cleaner (19/11/20)
+-- Trash Cleaner (20/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -179,6 +179,7 @@
 -- load on startup (загружаемые при запуске)
 ----------------------------------------------------------
 'luaScr/user/startup/epgSearchRezka.lua',
+'luaScr/user/startup/epgSearchWink.lua',
 'luaScr/user/startup/paramScriptForSkin-west_side.lua',
 'luaScr/user/startup/videotracks.lua',
 'luaScr/user/startup/west_side.lua',
@@ -211,22 +212,6 @@
 ----------------------------------------------------------
 		}
 	 return t
-	end
-	local function dialog(mainPath, debugPath)
-		debugPath = debugPath:gsub('/', '\\')
-		local messTxt
-		if m_simpleTV.Interface.GetLanguage() == 'ru' then
-			messTxt = 'Несовместимые и неактуальных скрипты удалены\nЛог в %s\nУдалить «Trash Cleaner»?'
-		else
-			messTxt = 'Incompatible and outdated scripts removed\nlLog in %s\nRemove «Trash Cleaner»?'
-		end
-		messTxt = string.format(messTxt, debugPath)
-		local ret = m_simpleTV.Interface.MessageBox(messTxt, 'Trash Cleaner - Nexterr', 0x34)
-		if ret == 6 then
-			local script = string.format('%sluaScr/user/startup/@TrashCleaner.lua', mainPath)
-			os.remove(script)
-		end
-		m_simpleTV.Common.Restart()
 	end
 	local function delDir(path)
 		for file in lfs.dir(path) do
@@ -271,7 +256,9 @@
 				end
 			end
 		if ok then
-			dialog(mainPath, debugPath)
+			-- local script = string.format('%sluaScr/user/startup/@TrashCleaner.lua', mainPath)
+			-- os.remove(scriptPath)
+			m_simpleTV.Common.Restart()
 		end
 	end
 	delete()
