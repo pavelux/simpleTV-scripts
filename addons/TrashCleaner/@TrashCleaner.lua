@@ -1,4 +1,4 @@
--- Trash Cleaner (20/11/20)
+-- Trash Cleaner (21/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -118,7 +118,6 @@
 'luaScr/user/TVSources/scrapers/film_ru_Y_pls.lua',
 'luaScr/user/TVSources/scrapers/galamtv_pls.lua',
 'luaScr/user/TVSources/scrapers/impulsTVplus_pls.lua',
-'luaScr/user/TVSources/scrapers/iptvportal_pls.lua',
 'luaScr/user/TVSources/scrapers/ITV_20_pls.lua',
 'luaScr/user/TVSources/scrapers/itv_uz_pls.lua',
 'luaScr/user/TVSources/scrapers/Lanet_pls.lua',
