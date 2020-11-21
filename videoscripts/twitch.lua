@@ -1,14 +1,14 @@
--- видеоскрипт для сайта https://www.twitch.tv (12/11/20)
+-- видеоскрипт для сайта https://www.twitch.tv (21/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- открывает подобные ссылки:
 -- https://www.twitch.tv/jonnykuik
 -- https://www.twitch.tv/SpeedrunHypeTV
 -- https://www.twitch.tv/videos/124888396
 -- https://www.twitch.tv/beyondthesummit/clip/NastyAbstemiousHareTTours
--- https://clips.twitch.tv/NastyAbstemiousHareTTours
+-- https://www.twitch.tv/39daph/clip/BlushingSpoopyTeaKappaPride
 -- https://www.twitch.tv/videos/478330615?filter=archives&sort=time
--- https://clips.twitch.tv/embed?clip=InquisitiveBreakableYogurtJebaited
 -- https://m.twitch.tv/rossbroadcast/clip/ConfidentBraveHumanChefFrank
+-- https://player.twitch.tv/?channel=krusna_tv&muted=true&parent=krusna.tv
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^https?://[%w%.]*twitch%.tv/.+') then return end
 	local inAdr = m_simpleTV.Control.CurrentAddress
@@ -51,6 +51,7 @@
 	 return title, banner
 	end
 	require 'json'
+	inAdr = inAdr:gsub('^(.-channel=)([^&]*)', 'https://www.twitch.tv/%2')
 	inAdr = inAdr:gsub('embed%?clip=', '')
 	inAdr = inAdr:gsub('[%?&].-$', '')
 	inAdr = inAdr:gsub('[%s/]+$', '')
@@ -116,14 +117,20 @@
 			end
 	end
 	m_simpleTV.Http.Close(session)
+	local extOpt = '$OPT:NO-STIMESHIFT'
 	local i, t = 1, {}
 	local adr, name, qlty, fps
 	if types == 'clips' then
 		answer = answer:gsub('(%[%])', '"nil"')
 		local tab = json.decode(answer)
-			if not tab or not tab.data or not tab.data.clip or not tab.data.clip.creationState == 'CREATED' then return end
-			while true do
-					if not tab.data.clip.videoQualities[i] then break end
+			if not tab
+				or not tab.data
+				or not tab.data.clip
+				or not tab.data.clip.creationState == 'CREATED'
+			then
+			 return
+			end
+			while tab.data.clip.videoQualities[i] do
 				fps = tonumber(tab.data.clip.videoQualities[i].frameRate or '0')
 				qlty = tonumber(tab.data.clip.videoQualities[i].quality)
 				name = qlty
@@ -136,7 +143,7 @@
 				t[i] = {}
 				t[i].Id = qlty
 				t[i].Name = name .. 'p' .. fps
-				t[i].Address = tab.data.clip.videoQualities[i].sourceURL .. '$OPT:NO-STIMESHIFT'
+				t[i].Address = tab.data.clip.videoQualities[i].sourceURL .. extOpt
 				i = i + 1
 			end
 			if i == 1 then
@@ -157,12 +164,12 @@
 					t[i] = {}
 					t[i].Id = qlty
 					t[i].Name = name
-					t[i].Address = adr
+					t[i].Address = adr .. extOpt
 					i = i + 1
 				end
 			end
 			if i == 1 then
-				m_simpleTV.Control.CurrentAddress = retAdr
+				m_simpleTV.Control.CurrentAddress = retAdr .. extOpt
 				m_simpleTV.Control.CurrentTitle_UTF8 = title
 			 return
 			end
