@@ -2,15 +2,15 @@
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	require 'lfs'
 	local function deleteTab()
 		local t = {
-----------------------------------------------------------
--- #################### outdated (устаревшие/неподдерживаемые)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+-- #################### Outdated (устаревшие/неподдерживаемые)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- videoscripts (видеоскрипты)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/video/!youtube.lua',
 'luaScr/user/video/1tv_embed.lua',
 'luaScr/user/video/545_tv.lua',
@@ -27,7 +27,7 @@
 'luaScr/user/video/cin-24.lua',
 'luaScr/user/video/cinemahd.lua',
 'luaScr/user/video/cloud_mailru_file.lua',
-'luaScr/user/video/core/youtubecore.lua.lua',
+'luaScr/user/video/core/youtubecore.lua',
 'luaScr/user/video/cybergame.lua',
 'luaScr/user/video/dancetelevision.lua',
 'luaScr/user/video/earthtv.lua',
@@ -95,21 +95,19 @@
 'luaScr/user/video/youtube_user_script.lua',
 'luaScr/user/video/youtube_user_uploads.lua',
 'luaScr/user/video/zala.lua',
--- 'luaScr/user/video/corntv.lua',
--- 'luaScr/user/video/streamaway.lua',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- httptimeshift extensions (расширения дополнения httptimeshift)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/httptimeshift/extensions/testEvent.lua',
 'luaScr/user/httptimeshift/extensions/wink-timeshift_ext.lua',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- load on startup (загружаемые при запуске)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/startup/torrenttv.lua',
 'luaScr/user/startup/TrashCleaner.lua',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- scrapers TVS (скраперы TVSources)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/TVSources/scrapers/acelive_pls.lua',
 'luaScr/user/TVSources/scrapers/Albbox_pls.lua',
 'luaScr/user/TVSources/scrapers/bjtutv_pls.lua',
@@ -146,13 +144,11 @@
 'luaScr/user/TVSources/scrapers/wink_pls.lua',
 'luaScr/user/TVSources/scrapers/xittv_pls.lua',
 'luaScr/user/TVSources/scrapers/yandexTV_pls.lua',
--- 'luaScr/user/TVSources/scrapers/corntv_pls.lua',
--- 'luaScr/user/TVSources/scrapers/streamaway_pls.lua',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- #################### incompatible (несовместимые)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- videoscripts (видеоскрипты)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/video/hdrezka.download_1080p.lua',
 'luaScr/user/video/hdrezka.download_720p.lua',
 'luaScr/user/video/hdrezka.download_portal.lua',
@@ -169,31 +165,32 @@
 'luaScr/user/video/wink_plus.lua',
 'luaScr/user/video/wink_TV_portal.lua',
 'luaScr/user/video/ytb.lua',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- httptimeshift extensions (расширения дополнения httptimeshift)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/httptimeshift/extensions/ext_peerstv.lua',
 'luaScr/user/httptimeshift/extensions/ext_zabava.lua',
-----------------------------------------------------------
+'luaScr/user/httptimeshift/extensions/test.lua',
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- load on startup (загружаемые при запуске)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/startup/epgSearchRezka.lua',
 'luaScr/user/startup/epgSearchWink.lua',
 'luaScr/user/startup/paramScriptForSkin-west_side.lua',
 'luaScr/user/startup/videotracks.lua',
 'luaScr/user/startup/west_side.lua',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- scrapers TVS (скраперы TVSources)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/TVSources/scrapers/filmix_WS_pls.lua',
 'luaScr/user/TVSources/scrapers/hevc-club_WS_pls.lua',
 'luaScr/user/TVSources/scrapers/pseudotv_pls.lua',
 'luaScr/user/TVSources/scrapers/wink_collection_pls.lua',
 'luaScr/user/TVSources/scrapers/wink_portal_pls.lua',
 'luaScr/user/TVSources/scrapers/Z_ufc_pls.lua',
-----------------------------------------------------------
--- #################### Folders (папки, включая файлы)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+-- #################### Folders (папки)
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/testWestSide',
 'luaScr/user/TorrentTV',
 'luaScr/user/video/x64',
@@ -202,13 +199,13 @@
 'skin/skin1',
 'skin/skin2',
 'skin/west_side',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- #################### Garbidge (мусор)
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 'luaScr/user/TVSources/m3u/out_PORTAL Wink TV.m3u',
 'luaScr/user/TVSources/m3u/out_Wink Media.m3u',
 'luaScr/user/video/_SYNCAPP',
-----------------------------------------------------------
+––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		}
 	 return t
 	end
