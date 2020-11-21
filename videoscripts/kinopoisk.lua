@@ -1,4 +1,4 @@
--- видеоскрипт для сайта http://www.kinopoisk.ru (19/11/20)
+-- видеоскрипт для сайта http://www.kinopoisk.ru (21/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- ## необходимы видеоскрипты ##
 -- wink-vod.lua, yandex-vod.lua, kodik.lua, filmix.lua, videoframe.lua, seasonvar.lua
@@ -35,7 +35,7 @@ local tname = {
 	'Kodik',
 	'Videoframe',
 	'Filmix',
-	'Ustore',
+	-- 'Ustore',
 	'Collaps',
 	'Hdvb',
 	'Seasonvar',
@@ -430,15 +430,15 @@ local tname = {
 	local function checkScrtpts()
 		require 'lfs'
 		local t = {
+					'luaScr/user/video/hdvb.lua',
+					'luaScr/user/video/iviru.lua',
+					'luaScr/user/video/seasonvar.lua',
+					'luaScr/user/video/videocdn.lua',
+					'luaScr/user/video/videoframe.lua',
 					'luaScr/user/video/wink-vod.lua',
 					'luaScr/user/video/yandex-vod.lua',
-					'luaScr/user/video/videoframe.lua',
-					'luaScr/user/video/seasonvar.lua',
 					'luaScr/user/video/zonamobi.lua',
-					'luaScr/user/video/iviru.lua',
-					'luaScr/user/video/videocdn.lua',
-					'luaScr/user/video/hdvb.lua',
-					'luaScr/user/video/ustore.lua',
+					-- 'luaScr/user/video/ustore.lua',
 				}
 		local mainPath = m_simpleTV.Common.GetMainPath(2)
 			for i = 1, #t do
