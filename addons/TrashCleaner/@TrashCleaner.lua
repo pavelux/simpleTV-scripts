@@ -1,4 +1,4 @@
--- Trash Cleaner (22/11/20)
+-- Trash Cleaner (23/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -241,7 +241,7 @@
 				if err then
 					if not ok then
 						ok = err
-						local date = os.date('%c')
+						local date = os.date('%c') .. string.rep(' ', 20) .. 'Trash Cleaner'
 						local rep = string.rep('–', 70)
 						debug_in_file(string.format('\n%s\n%s\n%s\n', rep, date, rep), debugPath)
 					end
@@ -253,8 +253,6 @@
 				end
 			end
 		if ok then
-			-- local script = string.format('%sluaScr/user/startup/@TrashCleaner.lua', mainPath)
-			-- os.remove(scriptPath)
 			m_simpleTV.Common.Restart()
 		end
 	end
