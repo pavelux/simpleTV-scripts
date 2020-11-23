@@ -1,4 +1,4 @@
--- Trash Cleaner (23/11/20)
+-- Trash Cleaner (24/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -80,6 +80,7 @@
 'luaScr/user/video/telego.lua',
 'luaScr/user/video/the_cinema.lua',
 'luaScr/user/video/topchantv.lua',
+'luaScr/user/video/tvplus.lua',
 'luaScr/user/video/uafilmtv.lua',
 'luaScr/user/video/uakino.lua',
 'luaScr/user/video/ussr.lua',
@@ -108,18 +109,20 @@
 --––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- scrapers TVS (скраперы TVSources)
 --––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-'luaScr/user/TVSources/scrapers/acelive_pls.lua',
 'luaScr/user/TVSources/scrapers/Albbox_pls.lua',
+'luaScr/user/TVSources/scrapers/ITV_20_pls.lua',
+'luaScr/user/TVSources/scrapers/Lanet_pls.lua',
+'luaScr/user/TVSources/scrapers/LimeHD_plus_pls.lua',
+'luaScr/user/TVSources/scrapers/TTV_pls.lua',
+'luaScr/user/TVSources/scrapers/TorrentTV_pls.lua',
+'luaScr/user/TVSources/scrapers/acelive_pls.lua',
 'luaScr/user/TVSources/scrapers/bjtutv_pls.lua',
 'luaScr/user/TVSources/scrapers/divantv_pls.lua',
 'luaScr/user/TVSources/scrapers/divantv_plus_pls.lua',
 'luaScr/user/TVSources/scrapers/film_ru_Y_pls.lua',
 'luaScr/user/TVSources/scrapers/galamtv_pls.lua',
 'luaScr/user/TVSources/scrapers/impulsTVplus_pls.lua',
-'luaScr/user/TVSources/scrapers/ITV_20_pls.lua',
 'luaScr/user/TVSources/scrapers/itv_uz_pls.lua',
-'luaScr/user/TVSources/scrapers/Lanet_pls.lua',
-'luaScr/user/TVSources/scrapers/LimeHD_plus_pls.lua',
 'luaScr/user/TVSources/scrapers/megafon_pls.lua',
 'luaScr/user/TVSources/scrapers/onlinetv_one_pls.lua',
 'luaScr/user/TVSources/scrapers/persik_pls.lua',
@@ -130,16 +133,15 @@
 'luaScr/user/TVSources/scrapers/regionsRU_pls.lua',
 'luaScr/user/TVSources/scrapers/rutubeTV_pls.lua',
 'luaScr/user/TVSources/scrapers/seirsanduk_pls.lua',
-'luaScr/user/TVSources/scrapers/serials_ru_Y_pls.lua',
 'luaScr/user/TVSources/scrapers/serials_Y_pls.lua',
+'luaScr/user/TVSources/scrapers/serials_ru_Y_pls.lua',
 'luaScr/user/TVSources/scrapers/slotos_pls.lua',
 'luaScr/user/TVSources/scrapers/spbtv_pls.lua',
 'luaScr/user/TVSources/scrapers/standarttv_pls.lua',
 'luaScr/user/TVSources/scrapers/strahtv_pls.lua',
 'luaScr/user/TVSources/scrapers/telego_pls.lua',
 'luaScr/user/TVSources/scrapers/topchantv_pls.lua',
-'luaScr/user/TVSources/scrapers/TorrentTV_pls.lua',
-'luaScr/user/TVSources/scrapers/TTV_pls.lua',
+'luaScr/user/TVSources/scrapers/tvplus_pls.lua',
 'luaScr/user/TVSources/scrapers/web_tv_pls.lua',
 'luaScr/user/TVSources/scrapers/wink_pls.lua',
 'luaScr/user/TVSources/scrapers/xittv_pls.lua',
