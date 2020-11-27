@@ -1,4 +1,4 @@
--- Trash Cleaner (24/11/20)
+-- Trash Cleaner (28/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -234,10 +234,23 @@
 	 return lfs.rmdir(path)
 	end
 	local function delete()
-		local ok, skin
+		local t = deleteTab()
+		local skin = m_simpleTV.Config.GetValue('skin/path', 'simpleTVConfig') or ''
+			for i = 1, #t do
+				local skinTab = t[i]:match('^skin/.+')
+				if skinTab then
+					skin = skin:gsub('%./', '')
+					if skinTab == skin then
+						m_simpleTV.Config.SetValue('skin/path', './skin/base', 'simpleTVConfig')
+						m_simpleTV.Common.Sleep(3000)
+						m_simpleTV.Common.Restart()
+					 return
+					end
+				end
+			end
+		local ok
 		local mainPath = m_simpleTV.Common.GetMainPath(2)
 		local debugPath = string.format('%strash.txt', mainPath)
-		local t = deleteTab()
 			for i = 1, #t do
 				local err
 				local path = string.format('%s%s', mainPath, t[i])
@@ -253,10 +266,6 @@
 						local date = os.date('%c') .. string.rep(' ', 20) .. 'Trash Cleaner'
 						local rep = string.rep('–', 70)
 						debug_in_file(string.format('\n%s\n%s\n%s\n', rep, date, rep), debugPath)
-					end
-					if not skin and t[i]:match('^skin/') then
-						skin = true
-						m_simpleTV.Config.SetValue('skin/path', './skin/base', 'simpleTVConfig')
 					end
 					debug_in_file(string.format('[%s] %s\n', attrib, path), debugPath)
 				end
