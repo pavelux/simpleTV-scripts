@@ -242,7 +242,7 @@
 					skin = skin:gsub('%./', '')
 					if skinTab == skin then
 						m_simpleTV.Config.SetValue('skin/path', './skin/base', 'simpleTVConfig')
-						m_simpleTV.Common.Sleep(3000)
+						m_simpleTV.Config.Sync('simpleTVConfig')
 						m_simpleTV.Common.Restart()
 					 return
 					end
