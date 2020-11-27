@@ -4,6 +4,13 @@
 -- искать через команду меню "Открыть URL" (Ctrl+N)
 -- использовать префикс "+"
 -- открывает подобные запросы: + матч
+-- ## время последней проверки доступности канала, в часах ##
+local updated = 3
+-- ## ссылки вида http://ipadress:YYYY/ace/getstream?infohash=XXXXXX&.mp4 ##
+local ace_adrPort = ''
+-- адрес:порт (например '127.0.0.1:6878')
+-- '' - по умолчанию
+-- ##
 		if m_simpleTV.Control.ChangeAddress ~= 'No' then return end
 		if not m_simpleTV.Control.CurrentAddress:match('^%+') then return end
 	m_simpleTV.OSD.ShowMessageT({text = '', showTime = 1000, id = 'channelName'})
@@ -18,7 +25,7 @@
 	m_simpleTV.Http.SetTimeout(session, 12000)
 	inAdr = inAdr:gsub('^%+', '')
 	inAdr = m_simpleTV.Common.multiByteToUTF8(inAdr)
-	local url = 'https://search.acestream.net/?method=search&api_version=1.0&api_key=test_api_key&query=' .. escape(inAdr)
+	local url = 'https://api.acestream.me/?method=search&api_version=1.0&api_key=test_api_key&query=' .. m_simpleTV.Common.toPercentEncoding(inAdr)
 	local rc, answer = m_simpleTV.Http.Request(session, {url = url})
 	m_simpleTV.Http.Close(session)
 		if rc ~= 200 then
@@ -26,6 +33,9 @@
 		 return
 		end
 	answer = answer:gsub('%[%]', '""'):gsub(string.char(239, 187, 191), ''):gsub('\\', '\\\\'):gsub('\\"', '\\\\"'):gsub('\\/', '/')
+	if updated == 0 then
+		updated = 1000
+	end
 	require 'json'
 	local tab = json.decode(answer)
 		if not tab or not tab.results then
@@ -33,16 +43,21 @@
 		 return
 		end
 	local t, i, h = {}, 1, 1
-		while true do
-				if not tab.results[h] then break end
-			if (tab.results[h].availability or 0) > 0.5
-				and (os.time() - (tab.results[h].availability_updated_at or 0)) < (3 * 60 * 60)
+		while tab.results[h] do
+			if tab.results[h].availability
+				and tab.results[h].availability_updated_at
+				and tab.results[h].availability == 1
+				and (os.time() - tab.results[h].availability_updated_at) < 3600 * updated
 			then
 				t[i] = {}
 				t[i].Id = i
 				local name = tab.results[h].name:gsub('\\"', '"')
 				t[i].Name = unescape3(name)
-				t[i].Address = 'torrent://INFOHASH=' .. tab.results[h].infohash
+				if ace_adrPort ~= '' then
+					t[i].Address = string.format('http://%s/ace/getstream?infohash=%s&.mp4', ace_adrPort, tab.results[h].infohash)
+				else
+					t[i].Address = 'torrent://INFOHASH=' .. tab.results[h].infohash
+				end
 				i = i + 1
 			end
 			h = h + 1
