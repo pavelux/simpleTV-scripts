@@ -35,7 +35,7 @@ local tname = {
 	'Kodik',
 	'Videoframe',
 	'Filmix',
-	-- 'Ustore',
+	'Ustore',
 	'Collaps',
 	'Hdvb',
 	'Seasonvar',
