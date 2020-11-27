@@ -1,7 +1,12 @@
--- скрапер TVS для загрузки плейлиста "acesearch" http://acestream.net (4/11/20)
+-- скрапер TVS для загрузки плейлиста "acesearch" http://acestream.net (27/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
+-- необходим устаовленный Acestream
 -- ## время последней проверки доступности канала, в часах ##
 local updated = 3
+-- ## ссылки вида http://ipadress:YYYY/ace/getstream?infohash=XXXXXX&.mp4 ##
+local ace_adrPort = ''
+-- адрес:порт (например '127.0.0.1:6878')
+-- '' - по умолчанию
 -- ## категории ##
 local group = 1
 -- 0 - нет
@@ -64,8 +69,13 @@ local filter = {
 					and (os.time() - tab[h].availability_updated_at) < 3600 * updated
 				then
 					t[i] = {}
-					t[i].name = unescape3(tab[h].name)
-					t[i].address = 'torrent://INFOHASH=' .. tab[h].infohash
+					local name = tab[h].name:gsub('\\"', '"')
+					t[i].name = unescape3(name)
+					if ace_adrPort ~= '' then
+						t[i].address = string.format('http://%s/ace/getstream?infohash=%s&.mp4', ace_adrPort, tab[h].infohash)
+					else
+						t[i].address = 'torrent://INFOHASH=' .. tab[h].infohash
+					end
 					if group ~= 0 then
 						if tab[h].categories then
 							cat = tab[h].categories[1] or 'неизвестно'
