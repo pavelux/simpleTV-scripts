@@ -205,8 +205,6 @@
 'luaScr/user/video/_SYNCAPP',
 'luaScr/user/videotracks',
 'luaScr/user/westSide',
-'skin/skin1',
-'skin/skin2',
 'skin/west_side',
 --––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 -- #################### Garbidge (мусор)
