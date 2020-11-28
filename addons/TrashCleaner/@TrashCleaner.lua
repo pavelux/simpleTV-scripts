@@ -1,4 +1,4 @@
--- Trash Cleaner (28/11/20)
+-- Trash Cleaner (29/11/20)
 -- Copyright © 2017-2020 Nexterr | https://github.com/Nexterr/simpleTV
 -- removal of incompatible and outdated scripts
 -- (удаление несовместимых и неактуальных скриптов)
@@ -239,7 +239,7 @@
 				if skinTab then
 					skin = skin:gsub('%./', '')
 					if skinTab == skin then
-						m_simpleTV.Config.SetValue('skin/path', './skin/base', 'simpleTVConfig')
+						m_simpleTV.Config.Remove('skin', 'simpleTVConfig')
 						m_simpleTV.Config.Sync('simpleTVConfig')
 						m_simpleTV.Common.Restart()
 					 return
