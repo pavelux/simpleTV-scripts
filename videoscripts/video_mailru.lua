@@ -1,4 +1,4 @@
--- видеоскрипт для сайта https://my.mail.ru/video (12/9/20)
+-- видеоскрипт для сайта https://my.mail.ru/video (29/11/20)
 -- Copyright © 2017-2020 Nexterr
 -- открывает подобные ссылки:
 -- https://my.mail.ru/v/fresh_movie/video/_groupvideo/244.html
@@ -20,7 +20,7 @@
 	end
 	local smotri = inAdr:match('smotri%.mail%.ru/watch/(%d+)')
 		if smotri then
-			m_simpleTV.Control.CurrentAddress = 'https://pulsarback.mail.ru/api/v2/video/manifest?id=' .. smotri
+			m_simpleTV.Control.CurrentAddress = 'https://pulsarback.mail.ru/api/v2/video/manifest?id=' .. smotri .. '$OPT:NO-STIMESHIFT'
 		 return
 		end
 	if not inAdr:match('/embed/') then
