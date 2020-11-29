@@ -35,7 +35,7 @@
 'luaScr/user/video/eporner_pages.lua',
 'luaScr/user/video/euronews.lua',
 'luaScr/user/video/ex_fs_net.lua',
-'luaScr/user/video/faaftv.lua',
+--'luaScr/user/video/faaftv.lua',
 'luaScr/user/video/facebook.lua',
 'luaScr/user/video/gidonline.lua',
 'luaScr/user/video/google_drive.lua',
